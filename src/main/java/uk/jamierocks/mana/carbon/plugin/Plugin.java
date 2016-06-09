@@ -22,35 +22,44 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.event;
+package uk.jamierocks.mana.carbon.plugin;
 
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
-import uk.jamierocks.mana.carbon.Carbon;
-
-import java.lang.reflect.Method;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * The implementation of {@link SubscriberExceptionHandler} for Slf4J.
+ * Used by plugins, to signify that they are a plugin.
  *
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public final class Slf4jEventLoggingHandler implements SubscriberExceptionHandler {
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Plugin {
 
     /**
-     * {@inheritDoc}
+     * Gets the identifier of the plugin.
+     *
+     * @return The identifier
+     * @since 1.0.0
      */
-    @Override
-    public void handleException(Throwable exception, SubscriberExceptionContext context) {
-        Carbon.getCarbon().getLogger().error(message(context), exception);
-    }
+    String id();
 
-    private static String message(SubscriberExceptionContext context) {
-        Method method = context.getSubscriberMethod();
-        return "Exception thrown by subscriber method "
-                + method.getName() + '(' + method.getParameterTypes()[0].getName() + ')'
-                + " on subscriber " + context.getSubscriber()
-                + " when dispatching event: " + context.getEvent();
-    }
+    /**
+     * Gets the name of the plugin.
+     *
+     * @return The name
+     * @since 1.0.0
+     */
+    String name();
+
+    /**
+     * Gets the version of the plugin.
+     *
+     * @return The version
+     * @since 1.0.0
+     */
+    String version();
 }

@@ -37,7 +37,7 @@ public interface Event {
     /**
      * Gets the instance of {@link Carbon}.
      *
-     * @return the instance of Carbon
+     * @return The instance of Carbon
      * @since 1.0.0
      */
     default Carbon getCarbon() {
@@ -47,7 +47,7 @@ public interface Event {
     /**
      * Posts the {@link Event} to the {@link Carbon} event bus.
      *
-     * @return this event
+     * @return This event
      * @since 1.0.0
      */
     default Event post() {

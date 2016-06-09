@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
 
 import java.lang.reflect.Field;
@@ -58,12 +59,14 @@ public final class Carbon {
         return INSTANCE;
     }
 
-    private final EventBus eventBus;
     private final Logger logger;
+    private final EventBus eventBus;
+    private final PluginManager pluginManager;
 
     protected Carbon() {
-        this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
         this.logger = LoggerFactory.getLogger("Carbon");
+        this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
+        this.pluginManager = new PluginManager();
 
         this.setInstance(); // Forcefully sets the instance
     }
@@ -87,16 +90,6 @@ public final class Carbon {
     }
 
     /**
-     * Gets the {@link EventBus} used by Carbon.
-     *
-     * @return Carbon's event bus
-     * @since 1.0.0
-     */
-    public EventBus getEventBus() {
-        return this.eventBus;
-    }
-
-    /**
      * Gets the {@link Logger} used by Carbon.
      *
      * <b>It is designed for use internally, and it is recommended
@@ -107,5 +100,25 @@ public final class Carbon {
      */
     public Logger getLogger() {
         return this.logger;
+    }
+
+    /**
+     * Gets the {@link EventBus} used by Carbon.
+     *
+     * @return Carbon's event bus
+     * @since 1.0.0
+     */
+    public EventBus getEventBus() {
+        return this.eventBus;
+    }
+
+    /**
+     * Gets the {@link PluginManager} used by Carbon.
+     *
+     * @return Carbon's plugin manager
+     * @since 1.0.0
+     */
+    public PluginManager getPluginManager() {
+        return this.pluginManager;
     }
 }

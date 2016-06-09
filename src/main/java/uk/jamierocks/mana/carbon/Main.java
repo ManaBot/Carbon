@@ -35,5 +35,8 @@ public final class Main {
     public static void main(String[] args) {
         // Initialise Carbon
         new Carbon();
+
+        // Load all of the plugins
+        Carbon.getCarbon().getPluginManager().loadAllPlugins();
     }
 }
