@@ -22,34 +22,29 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
-
-import uk.jamierocks.mana.carbon.event.state.InitialisationEvent;
-import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
-import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
+package uk.jamierocks.mana.carbon.event;
 
 /**
- * The application entry-point for Carbon.
+ * Represents an event that can be cancelled.
  *
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public final class Main {
+public interface CancellableEvent extends Event {
 
-    public static void main(String[] args) {
-        // Initialise Carbon
-        new Carbon();
+    /**
+     * Gets if the event has been cancelled.
+     *
+     * @return {@code True} if the event has been cancelled, {@code false} otherwise
+     * @since 1.0.0
+     */
+    boolean isCancelled();
 
-        // Load all of the plugins
-        Carbon.getCarbon().getPluginManager().loadAllPlugins();
-
-        // Pre Init state
-        new PreInitialisationEvent().post();
-
-        // Init state
-        new InitialisationEvent().post();
-
-        // Post init state
-        new PostInitialisationEvent().post();
-    }
+    /**
+     * Sets if the event has been cancelled.
+     *
+     * @param cancel If the event is cancelled or not
+     * @since 1.0.0
+     */
+    void setCancelled(boolean cancel);
 }

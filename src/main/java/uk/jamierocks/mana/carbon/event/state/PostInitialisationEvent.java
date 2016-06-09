@@ -22,34 +22,16 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
+package uk.jamierocks.mana.carbon.event.state;
 
-import uk.jamierocks.mana.carbon.event.state.InitialisationEvent;
-import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
-import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
+import uk.jamierocks.mana.carbon.event.Event;
 
 /**
- * The application entry-point for Carbon.
+ * The post-initialisation event.
  *
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public final class Main {
+public class PostInitialisationEvent implements Event {
 
-    public static void main(String[] args) {
-        // Initialise Carbon
-        new Carbon();
-
-        // Load all of the plugins
-        Carbon.getCarbon().getPluginManager().loadAllPlugins();
-
-        // Pre Init state
-        new PreInitialisationEvent().post();
-
-        // Init state
-        new InitialisationEvent().post();
-
-        // Post init state
-        new PostInitialisationEvent().post();
-    }
 }
