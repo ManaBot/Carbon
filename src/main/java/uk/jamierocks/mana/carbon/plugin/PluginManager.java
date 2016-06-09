@@ -26,7 +26,10 @@ package uk.jamierocks.mana.carbon.plugin;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.util.guice.PluginGuiceModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,15 +102,13 @@ public final class PluginManager {
             List<Class> mods = this.findPlugins(jarFile);
 
             for (Class<?> pluginClass : mods) {
-                try {
-                    Plugin pluginAnnotation = pluginClass.getDeclaredAnnotation(Plugin.class);
-                    Object instance = pluginClass.newInstance();
+                Plugin pluginAnnotation = pluginClass.getDeclaredAnnotation(Plugin.class);
 
-                    Carbon.getCarbon().getEventBus().register(instance);
-                    this.loadedPlugins.put(pluginAnnotation.id(), PluginContainer.of(pluginAnnotation, instance));
-                } catch (InstantiationException | IllegalAccessException e) {
-                    Carbon.getCarbon().getLogger().error("Exception while loading plugin!", e);
-                }
+                Injector injector = Guice.createInjector(new PluginGuiceModule(pluginAnnotation));
+                Object instance = injector.getInstance(pluginClass);
+
+                Carbon.getCarbon().getEventBus().register(instance);
+                this.loadedPlugins.put(pluginAnnotation.id(), PluginContainer.of(pluginAnnotation, instance));
             }
         }
     }
