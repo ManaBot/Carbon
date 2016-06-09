@@ -27,6 +27,9 @@ package uk.jamierocks.mana.carbon;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.eventbus.EventBus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -56,11 +59,13 @@ public final class Carbon {
     }
 
     private final EventBus eventBus;
+    private final Logger logger;
 
     protected Carbon() {
-        this.setInstance(); // Forcefully sets the instance
+        this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
+        this.logger = LoggerFactory.getLogger("Carbon");
 
-        this.eventBus = new EventBus();
+        this.setInstance(); // Forcefully sets the instance
     }
 
     private void setInstance() {
@@ -76,18 +81,31 @@ public final class Carbon {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
-            e.printStackTrace();
+            this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
             System.exit(0);
         }
     }
 
     /**
-     * Gets the event bus used by Carbon.
+     * Gets the {@link EventBus} used by Carbon.
      *
      * @return Carbon's event bus
      * @since 1.0.0
      */
     public EventBus getEventBus() {
         return this.eventBus;
+    }
+
+    /**
+     * Gets the {@link Logger} used by Carbon.
+     *
+     * <b>It is designed for use internally, and it is recommended
+     * that plugins do NOT use this Logger.</b>
+     *
+     * @return Carbon's logger
+     * @since 1.0.0
+     */
+    public Logger getLogger() {
+        return this.logger;
     }
 }
