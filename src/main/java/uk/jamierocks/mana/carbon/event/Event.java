@@ -22,18 +22,36 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
+package uk.jamierocks.mana.carbon.event;
+
+import uk.jamierocks.mana.carbon.Carbon;
 
 /**
- * The application entry-point for Carbon.
+ * An event within Carbon.
  *
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public final class Main {
+public interface Event {
 
-    public static void main(String[] args) {
-        // Initialise Carbon
-        new Carbon();
+    /**
+     * Gets the instance of {@link Carbon}.
+     *
+     * @return the instance of Carbon
+     * @since 1.0.0
+     */
+    default Carbon getCarbon() {
+        return Carbon.getCarbon();
+    }
+
+    /**
+     * Posts the {@link Event} to the {@link Carbon} event bus.
+     *
+     * @return this event
+     * @since 1.0.0
+     */
+    default Event post() {
+        Carbon.getCarbon().getEventBus().post(this);
+        return this;
     }
 }
