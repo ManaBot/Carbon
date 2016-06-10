@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
@@ -48,6 +49,11 @@ public final class Carbon {
      * This will be forcefully overridden by Carbon upon its initialisation.
      */
     private static final Carbon INSTANCE = null;
+
+    /**
+     * This will be forcefully overridden by Carbon upon its initialisation.
+     */
+    protected static final PluginContainer CONTAINER = null;
 
     /**
      * Gets the instance of {@link Carbon} currently running.
@@ -72,6 +78,7 @@ public final class Carbon {
         this.serviceRegistry = new CarbonServiceRegistry();
 
         this.setInstance(); // Forcefully sets the instance
+        this.setContainer(); // Forcefully sets the container
     }
 
     private void setInstance() {
@@ -84,6 +91,44 @@ public final class Carbon {
             modifiersField.setInt(instanceField, instanceField.getModifiers() & ~Modifier.FINAL);
 
             instanceField.set(null, this);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            // If this ever occurs something massively wrong is going on.
+            // It is probably for the best to exit the application
+            this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
+            System.exit(0);
+        }
+    }
+
+    private void setContainer() {
+        try {
+            Field instanceField = Carbon.class.getDeclaredField("CONTAINER");
+            instanceField.setAccessible(true);
+
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(instanceField, instanceField.getModifiers() & ~Modifier.FINAL);
+
+            instanceField.set(null, new PluginContainer() {
+                @Override
+                public String getId() {
+                    return "carbon";
+                }
+
+                @Override
+                public String getName() {
+                    return "Carbon";
+                }
+
+                @Override
+                public String getVersion() {
+                    return "TODO";
+                }
+
+                @Override
+                public Object getInstance() {
+                    return Carbon.this;
+                }
+            });
         } catch (NoSuchFieldException | IllegalAccessException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application

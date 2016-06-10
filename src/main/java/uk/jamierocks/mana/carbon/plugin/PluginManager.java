@@ -125,7 +125,9 @@ public final class PluginManager {
                 Object instance = injector.getInstance(pluginClass);
 
                 Carbon.getCarbon().getEventBus().register(instance);
-                this.plugins.put(pluginAnnotation.id(), PluginContainer.of(pluginAnnotation, instance));
+                PluginContainer pluginContainer = PluginContainer.of(pluginAnnotation, instance);
+                this.plugins.put(pluginAnnotation.id(), pluginContainer);
+                this.pluginInstances.put(instance, pluginContainer);
             }
         }
     }
