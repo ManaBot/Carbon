@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
+import uk.jamierocks.mana.carbon.util.Constants;
 import uk.jamierocks.mana.carbon.util.ReflectionUtil;
 import uk.jamierocks.mana.carbon.util.ReflectionUtilException;
 import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
@@ -94,7 +95,7 @@ public final class Carbon {
     private void setContainer() {
         try {
             ReflectionUtil.setStaticFinal(this.getClass(), "CONTAINER",
-                    PluginContainer.of("carbon", "Carbon", "TODO", this));
+                    PluginContainer.of("carbon", "Carbon", Constants.VERSION, this));
         } catch (ReflectionUtilException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
