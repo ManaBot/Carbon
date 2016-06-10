@@ -46,7 +46,7 @@ import java.util.Optional;
 import java.util.jar.JarFile;
 
 /**
- * The manager for Carbon plugins.
+ * The implementation of {@link PluginManager} for Carbon.
  *
  * @author Jamie Mansfield
  * @since 1.0.0

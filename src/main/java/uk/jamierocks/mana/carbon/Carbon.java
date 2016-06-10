@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
@@ -69,12 +70,14 @@ public final class Carbon {
     private final Logger logger;
     private final EventBus eventBus;
     private final PluginManager pluginManager;
+    private final ModuleManager moduleManager;
     private final ServiceRegistry serviceRegistry;
 
     protected Carbon() {
         this.logger = LoggerFactory.getLogger("Carbon");
         this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
         this.pluginManager = new CarbonPluginManager();
+        this.moduleManager = new CarbonModuleManager();
         this.serviceRegistry = new CarbonServiceRegistry();
 
         this.setInstance(); // Forcefully sets the instance
@@ -135,6 +138,16 @@ public final class Carbon {
      */
     public PluginManager getPluginManager() {
         return this.pluginManager;
+    }
+
+    /**
+     * Gets the {@link ModuleManager} used by Carbon.
+     *
+     * @return Carbon's module manager
+     * @since 1.0.0
+     */
+    public ModuleManager getModuleManager() {
+        return this.moduleManager;
     }
 
     /**
