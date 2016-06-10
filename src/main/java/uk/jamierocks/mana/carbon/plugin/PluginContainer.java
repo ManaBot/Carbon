@@ -40,25 +40,45 @@ public interface PluginContainer {
      * @param plugin The plugin annotation
      * @param instance The plugin instance
      * @return The plugin container
+     * @since 1.0.0
      */
     static PluginContainer of(Plugin plugin, Object instance) {
-        checkNotNull(plugin, "@Plugin annotation is null!");
-        checkNotNull(instance, "Plugin instance is null!");
+        checkNotNull(plugin, "plugin is null!");
+        checkNotNull(instance, "instance is null!");
+
+        return PluginContainer.of(plugin.id(), plugin.name(), plugin.version(), instance);
+    }
+
+    /**
+     * Creates a {@link PluginContainer} with the given values.
+     *
+     * @param id The identifier
+     * @param name The name
+     * @param version The version
+     * @param instance The plugin instance
+     * @return The plugin container
+     * @since 1.0.0
+     */
+    static PluginContainer of(String id, String name, String version, Object instance) {
+        checkNotNull(id, "id is null!");
+        checkNotNull(name, "name is null!");
+        checkNotNull(version, "version is null!");
+        checkNotNull(instance, "instance is null!");
 
         return new PluginContainer() {
             @Override
             public String getId() {
-                return plugin.id();
+                return id;
             }
 
             @Override
             public String getName() {
-                return plugin.name();
+                return name;
             }
 
             @Override
             public String getVersion() {
-                return plugin.version();
+                return version;
             }
 
             @Override
@@ -99,6 +119,7 @@ public interface PluginContainer {
      * Gets the instance of this plugin.
      *
      * @return The instance
+     * @since 1.0.0
      */
     Object getInstance();
 }

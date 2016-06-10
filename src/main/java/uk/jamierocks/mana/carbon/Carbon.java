@@ -32,10 +32,9 @@ import org.slf4j.LoggerFactory;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
+import uk.jamierocks.mana.carbon.util.ReflectionUtil;
+import uk.jamierocks.mana.carbon.util.ReflectionUtilException;
 import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 /**
  * Holds all the necessary components for Carbon.
@@ -83,15 +82,8 @@ public final class Carbon {
 
     private void setInstance() {
         try {
-            Field instanceField = Carbon.class.getDeclaredField("INSTANCE");
-            instanceField.setAccessible(true);
-
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(instanceField, instanceField.getModifiers() & ~Modifier.FINAL);
-
-            instanceField.set(null, this);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            ReflectionUtil.setStaticFinal(this.getClass(), "INSTANCE", this);
+        } catch (ReflectionUtilException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
             this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
@@ -101,35 +93,9 @@ public final class Carbon {
 
     private void setContainer() {
         try {
-            Field instanceField = Carbon.class.getDeclaredField("CONTAINER");
-            instanceField.setAccessible(true);
-
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(instanceField, instanceField.getModifiers() & ~Modifier.FINAL);
-
-            instanceField.set(null, new PluginContainer() {
-                @Override
-                public String getId() {
-                    return "carbon";
-                }
-
-                @Override
-                public String getName() {
-                    return "Carbon";
-                }
-
-                @Override
-                public String getVersion() {
-                    return "TODO";
-                }
-
-                @Override
-                public Object getInstance() {
-                    return Carbon.this;
-                }
-            });
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            ReflectionUtil.setStaticFinal(this.getClass(), "CONTAINER",
+                    PluginContainer.of("carbon", "Carbon", "TODO", this));
+        } catch (ReflectionUtilException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
             this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
