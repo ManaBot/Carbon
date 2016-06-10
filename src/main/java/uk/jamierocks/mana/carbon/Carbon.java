@@ -73,7 +73,7 @@ public final class Carbon {
     protected Carbon() {
         this.logger = LoggerFactory.getLogger("Carbon");
         this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
-        this.pluginManager = new PluginManager();
+        this.pluginManager = new CarbonPluginManager();
         this.serviceRegistry = new CarbonServiceRegistry();
 
         this.setInstance(); // Forcefully sets the instance
