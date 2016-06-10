@@ -30,6 +30,7 @@ import com.google.common.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
+import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
 
 import java.lang.reflect.Field;
@@ -62,11 +63,13 @@ public final class Carbon {
     private final Logger logger;
     private final EventBus eventBus;
     private final PluginManager pluginManager;
+    private final ServiceRegistry serviceRegistry;
 
     protected Carbon() {
         this.logger = LoggerFactory.getLogger("Carbon");
         this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
         this.pluginManager = new PluginManager();
+        this.serviceRegistry = new CarbonServiceRegistry();
 
         this.setInstance(); // Forcefully sets the instance
     }
@@ -120,5 +123,15 @@ public final class Carbon {
      */
     public PluginManager getPluginManager() {
         return this.pluginManager;
+    }
+
+    /**
+     * Gets the {@link ServiceRegistry} used by Carbon.
+     *
+     * @return Carbon's service registry
+     * @since 1.0.0
+     */
+    public ServiceRegistry getServiceRegistry() {
+        return this.serviceRegistry;
     }
 }

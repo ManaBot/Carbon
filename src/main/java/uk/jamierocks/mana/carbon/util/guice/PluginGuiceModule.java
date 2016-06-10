@@ -36,7 +36,7 @@ import uk.jamierocks.mana.carbon.plugin.Plugin;
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public class PluginGuiceModule extends AbstractModule {
+public final class PluginGuiceModule extends AbstractModule {
 
     private final Plugin plugin;
 

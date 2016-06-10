@@ -22,34 +22,44 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
-
-import uk.jamierocks.mana.carbon.event.state.InitialisationEvent;
-import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
-import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
+package uk.jamierocks.mana.carbon.service;
 
 /**
- * The application entry-point for Carbon.
+ * An exception for issues that may arise while registering a provider.
  *
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public final class Main {
+public class ProviderRegistrationException extends Exception {
 
-    public static void main(String[] args) {
-        // Initialise Carbon
-        new Carbon();
+    /**
+     * Constructs the exception with only a message.
+     *
+     * @param message The message
+     * @since 1.0.0
+     */
+    public ProviderRegistrationException(String message) {
+        super(message);
+    }
 
-        // Load all of the plugins
-        Carbon.getCarbon().getPluginManager().loadAllPlugins();
+    /**
+     * Constructs the exception with only a cause.
+     *
+     * @param cause The cause
+     * @since 1.0.0
+     */
+    public ProviderRegistrationException(Throwable cause) {
+        super(cause);
+    }
 
-        // Pre Init state
-        new PreInitialisationEvent().post();
-
-        // Init state
-        new InitialisationEvent().post();
-
-        // Post Init state
-        new PostInitialisationEvent().post();
+    /**
+     * Constructs the exception with a message and cause.
+     *
+     * @param message The message
+     * @param cause The cause
+     * @since 1.0.0
+     */
+    public ProviderRegistrationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

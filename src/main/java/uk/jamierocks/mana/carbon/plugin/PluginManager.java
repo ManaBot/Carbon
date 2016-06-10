@@ -24,6 +24,8 @@
 
 package uk.jamierocks.mana.carbon.plugin;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Guice;
@@ -51,7 +53,25 @@ public final class PluginManager {
 
     private static final File PLUGIN_DIR = new File("plugins");
 
-    private final Map<String, PluginContainer> loadedPlugins = Maps.newHashMap();
+    private final Map<String, PluginContainer> plugins = Maps.newHashMap();
+    private final Map<Object, PluginContainer> pluginInstances = Maps.newHashMap();
+
+    /**
+     * Gets a {@link PluginContainer} from an instance, if available.
+     *
+     * @param instance The plugin instance
+     * @return The plugin container
+     * @since 1.0.0
+     */
+    public Optional<PluginContainer> fromInstance(Object instance) {
+        checkNotNull(instance, "instance is null!");
+
+        if (instance instanceof PluginContainer) {
+            return Optional.of((PluginContainer) instance);
+        }
+
+        return Optional.ofNullable(this.pluginInstances.get(instance));
+    }
 
     /**
      * Gets the {@link PluginContainer} from the given identifier.
@@ -61,10 +81,7 @@ public final class PluginManager {
      * @since 1.0.0
      */
     public Optional<PluginContainer> getPlugin(String id) {
-        if (!this.isLoaded(id)) {
-            return Optional.empty();
-        }
-        return Optional.of(this.loadedPlugins.get(id));
+        return Optional.ofNullable(this.plugins.get(id));
     }
 
     /**
@@ -74,7 +91,7 @@ public final class PluginManager {
      * @since 1.0.0
      */
     public List<PluginContainer> getPlugins() {
-        return Lists.newArrayList(this.loadedPlugins.values());
+        return Lists.newArrayList(this.plugins.values());
     }
 
     /**
@@ -85,7 +102,7 @@ public final class PluginManager {
      * @since 1.0.0
      */
     public boolean isLoaded(String id) {
-        return this.loadedPlugins.containsKey(id);
+        return this.plugins.containsKey(id);
     }
 
     /**
@@ -108,7 +125,7 @@ public final class PluginManager {
                 Object instance = injector.getInstance(pluginClass);
 
                 Carbon.getCarbon().getEventBus().register(instance);
-                this.loadedPlugins.put(pluginAnnotation.id(), PluginContainer.of(pluginAnnotation, instance));
+                this.plugins.put(pluginAnnotation.id(), PluginContainer.of(pluginAnnotation, instance));
             }
         }
     }

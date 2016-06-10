@@ -22,34 +22,46 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
+package uk.jamierocks.mana.carbon.service;
 
-import uk.jamierocks.mana.carbon.event.state.InitialisationEvent;
-import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
-import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
+import java.util.Optional;
 
 /**
- * The application entry-point for Carbon.
+ * A registry for services and their providers.
  *
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public final class Main {
+public interface ServiceRegistry {
 
-    public static void main(String[] args) {
-        // Initialise Carbon
-        new Carbon();
+    /**
+     * Registers the given provider to the given service within the registry.
+     *
+     * @param plugin The instance of the plugin of which is registering the provider
+     * @param service The service
+     * @param provider The provider for the service
+     * @param <T> The type of the service
+     * @since 1.0.0
+     */
+    <T> void registerProvider(Object plugin, Class<T> service, T provider);
 
-        // Load all of the plugins
-        Carbon.getCarbon().getPluginManager().loadAllPlugins();
+    /**
+     * Returns the provider for the given service, if one is available.
+     *
+     * @param service The service
+     * @param <T> The type of the service
+     * @return The provider if available
+     * @since 1.0.0
+     */
+    <T> Optional<T> provide(Class<T> service);
 
-        // Pre Init state
-        new PreInitialisationEvent().post();
-
-        // Init state
-        new InitialisationEvent().post();
-
-        // Post Init state
-        new PostInitialisationEvent().post();
-    }
+    /**
+     * Returns the registration for the given service, if one is available.
+     *
+     * @param service The service
+     * @param <T> The type of the service
+     * @return The registration if available
+     * @since 1.0.0
+     */
+    <T> Optional<ProviderRegistration<T>> provideRegistration(Class<T> service);
 }
