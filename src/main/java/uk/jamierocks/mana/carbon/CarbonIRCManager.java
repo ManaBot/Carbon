@@ -22,45 +22,42 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.guice;
+package uk.jamierocks.mana.carbon;
 
-import com.google.inject.AbstractModule;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import uk.jamierocks.mana.carbon.Carbon;
-import uk.jamierocks.mana.carbon.module.Module;
+import com.google.common.collect.Maps;
+import org.kitteh.irc.client.library.Client;
+import uk.jamierocks.mana.carbon.irc.IRCManager;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
 /**
- * The Guice module for {@link Module}s within Carbon.
+ * The implementation of {@link IRCManager} for Carbon.
  *
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public final class ModuleGuiceModule extends AbstractModule {
+public final class CarbonIRCManager implements IRCManager {
 
-    private final Module module;
+    private final Map<String, Client> clients = Maps.newHashMap();
+
+    protected CarbonIRCManager() {}
 
     /**
-     * Constructs a new Guice module for a {@link Module}.
-     *
-     * @param module The module
+     * {@inheritDoc}
      */
-    public ModuleGuiceModule(Module module) {
-        this.module = module;
+    @Override
+    public Optional<Client> getClient(String id) {
+        return Optional.ofNullable(this.clients.get(id));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void configure() {
-        // The basics
-        this.bind(Carbon.class).toInstance(Carbon.getCarbon());
-        this.bind(Logger.class).toInstance(LoggerFactory.getLogger(this.module.name()));
-
-        // Config node
-        this.bind(CommentedConfigurationNode.class)
-                .toInstance(Carbon.getCarbon().getConfigurationNode().getNode("module", this.module.id()));
+    public Collection<Client> getClients() {
+        return Collections.unmodifiableCollection(this.clients.values());
     }
 }

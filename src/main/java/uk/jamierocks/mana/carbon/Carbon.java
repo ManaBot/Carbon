@@ -31,6 +31,7 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
@@ -80,6 +81,7 @@ public final class Carbon {
     private final EventBus eventBus;
     private final PluginManager pluginManager;
     private final ModuleManager moduleManager;
+    private final IRCManager ircManager;
     private final ServiceRegistry serviceRegistry;
     private CommentedConfigurationNode configurationNode;
 
@@ -88,6 +90,7 @@ public final class Carbon {
         this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
         this.pluginManager = new CarbonPluginManager();
         this.moduleManager = new CarbonModuleManager();
+        this.ircManager = new CarbonIRCManager();
         this.serviceRegistry = new CarbonServiceRegistry();
 
         this.setInstance(); // Forcefully sets the instance
@@ -178,6 +181,16 @@ public final class Carbon {
      */
     public ModuleManager getModuleManager() {
         return this.moduleManager;
+    }
+
+    /**
+     * Gets the {@link IRCManager} used by Carbon.
+     *
+     * @return Carbon's irc manager
+     * @since 1.0.0
+     */
+    public IRCManager getIRCManager() {
+        return this.ircManager;
     }
 
     /**

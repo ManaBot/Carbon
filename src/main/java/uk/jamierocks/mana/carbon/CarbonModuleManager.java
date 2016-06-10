@@ -42,7 +42,7 @@ import java.util.List;
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public class CarbonModuleManager implements ModuleManager {
+public final class CarbonModuleManager implements ModuleManager {
 
     private final List<ModuleContainer> modules = Lists.newArrayList();
 

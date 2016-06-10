@@ -61,6 +61,6 @@ public final class PluginGuiceModule extends AbstractModule {
 
         // Config node
         this.bind(CommentedConfigurationNode.class)
-                .toInstance(Carbon.getCarbon().getConfigurationNode().getNode("plugins." + this.plugin.id()));
+                .toInstance(Carbon.getCarbon().getConfigurationNode().getNode("plugin", this.plugin.id()));
     }
 }
