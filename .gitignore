@@ -92,3 +92,7 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
+
+### Carbon ###
+run/

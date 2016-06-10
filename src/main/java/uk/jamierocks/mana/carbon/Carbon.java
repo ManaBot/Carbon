@@ -27,6 +27,8 @@ package uk.jamierocks.mana.carbon;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.eventbus.EventBus;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
@@ -38,6 +40,11 @@ import uk.jamierocks.mana.carbon.util.ReflectionUtil;
 import uk.jamierocks.mana.carbon.util.ReflectionUtilException;
 import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * Holds all the necessary components for Carbon.
  *
@@ -45,6 +52,8 @@ import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
  * @since 1.0.0
  */
 public final class Carbon {
+
+    private static final Path CONFIG_PATH = Paths.get("carbon.conf");
 
     /**
      * This will be forcefully overridden by Carbon upon its initialisation.
@@ -72,6 +81,7 @@ public final class Carbon {
     private final PluginManager pluginManager;
     private final ModuleManager moduleManager;
     private final ServiceRegistry serviceRegistry;
+    private CommentedConfigurationNode configurationNode;
 
     protected Carbon() {
         this.logger = LoggerFactory.getLogger("Carbon");
@@ -82,6 +92,26 @@ public final class Carbon {
 
         this.setInstance(); // Forcefully sets the instance
         this.setContainer(); // Forcefully sets the container
+
+        if (Files.notExists(CONFIG_PATH)) {
+            try {
+                Files.copy(Carbon.class.getResourceAsStream("carbon.conf"), CONFIG_PATH);
+            } catch (IOException e) {
+                // If this ever occurs something massively wrong is going on.
+                // It is probably for the best to exit the application
+                this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
+                System.exit(0);
+            }
+        }
+
+        try {
+            this.configurationNode = HoconConfigurationLoader.builder().setPath(CONFIG_PATH).build().load();
+        } catch (IOException e) {
+            // If this ever occurs something massively wrong is going on.
+            // It is probably for the best to exit the application
+            this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
+            System.exit(0);
+        }
     }
 
     private void setInstance() {
@@ -158,5 +188,15 @@ public final class Carbon {
      */
     public ServiceRegistry getServiceRegistry() {
         return this.serviceRegistry;
+    }
+
+    /**
+     * Gets the {@link CommentedConfigurationNode} used by Carbon.
+     *
+     * @return Carbon's configuration node
+     * @since 1.0.0
+     */
+    public CommentedConfigurationNode getConfigurationNode() {
+        return this.configurationNode;
     }
 }

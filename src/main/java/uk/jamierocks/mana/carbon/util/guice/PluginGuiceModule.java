@@ -25,6 +25,7 @@
 package uk.jamierocks.mana.carbon.util.guice;
 
 import com.google.inject.AbstractModule;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.jamierocks.mana.carbon.Carbon;
@@ -57,5 +58,9 @@ public final class PluginGuiceModule extends AbstractModule {
         // The basics
         this.bind(Carbon.class).toInstance(Carbon.getCarbon());
         this.bind(Logger.class).toInstance(LoggerFactory.getLogger(this.plugin.name()));
+
+        // Config node
+        this.bind(CommentedConfigurationNode.class)
+                .toInstance(Carbon.getCarbon().getConfigurationNode().getNode("plugins." + this.plugin.id()));
     }
 }
