@@ -40,6 +40,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -86,8 +88,8 @@ public final class CarbonPluginManager implements PluginManager {
      * {@inheritDoc}
      */
     @Override
-    public List<PluginContainer> getPlugins() {
-        return Lists.newArrayList(this.plugins.values());
+    public Collection<PluginContainer> getPlugins() {
+        return Collections.unmodifiableCollection(this.plugins.values());
     }
 
     /**

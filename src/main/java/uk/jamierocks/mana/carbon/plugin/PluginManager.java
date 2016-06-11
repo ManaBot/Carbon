@@ -24,7 +24,7 @@
 
 package uk.jamierocks.mana.carbon.plugin;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -54,12 +54,12 @@ public interface PluginManager {
     Optional<PluginContainer> getPlugin(String id);
 
     /**
-     * Gets an immutable {@link List} of the loaded {@link Plugin}s.
+     * Gets an immutable collection of the loaded {@link Plugin}s.
      *
      * @return The list of plugins
      * @since 1.0.0
      */
-    List<PluginContainer> getPlugins();
+    Collection<PluginContainer> getPlugins();
 
     /**
      * Checks if a plugin with the given identifier is currently loaded.

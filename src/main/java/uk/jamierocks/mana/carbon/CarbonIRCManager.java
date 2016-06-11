@@ -25,7 +25,9 @@
 package uk.jamierocks.mana.carbon;
 
 import com.google.common.collect.Maps;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.kitteh.irc.client.library.Client;
+import org.kitteh.irc.client.library.util.AcceptingTrustManagerFactory;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 
 import java.util.Collection;
@@ -43,7 +45,26 @@ public final class CarbonIRCManager implements IRCManager {
 
     private final Map<String, Client> clients = Maps.newHashMap();
 
-    protected CarbonIRCManager() {}
+    protected CarbonIRCManager() {
+        CommentedConfigurationNode configurationNode = Carbon.getCarbon().getConfigurationNode().getNode("irc");
+        for (CommentedConfigurationNode network : configurationNode.getNode("networks").getChildrenList()) {
+            Client.Builder clientBuilder = Client.builder()
+                    .secureTrustManagerFactory(new AcceptingTrustManagerFactory())
+                    .name(network.getNode("id").getString())
+                    .serverHost(network.getNode("host").getString())
+                    .serverPort(network.getNode("port").getInt())
+                    .secure(network.getNode("secure").getBoolean())
+                    .user(network.getNode("user").getString())
+                    .nick(network.getNode("nick").getString())
+                    .listenOutput(Carbon.getCarbon().getLogger()::debug)
+                    .listenException(e -> Carbon.getCarbon().getLogger()
+                            .error("KittehIRCClientLibrary has experienced an exception!", e));
+            if (!network.getNode("serverPassword").isVirtual()) {
+                clientBuilder.serverPassword(network.getNode("serverPassword").getString());
+            }
+            this.clients.put(network.getNode("id").getString(), clientBuilder.build());
+        }
+    }
 
     /**
      * {@inheritDoc}
