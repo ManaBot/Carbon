@@ -58,17 +58,20 @@ public final class CarbonModuleManager implements ModuleManager {
         if (module.isAnnotationPresent(Module.class)) {
             Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
 
-            Carbon.getCarbon().getLogger()
-                    .info("Loading module: " + moduleAnnotation.name() + "(" + moduleAnnotation.id() + ")");
+            if (Carbon.getCarbon().getConfigurationNode()
+                    .getNode("module", moduleAnnotation.id(), "enabled").getBoolean(false)) {
+                Carbon.getCarbon().getLogger()
+                        .info("Loading module: " + moduleAnnotation.name() + "(" + moduleAnnotation.id() + ")");
 
-            Injector injector = Guice.createInjector(new ModuleGuiceModule(moduleAnnotation));
-            Object instance = injector.getInstance(module);
+                Injector injector = Guice.createInjector(new ModuleGuiceModule(moduleAnnotation));
+                Object instance = injector.getInstance(module);
 
-            Carbon.getCarbon().getEventBus().register(instance);
-            this.modules.add(ModuleContainer.of(moduleAnnotation, instance));
+                Carbon.getCarbon().getEventBus().register(instance);
+                this.modules.add(ModuleContainer.of(moduleAnnotation, instance));
 
-            Carbon.getCarbon().getLogger()
-                    .info("Loaded module: " + moduleAnnotation.name() + "(" + moduleAnnotation.id() + ")");
+                Carbon.getCarbon().getLogger()
+                        .info("Loaded module: " + moduleAnnotation.name() + "(" + moduleAnnotation.id() + ")");
+            }
         } else {
             Carbon.getCarbon().getLogger().error(module.getName() + " has no @Module annotation!");
         }
