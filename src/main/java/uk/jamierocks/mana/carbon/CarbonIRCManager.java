@@ -45,7 +45,9 @@ public final class CarbonIRCManager implements IRCManager {
 
     private final Map<String, Client> clients = Maps.newHashMap();
 
-    protected CarbonIRCManager() {
+    protected CarbonIRCManager() {}
+
+    protected void start() {
         CommentedConfigurationNode configurationNode = Carbon.getCarbon().getConfigurationNode().getNode("irc");
         for (CommentedConfigurationNode network : configurationNode.getNode("networks").getChildrenList()) {
             Client.Builder clientBuilder = Client.builder()
@@ -54,8 +56,8 @@ public final class CarbonIRCManager implements IRCManager {
                     .serverHost(network.getNode("host").getString())
                     .serverPort(network.getNode("port").getInt())
                     .secure(network.getNode("secure").getBoolean())
-                    .user(network.getNode("user").getString())
-                    .nick(network.getNode("nick").getString())
+                    .user(network.getNode("username").getString())
+                    .nick(network.getNode("nickname").getString())
                     .listenOutput(Carbon.getCarbon().getLogger()::debug)
                     .listenException(e -> Carbon.getCarbon().getLogger()
                             .error("KittehIRCClientLibrary has experienced an exception!", e));

@@ -33,7 +33,7 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.event.channel.ChannelInviteEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
-import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
+import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.module.Module;
 import uk.jamierocks.mana.carbon.util.extra.command.JoinCommand;
 import uk.jamierocks.mana.carbon.util.extra.command.PartCommand;
@@ -50,7 +50,7 @@ public final class InviteModule {
     @Inject private Logger logger;
 
     @Subscribe
-    public void onPreInitialisation(PreInitialisationEvent event) {
+    public void onPostInitialisation(PostInitialisationEvent event) {
         // Register listener
         event.getCarbon().getIRCManager().getClients().forEach(c -> c.getEventManager().registerEventListener(this));
 

@@ -57,6 +57,12 @@ public final class CarbonPluginManager implements PluginManager {
 
     private static final File PLUGIN_DIR = new File("plugins");
 
+    static {
+        if (!PLUGIN_DIR.exists()) {
+            PLUGIN_DIR.mkdirs();
+        }
+    }
+
     private final Map<String, PluginContainer> plugins = Maps.newHashMap();
     private final Map<Object, PluginContainer> pluginInstances = Maps.newHashMap();
 
