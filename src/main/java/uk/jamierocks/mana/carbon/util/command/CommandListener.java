@@ -52,7 +52,7 @@ public final class CommandListener {
             // By this point it still isn't decided as to weather this is a command!
             final String command = message.substring(Constants.COMMAND_PREFIX.length());
 
-            if (Carbon.getCarbon().getCommandDispatcher().contains(command.split("")[0])) {
+            if (Carbon.getCarbon().getCommandDispatcher().contains(command.split(" ")[0])) {
                 // We know know it is a command, and can continue to process it
                 Namespace namespace = new Namespace();
                 namespace.put(String.class, command);

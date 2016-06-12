@@ -102,7 +102,7 @@ public final class Carbon {
 
         if (Files.notExists(CONFIG_PATH)) {
             try {
-                Files.copy(Carbon.class.getResourceAsStream("carbon.conf"), CONFIG_PATH);
+                Files.copy(Carbon.class.getResourceAsStream("/carbon.conf"), CONFIG_PATH);
             } catch (IOException e) {
                 // If this ever occurs something massively wrong is going on.
                 // It is probably for the best to exit the application
