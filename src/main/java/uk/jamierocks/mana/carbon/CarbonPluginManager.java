@@ -180,6 +180,7 @@ public final class CarbonPluginManager implements PluginManager {
      * @since 1.0.0
      */
     private void registerPlugin(PluginContainer container) {
+        Carbon.getCarbon().getLogger().info("Found plugin: " + container.getName() + " (" + container.getId() + ")");
         Carbon.getCarbon().getEventBus().register(container.getInstance());
         this.plugins.put(container.getId(), container);
         this.pluginInstances.put(container.getInstance(), container);
