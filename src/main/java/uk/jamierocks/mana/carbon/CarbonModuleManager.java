@@ -57,7 +57,7 @@ public final class CarbonModuleManager implements ModuleManager {
     public void registerModule(Class<?> module) {
         checkNotNull(module, "module is null!");
 
-        this.registerPlugin0(null, module);
+        this.registerModule0(null, module);
     }
 
     /**
@@ -69,18 +69,18 @@ public final class CarbonModuleManager implements ModuleManager {
         checkNotNull(module, "module is null!");
 
         if (plugin instanceof PluginContainer) {
-            this.registerPlugin0((PluginContainer) plugin, module);
+            this.registerModule0((PluginContainer) plugin, module);
         } else {
             Optional<PluginContainer> container = Carbon.getCarbon().getPluginManager().fromInstance(plugin);
             if (container.isPresent()) {
-                this.registerPlugin0(container.get(), module);
+                this.registerModule0(container.get(), module);
             } else {
                 Carbon.getCarbon().getLogger().error("Could not find container for the given plugin!");
             }
         }
     }
 
-    private void registerPlugin0(PluginContainer container, Class<?> module) {
+    private void registerModule0(PluginContainer container, Class<?> module) {
         if (module.isAnnotationPresent(Module.class)) {
             Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
 
@@ -120,5 +120,13 @@ public final class CarbonModuleManager implements ModuleManager {
             }
         }
         return Optional.empty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<ModuleContainer> getModule(String id) {
+        return Optional.ofNullable(this.modules.get(id));
     }
 }

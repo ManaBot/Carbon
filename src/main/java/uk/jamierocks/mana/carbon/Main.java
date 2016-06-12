@@ -49,7 +49,7 @@ public final class Main {
         // Pre Init state
         new PreInitialisationEvent().post();
 
-        ((CarbonIRCManager) Carbon.getCarbon().getIRCManager()).start();
+        ((CarbonIRCManager) Carbon.getCarbon().getIRCManager()).initialise();
 
         // Register command listener
         CommandListener commandListener = new CommandListener();

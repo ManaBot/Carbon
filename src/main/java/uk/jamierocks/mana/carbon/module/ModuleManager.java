@@ -63,4 +63,28 @@ public interface ModuleManager {
      * @since 1.1.0
      */
     Optional<PluginContainer> getOwner(Class<?> module);
+
+    /**
+     * Returns the {@link ModuleContainer} for the module requested, if available.
+     *
+     * @param module The module class
+     * @return The module container
+     * @since 1.1.0
+     */
+    default Optional<ModuleContainer> getModule(Class<?> module) {
+        if (module.isAnnotationPresent(Module.class)) {
+            final Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
+            return this.getModule(moduleAnnotation.id());
+        }
+        return Optional.empty();
+    }
+
+    /**
+     * Returns the {@link ModuleContainer} for the module requested, if available.
+     *
+     * @param id The module id
+     * @return The module container
+     * @since 1.1.0
+     */
+    Optional<ModuleContainer> getModule(String id);
 }

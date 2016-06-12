@@ -53,7 +53,7 @@ public final class CarbonIRCManager implements IRCManager {
 
     protected CarbonIRCManager() {}
 
-    protected void start() {
+    public void initialise() {
         CommentedConfigurationNode configurationNode = Carbon.getCarbon().getConfigurationNode().getNode("irc");
         for (CommentedConfigurationNode network : configurationNode.getNode("networks").getChildrenList()) {
             Client.Builder clientBuilder = Client.builder()
