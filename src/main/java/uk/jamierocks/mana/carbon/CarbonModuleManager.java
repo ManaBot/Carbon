@@ -35,6 +35,8 @@ import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.util.guice.ModuleGuiceModule;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -56,7 +58,6 @@ public final class CarbonModuleManager implements ModuleManager {
     @Override
     public void registerModule(Class<?> module) {
         checkNotNull(module, "module is null!");
-
         this.registerModule0(null, module);
     }
 
@@ -111,22 +112,16 @@ public final class CarbonModuleManager implements ModuleManager {
      * {@inheritDoc}
      */
     @Override
-    public Optional<PluginContainer> getOwner(Class<?> module) {
-        if (module.isAnnotationPresent(Module.class)) {
-            Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
-
-            if (this.modules.containsKey(moduleAnnotation.id())) {
-                return this.modules.get(moduleAnnotation.id()).getOwner();
-            }
-        }
-        return Optional.empty();
+    public Optional<ModuleContainer> getModule(String id) {
+        checkNotNull(id, "id is null!");
+        return Optional.ofNullable(this.modules.get(id));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Optional<ModuleContainer> getModule(String id) {
-        return Optional.ofNullable(this.modules.get(id));
+    public Collection<ModuleContainer> getModules() {
+        return Collections.unmodifiableCollection(this.modules.values());
     }
 }
