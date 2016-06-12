@@ -60,26 +60,7 @@ public final class CarbonModuleManager implements ModuleManager {
     public void registerModule(Class<?> module) {
         checkNotNull(module, "module is null!");
 
-        if (module.isAnnotationPresent(Module.class)) {
-            Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
-
-            if (Carbon.getCarbon().getConfigurationNode()
-                    .getNode("module", moduleAnnotation.id(), "enabled").getBoolean(false)) {
-                Carbon.getCarbon().getLogger()
-                        .info("Loading module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
-
-                Injector injector = Guice.createInjector(new ModuleGuiceModule(moduleAnnotation));
-                Object instance = injector.getInstance(module);
-
-                Carbon.getCarbon().getEventBus().register(instance);
-                this.modules.add(ModuleContainer.of(moduleAnnotation, instance));
-
-                Carbon.getCarbon().getLogger()
-                        .info("Loaded module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
-            }
-        } else {
-            Carbon.getCarbon().getLogger().error(module.getName() + " has no @Module annotation!");
-        }
+        this.registerPlugin0(null, module);
     }
 
     /**
@@ -93,14 +74,41 @@ public final class CarbonModuleManager implements ModuleManager {
         this.registerModule(module);
 
         if (plugin instanceof PluginContainer) {
-            this.moduleOwners.put(module, (PluginContainer) plugin);
+            this.registerPlugin0((PluginContainer) plugin, module);
         } else {
             Optional<PluginContainer> container = Carbon.getCarbon().getPluginManager().fromInstance(plugin);
             if (container.isPresent()) {
-                this.moduleOwners.put(module, container.get());
+                this.registerPlugin0(container.get(), module);
             } else {
                 Carbon.getCarbon().getLogger().error("Could not find container for the given plugin!");
             }
+        }
+    }
+
+    private void registerPlugin0(PluginContainer container, Class<?> module) {
+        if (module.isAnnotationPresent(Module.class)) {
+            Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
+
+            if (Carbon.getCarbon().getConfigurationNode()
+                    .getNode("module", moduleAnnotation.id(), "enabled").getBoolean(false)) {
+                Carbon.getCarbon().getLogger()
+                        .info("Loading module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
+
+                Injector injector = Guice.createInjector(new ModuleGuiceModule(moduleAnnotation));
+                Object instance = injector.getInstance(module);
+
+                Carbon.getCarbon().getEventBus().register(instance);
+                if (container != null) {
+                    this.modules.add(ModuleContainer.of(moduleAnnotation, instance, container));
+                } else {
+                    this.modules.add(ModuleContainer.of(moduleAnnotation, instance));
+                }
+
+                Carbon.getCarbon().getLogger()
+                        .info("Loaded module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
+            }
+        } else {
+            Carbon.getCarbon().getLogger().error(module.getName() + " has no @Module annotation!");
         }
     }
 
