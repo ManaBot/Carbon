@@ -61,7 +61,7 @@ public final class Main {
         new InitialisationEvent().post();
 
         // Register builtin modules
-        Carbon.getCarbon().getModuleManager().registerModule(InviteModule.class);
+        Carbon.getCarbon().getModuleManager().registerModule(Carbon.getCarbon(), InviteModule.class);
 
         // Post Init state
         new PostInitialisationEvent().post();

@@ -27,14 +27,18 @@ package uk.jamierocks.mana.carbon;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import uk.jamierocks.mana.carbon.module.Module;
 import uk.jamierocks.mana.carbon.module.ModuleContainer;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
+import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.util.guice.ModuleGuiceModule;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * The implementation of {@link ModuleManager} for Carbon.
@@ -45,6 +49,7 @@ import java.util.List;
 public final class CarbonModuleManager implements ModuleManager {
 
     private final List<ModuleContainer> modules = Lists.newArrayList();
+    private final Map<Class<?>, PluginContainer> moduleOwners = Maps.newHashMap();
 
     protected CarbonModuleManager() {}
 
@@ -75,5 +80,35 @@ public final class CarbonModuleManager implements ModuleManager {
         } else {
             Carbon.getCarbon().getLogger().error(module.getName() + " has no @Module annotation!");
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void registerModule(Object plugin, Class<?> module) {
+        checkNotNull(module, "plugin is null!");
+        checkNotNull(module, "module is null!");
+
+        this.registerModule(module);
+
+        if (plugin instanceof PluginContainer) {
+            this.moduleOwners.put(module, (PluginContainer) plugin);
+        } else {
+            Optional<PluginContainer> container = Carbon.getCarbon().getPluginManager().fromInstance(plugin);
+            if (container.isPresent()) {
+                this.moduleOwners.put(module, container.get());
+            } else {
+                Carbon.getCarbon().getLogger().error("Could not find container for the given plugin!");
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Optional<PluginContainer> getOwner(Class<?> module) {
+        return Optional.ofNullable(this.moduleOwners.get(module));
     }
 }

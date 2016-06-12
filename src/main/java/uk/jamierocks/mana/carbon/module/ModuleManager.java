@@ -24,6 +24,10 @@
 
 package uk.jamierocks.mana.carbon.module;
 
+import uk.jamierocks.mana.carbon.plugin.PluginContainer;
+
+import java.util.Optional;
+
 /**
  * A manager for registering modules.
  *
@@ -33,10 +37,30 @@ package uk.jamierocks.mana.carbon.module;
 public interface ModuleManager {
 
     /**
-     * Registers the given module.
+     * Registers the given module, to an uncredited plugin.
      *
      * @param module The module
      * @since 1.0.0
+     * @deprecated As of release 1.1.0, replaced by {@link #registerModule(Object, Class)}
      */
+    @Deprecated
     void registerModule(Class<?> module);
+
+    /**
+     * Registers the given module, to the given plugin.
+     *
+     * @param plugin The plugin instance or container
+     * @param module The module
+     * @since 1.1.0
+     */
+    void registerModule(Object plugin, Class<?> module);
+
+    /**
+     * Returns the owner of the given module, if available.
+     *
+     * @param module The module
+     * @return The plugin owner
+     * @since 1.1.0
+     */
+    Optional<PluginContainer> getOwner(Class<?> module);
 }
