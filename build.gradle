@@ -22,6 +22,9 @@ ext.url = 'http://mana.jamierocks.uk/'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'http://repo.miserable.ninja/content/repositories/public/'
+    }
 }
 
 dependencies {
@@ -40,6 +43,9 @@ dependencies {
 
     // IRC related
     compile 'org.kitteh.irc:client-lib:1.1.0'
+
+    // Command related
+    compile 'com.sk89q.intake:intake:4.2-MISNIN-SNAPSHOT'
 }
 
 license {

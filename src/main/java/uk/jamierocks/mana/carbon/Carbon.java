@@ -27,6 +27,8 @@ package uk.jamierocks.mana.carbon;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.eventbus.EventBus;
+import com.sk89q.intake.dispatcher.Dispatcher;
+import com.sk89q.intake.dispatcher.SimpleDispatcher;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.slf4j.Logger;
@@ -83,6 +85,7 @@ public final class Carbon {
     private final ModuleManager moduleManager;
     private final IRCManager ircManager;
     private final ServiceRegistry serviceRegistry;
+    private final Dispatcher commandDispatcher;
     private CommentedConfigurationNode configurationNode;
 
     protected Carbon() {
@@ -92,6 +95,7 @@ public final class Carbon {
         this.moduleManager = new CarbonModuleManager();
         this.ircManager = new CarbonIRCManager();
         this.serviceRegistry = new CarbonServiceRegistry();
+        this.commandDispatcher = new SimpleDispatcher();
 
         this.setInstance(); // Forcefully sets the instance
         this.setContainer(); // Forcefully sets the container
@@ -201,6 +205,16 @@ public final class Carbon {
      */
     public ServiceRegistry getServiceRegistry() {
         return this.serviceRegistry;
+    }
+
+    /**
+     * Gets the {@link Dispatcher} used by Carbon.
+     *
+     * @return Carbon's command dispatcher
+     * @since 1.0.0
+     */
+    public Dispatcher getCommandDispatcher() {
+        return this.commandDispatcher;
     }
 
     /**

@@ -38,4 +38,11 @@ public final class Constants {
      * @since 1.0.0
      */
     public static final String VERSION = "%version%";
+
+    /**
+     * The prefix used by commands.
+     *
+     * @since 1.0.0
+     */
+    public static final String COMMAND_PREFIX = ".";
 }
