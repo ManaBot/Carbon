@@ -5,18 +5,18 @@
             <PatternLayout pattern="[%d{HH:mm:ss}] [%logger{1}/%level]: %msg%n"/>
         </Console>
 
-        <!--<RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+        <RollingFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%logger{1}/%level]: %msg%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy />
                 <OnStartupTriggeringPolicy />
             </Policies>
-        </RollingRandomAccessFile>-->
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="all">
             <AppenderRef ref="Console" level="info"/>
-            <!--<AppenderRef ref="File"/>-->
+            <AppenderRef ref="File"/>
         </Root>
     </Loggers>
 </Configuration>
