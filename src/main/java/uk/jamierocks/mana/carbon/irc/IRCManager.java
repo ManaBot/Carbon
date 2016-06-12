@@ -27,6 +27,7 @@ package uk.jamierocks.mana.carbon.irc;
 import org.kitteh.irc.client.library.Client;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -53,4 +54,12 @@ public interface IRCManager {
      * @since 1.0.0
      */
     Collection<Client> getClients();
+
+    /**
+     * Returns an immutable list of all the bot administrators.
+     *
+     * @return The administrators
+     * @since 1.1.0
+     */
+    List<String> getAdministrators();
 }

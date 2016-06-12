@@ -27,9 +27,7 @@ package uk.jamierocks.mana.carbon.util.extra;
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
 import com.google.common.eventbus.Subscribe;
-import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.event.channel.ChannelInviteEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
 import org.slf4j.Logger;
@@ -61,14 +59,9 @@ public final class InviteModule {
 
     @Handler
     public void onInvite(ChannelInviteEvent event) {
-        try {
-            if (event.getTarget().equalsIgnoreCase(event.getClient().getNick()) &&
-                    getCarbon().getConfigurationNode().getNode("irc", "admins").getList(TypeToken.of(String.class))
-                            .contains(event.getActor().getName())) {
-                event.getChannel().join();
-            }
-        } catch (ObjectMappingException e) {
-            this.logger.error("Failed to get IRC admins!", e);
+        if (event.getTarget().equalsIgnoreCase(event.getClient().getNick()) &&
+                getCarbon().getIRCManager().getAdministrators().contains(event.getActor().getName())) {
+            event.getChannel().join();
         }
     }
 }

@@ -26,7 +26,6 @@ package uk.jamierocks.mana.carbon;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -36,7 +35,6 @@ import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.util.guice.ModuleGuiceModule;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -48,8 +46,7 @@ import java.util.Optional;
  */
 public final class CarbonModuleManager implements ModuleManager {
 
-    private final List<ModuleContainer> modules = Lists.newArrayList();
-    private final Map<Class<?>, PluginContainer> moduleOwners = Maps.newHashMap();
+    private final Map<String, ModuleContainer> modules = Maps.newHashMap();
 
     protected CarbonModuleManager() {}
 
@@ -97,9 +94,9 @@ public final class CarbonModuleManager implements ModuleManager {
 
                 Carbon.getCarbon().getEventBus().register(instance);
                 if (container != null) {
-                    this.modules.add(ModuleContainer.of(moduleAnnotation, instance, container));
+                    this.modules.put(moduleAnnotation.id(), ModuleContainer.of(moduleAnnotation, instance, container));
                 } else {
-                    this.modules.add(ModuleContainer.of(moduleAnnotation, instance));
+                    this.modules.put(moduleAnnotation.id(), ModuleContainer.of(moduleAnnotation, instance));
                 }
 
                 Carbon.getCarbon().getLogger()
@@ -115,6 +112,13 @@ public final class CarbonModuleManager implements ModuleManager {
      */
     @Override
     public Optional<PluginContainer> getOwner(Class<?> module) {
-        return Optional.ofNullable(this.moduleOwners.get(module));
+        if (module.isAnnotationPresent(Module.class)) {
+            Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
+
+            if (this.modules.containsKey(moduleAnnotation.id())) {
+                return this.modules.get(moduleAnnotation.id()).getOwner();
+            }
+        }
+        return Optional.empty();
     }
 }

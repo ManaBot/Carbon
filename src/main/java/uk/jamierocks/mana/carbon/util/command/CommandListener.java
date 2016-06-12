@@ -55,7 +55,7 @@ public final class CommandListener {
             final String command = message.substring(Constants.COMMAND_PREFIX.length());
 
             if (getCarbon().getCommandDispatcher().contains(command.split(" ")[0])) {
-                // We know know it is a command, and can continue to process it
+                // We now know it is a command, and can continue to process it
                 CommandEvent commandEvent =
                         new CommandEvent(event, getCarbon().getCommandDispatcher().get(command.split(" ")[0])).post();
                 if (!commandEvent.isCancelled()) {

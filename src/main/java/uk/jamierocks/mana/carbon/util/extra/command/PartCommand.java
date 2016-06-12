@@ -27,14 +27,12 @@ package uk.jamierocks.mana.carbon.util.extra.command;
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
 import com.google.common.collect.Lists;
-import com.google.common.reflect.TypeToken;
 import com.sk89q.intake.CommandCallable;
 import com.sk89q.intake.CommandException;
 import com.sk89q.intake.Description;
 import com.sk89q.intake.InvocationCommandException;
 import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
 import org.slf4j.Logger;
@@ -88,13 +86,7 @@ public final class PartCommand implements CommandCallable {
      */
     @Override
     public boolean testPermission(Namespace namespace) {
-        try {
-            return getCarbon().getConfigurationNode().getNode("irc", "admins").getList(TypeToken.of(String.class))
-                    .contains(namespace.get(User.class).getName());
-        } catch (ObjectMappingException e) {
-            this.logger.error("Failed to get IRC admins!", e);
-            return false;
-        }
+        return getCarbon().getIRCManager().getAdministrators().contains(namespace.get(User.class).getName());
     }
 
     /**
