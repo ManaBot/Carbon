@@ -29,6 +29,7 @@ import uk.jamierocks.mana.carbon.event.state.InitialisationEvent;
 import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
 import uk.jamierocks.mana.carbon.util.command.CommandListener;
+import uk.jamierocks.mana.carbon.util.extra.InviteModule;
 
 /**
  * The application entry-point for Carbon.
@@ -53,6 +54,9 @@ public final class Main {
         for (Client client : Carbon.getCarbon().getIRCManager().getClients()) {
             client.getEventManager().registerEventListener(commandListener);
         }
+
+        // Register builtin modules
+        Carbon.getCarbon().getModuleManager().registerModule(InviteModule.class);
 
         // Init state
         new InitialisationEvent().post();
