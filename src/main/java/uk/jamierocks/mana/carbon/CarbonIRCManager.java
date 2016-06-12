@@ -24,6 +24,8 @@
 
 package uk.jamierocks.mana.carbon;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.google.common.collect.Maps;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.kitteh.irc.client.library.Client;
@@ -73,6 +75,8 @@ public final class CarbonIRCManager implements IRCManager {
      */
     @Override
     public Optional<Client> getClient(String id) {
+        checkNotNull(id, "id is null!");
+
         return Optional.ofNullable(this.clients.get(id));
     }
 

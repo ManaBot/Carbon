@@ -56,7 +56,7 @@ public final class CarbonServiceRegistry implements ServiceRegistry {
         checkNotNull(provider, "provider is null!");
 
         try {
-            providers.put(service, ProviderRegistration.of(plugin, service, provider));
+            this.providers.put(service, ProviderRegistration.of(plugin, service, provider));
         } catch (ProviderRegistrationException e) {
             Carbon.getCarbon().getLogger().error("Failed to register provider!", e);
         }
@@ -67,6 +67,8 @@ public final class CarbonServiceRegistry implements ServiceRegistry {
      */
     @Override
     public <T> Optional<T> provide(Class<T> service) {
+        checkNotNull(service, "service is null!");
+
         Optional<ProviderRegistration<T>> providerRegistration = this.provideRegistration(service);
         if (providerRegistration.isPresent()) {
             return Optional.of(providerRegistration.get().getProvider());
@@ -79,6 +81,8 @@ public final class CarbonServiceRegistry implements ServiceRegistry {
      */
     @Override
     public <T> Optional<ProviderRegistration<T>> provideRegistration(Class<T> service) {
+        checkNotNull(service, "service is null!");
+
         return Optional.ofNullable((ProviderRegistration<T>) this.providers.get(service));
     }
 }
