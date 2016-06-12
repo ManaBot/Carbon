@@ -71,8 +71,6 @@ public final class CarbonModuleManager implements ModuleManager {
         checkNotNull(module, "plugin is null!");
         checkNotNull(module, "module is null!");
 
-        this.registerModule(module);
-
         if (plugin instanceof PluginContainer) {
             this.registerPlugin0((PluginContainer) plugin, module);
         } else {

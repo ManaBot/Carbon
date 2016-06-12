@@ -29,7 +29,11 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.irc.IRCManager;
+import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.Plugin;
+import uk.jamierocks.mana.carbon.plugin.PluginManager;
+import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 
 /**
  * The Guice module for {@link Plugin}s within Carbon.
@@ -58,6 +62,12 @@ public final class PluginGuiceModule extends AbstractModule {
         // The basics
         this.bind(Carbon.class).toInstance(Carbon.getCarbon());
         this.bind(Logger.class).toInstance(LoggerFactory.getLogger(this.plugin.name()));
+
+        // The managers
+        this.bind(PluginManager.class).toInstance(Carbon.getCarbon().getPluginManager());
+        this.bind(ModuleManager.class).toInstance(Carbon.getCarbon().getModuleManager());
+        this.bind(IRCManager.class).toInstance(Carbon.getCarbon().getIRCManager());
+        this.bind(ServiceRegistry.class).toInstance(Carbon.getCarbon().getServiceRegistry());
 
         // Config node
         this.bind(CommentedConfigurationNode.class)
