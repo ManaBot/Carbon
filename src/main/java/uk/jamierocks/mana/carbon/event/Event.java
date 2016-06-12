@@ -26,6 +26,8 @@ package uk.jamierocks.mana.carbon.event;
 
 import uk.jamierocks.mana.carbon.Carbon;
 
+import java.util.Optional;
+
 /**
  * An event within Carbon.
  *
@@ -42,6 +44,16 @@ public interface Event {
      */
     default Carbon getCarbon() {
         return Carbon.getCarbon();
+    }
+
+    /**
+     * Gets the cause of the event, if available.
+     *
+     * @return The cause
+     * @since 1.1.0
+     */
+    default Optional<Object> getCause() {
+        return Optional.empty();
     }
 
     /**

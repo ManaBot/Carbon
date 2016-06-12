@@ -24,6 +24,8 @@
 
 package uk.jamierocks.mana.carbon.util.command;
 
+import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
+
 import com.sk89q.intake.CommandException;
 import com.sk89q.intake.InvocationCommandException;
 import com.sk89q.intake.argument.Namespace;
@@ -32,7 +34,7 @@ import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
-import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.event.command.CommandEvent;
 import uk.jamierocks.mana.carbon.util.Constants;
 
 import java.util.Collections;
@@ -52,20 +54,24 @@ public final class CommandListener {
             // By this point it still isn't decided as to weather this is a command!
             final String command = message.substring(Constants.COMMAND_PREFIX.length());
 
-            if (Carbon.getCarbon().getCommandDispatcher().contains(command.split(" ")[0])) {
+            if (getCarbon().getCommandDispatcher().contains(command.split(" ")[0])) {
                 // We know know it is a command, and can continue to process it
-                Namespace namespace = new Namespace();
-                namespace.put(String.class, command);
-                namespace.put(Channel.class, event.getChannel());
-                namespace.put(User.class, event.getActor());
+                CommandEvent commandEvent =
+                        new CommandEvent(event, getCarbon().getCommandDispatcher().get(command.split(" ")[0])).post();
+                if (!commandEvent.isCancelled()) {
+                    Namespace namespace = new Namespace();
+                    namespace.put(String.class, command);
+                    namespace.put(Channel.class, event.getChannel());
+                    namespace.put(User.class, event.getActor());
 
-                try {
-                    Carbon.getCarbon().getCommandDispatcher()
-                            .call(command, namespace, Collections.singletonList(command));
-                } catch (CommandException | InvocationCommandException e) {
-                    Carbon.getCarbon().getLogger().error("Failed to execute command: " + message, e);
-                } catch (AuthorizationException e) {
-                    event.sendReply(event.getActor().getNick() + ": You do not have permission to do that!");
+                    try {
+                        getCarbon().getCommandDispatcher()
+                                .call(command, namespace, Collections.singletonList(command));
+                    } catch (CommandException | InvocationCommandException e) {
+                        getCarbon().getLogger().error("Failed to execute command: " + message, e);
+                    } catch (AuthorizationException e) {
+                        event.sendReply(event.getActor().getNick() + ": You do not have permission to do that!");
+                    }
                 }
             }
         }
