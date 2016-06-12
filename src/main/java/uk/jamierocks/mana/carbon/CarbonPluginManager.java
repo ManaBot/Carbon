@@ -87,6 +87,8 @@ public final class CarbonPluginManager implements PluginManager {
      */
     @Override
     public Optional<PluginContainer> getPlugin(String id) {
+        checkNotNull(id, "id is null!");
+
         return Optional.ofNullable(this.plugins.get(id));
     }
 
@@ -103,6 +105,8 @@ public final class CarbonPluginManager implements PluginManager {
      */
     @Override
     public boolean isLoaded(String id) {
+        checkNotNull(id, "id is null!");
+
         return this.plugins.containsKey(id);
     }
 

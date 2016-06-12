@@ -24,6 +24,7 @@
 
 package uk.jamierocks.mana.carbon;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
 import com.google.common.collect.Lists;
@@ -54,7 +55,7 @@ public final class CarbonIRCManager implements IRCManager {
     protected CarbonIRCManager() {}
 
     public void initialise() {
-        CommentedConfigurationNode configurationNode = Carbon.getCarbon().getConfigurationNode().getNode("irc");
+        CommentedConfigurationNode configurationNode = getCarbon().getConfigurationNode().getNode("irc");
         for (CommentedConfigurationNode network : configurationNode.getNode("networks").getChildrenList()) {
             Client.Builder clientBuilder = Client.builder()
                     .secureTrustManagerFactory(new AcceptingTrustManagerFactory())
@@ -64,8 +65,8 @@ public final class CarbonIRCManager implements IRCManager {
                     .secure(network.getNode("secure").getBoolean())
                     .user(network.getNode("username").getString())
                     .nick(network.getNode("nickname").getString())
-                    .listenOutput(Carbon.getCarbon().getLogger()::debug)
-                    .listenException(e -> Carbon.getCarbon().getLogger()
+                    .listenOutput(getCarbon().getLogger()::debug)
+                    .listenException(e -> getCarbon().getLogger()
                             .error("KittehIRCClientLibrary has experienced an exception!", e));
             if (!network.getNode("serverPassword").isVirtual()) {
                 clientBuilder.serverPassword(network.getNode("serverPassword").getString());
@@ -79,6 +80,8 @@ public final class CarbonIRCManager implements IRCManager {
      */
     @Override
     public Optional<Client> getClient(String id) {
+        checkNotNull(id, "id is null!");
+
         return Optional.ofNullable(this.clients.get(id));
     }
 
