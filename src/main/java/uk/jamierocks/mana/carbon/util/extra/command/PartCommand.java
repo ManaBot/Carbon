@@ -36,6 +36,7 @@ import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
 import org.slf4j.Logger;
+import uk.jamierocks.mana.carbon.util.intake.DescriptionBuilder;
 
 import java.util.List;
 
@@ -78,7 +79,9 @@ public final class PartCommand implements CommandCallable {
      */
     @Override
     public Description getDescription() {
-        return null;
+        return new DescriptionBuilder()
+                .help("The part command is used to part channels.")
+                .build();
     }
 
     /**
