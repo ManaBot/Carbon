@@ -49,17 +49,19 @@ public final class Main {
         // Pre Init state
         new PreInitialisationEvent().post();
 
+        ((CarbonIRCManager) Carbon.getCarbon().getIRCManager()).start();
+
         // Register command listener
         CommandListener commandListener = new CommandListener();
         for (Client client : Carbon.getCarbon().getIRCManager().getClients()) {
             client.getEventManager().registerEventListener(commandListener);
         }
 
-        // Register builtin modules
-        Carbon.getCarbon().getModuleManager().registerModule(InviteModule.class);
-
         // Init state
         new InitialisationEvent().post();
+
+        // Register builtin modules
+        Carbon.getCarbon().getModuleManager().registerModule(InviteModule.class);
 
         // Post Init state
         new PostInitialisationEvent().post();
