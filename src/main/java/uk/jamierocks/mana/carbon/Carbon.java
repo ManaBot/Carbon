@@ -79,7 +79,7 @@ public final class Carbon {
         return INSTANCE;
     }
 
-    private final Logger logger;
+    private final Logger logger = LoggerFactory.getLogger("Carbon");
     private final EventBus eventBus;
     private final PluginManager pluginManager;
     private final ModuleManager moduleManager;
@@ -89,7 +89,7 @@ public final class Carbon {
     private CommentedConfigurationNode configurationNode;
 
     protected Carbon() {
-        this.logger = LoggerFactory.getLogger("Carbon");
+        this.logger.info("Loading Carbon " + Constants.VERSION);
         this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
         this.pluginManager = new CarbonPluginManager();
         this.moduleManager = new CarbonModuleManager();
@@ -119,6 +119,8 @@ public final class Carbon {
             this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
             System.exit(0);
         }
+
+        this.setCommandPrefix(); // Forcefully set the command prefix
     }
 
     private void setInstance() {
@@ -141,6 +143,16 @@ public final class Carbon {
             // It is probably for the best to exit the application
             this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
             System.exit(0);
+        }
+    }
+
+    private void setCommandPrefix() {
+        try {
+            final String prefix = this.configurationNode.getNode("commands", "prefix").getString();
+            this.logger.info("Using command prefix: " + prefix);
+            ReflectionUtil.setStaticFinal(Constants.class, "COMMAND_PREFIX", prefix);
+        } catch (ReflectionUtilException e) {
+            this.getLogger().error("Failed to set the command prefix!", e);
         }
     }
 
