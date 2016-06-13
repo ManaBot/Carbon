@@ -64,4 +64,15 @@ public interface ServiceRegistry {
      * @since 1.0.0
      */
     <T> Optional<ProviderRegistration<T>> provideRegistration(Class<T> service);
+
+    /**
+     * Returns weather the given service has a registered provider.
+     *
+     * @param service The service
+     * @return {@code True} if it does, {@code false} otherwise
+     * @since 1.2.0
+     */
+    default boolean hasProvider(Class<?> service) {
+        return this.provideRegistration(service).isPresent();
+    }
 }

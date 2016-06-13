@@ -83,7 +83,6 @@ public final class CarbonServiceRegistry implements ServiceRegistry {
     @Override
     public <T> Optional<ProviderRegistration<T>> provideRegistration(Class<T> service) {
         checkNotNull(service, "service is null!");
-
         return Optional.ofNullable((ProviderRegistration<T>) this.providers.get(service));
     }
 }

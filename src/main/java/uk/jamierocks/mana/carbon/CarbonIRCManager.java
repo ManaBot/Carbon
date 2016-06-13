@@ -82,7 +82,6 @@ public final class CarbonIRCManager implements IRCManager {
     @Override
     public Optional<Client> getClient(String id) {
         checkNotNull(id, "id is null!");
-
         return Optional.ofNullable(this.clients.get(id));
     }
 
