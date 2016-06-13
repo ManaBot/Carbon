@@ -56,10 +56,12 @@ public final class HelpCommand implements CommandCallable {
         builder.append("Commands: ");
 
         for (CommandMapping mapping : Carbon.getCarbon().getCommandDispatcher().getCommands()) {
-            builder.append(mapping.getPrimaryAlias());
-            builder.append(" (");
-            builder.append(mapping.getCallable().getDescription().getHelp());
-            builder.append(") ");
+            if (mapping.getCallable().testPermission(namespace)) {
+                builder.append(mapping.getPrimaryAlias());
+                builder.append(" (");
+                builder.append(mapping.getCallable().getDescription().getHelp());
+                builder.append(") ");
+            }
         }
 
         namespace.get(User.class).sendMessage(builder.toString());
