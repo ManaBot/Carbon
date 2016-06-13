@@ -34,8 +34,10 @@ import java.lang.reflect.Method;
  * The implementation of {@link SubscriberExceptionHandler} for Slf4J.
  *
  * @author Jamie Mansfield
+ * @deprecated As of release 1.1.0, replaced by {@link ExceptionReporterEventLoggingHandler}
  * @since 1.0.0
  */
+@Deprecated
 public final class Slf4jEventLoggingHandler implements SubscriberExceptionHandler {
 
     /**

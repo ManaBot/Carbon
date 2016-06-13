@@ -22,44 +22,36 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.irc;
+package uk.jamierocks.mana.carbon.util.event;
 
-import org.kitteh.irc.client.library.Client;
+import com.google.common.eventbus.SubscriberExceptionContext;
+import com.google.common.eventbus.SubscriberExceptionHandler;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionService;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.lang.reflect.Method;
 
 /**
- * A manager for IRC networks / servers.
+ * The implementation of {@link SubscriberExceptionHandler} for Carbon's {@link ExceptionService}.
  *
  * @author Jamie Mansfield
- * @since 1.0.0
+ * @since 1.1.0
  */
-public interface IRCManager {
+public final class ExceptionReporterEventLoggingHandler implements SubscriberExceptionHandler {
 
     /**
-     * Returns the {@link Client} for the given id, if available.
-     *
-     * @param id The client id
-     * @return The client
-     * @since 1.0.0
+     * {@inheritDoc}
      */
-    Optional<Client> getClient(String id);
+    @Override
+    public void handleException(Throwable exception, SubscriberExceptionContext context) {
+        ExceptionReporter.report(message(context), exception);
+    }
 
-    /**
-     * Returns an immutable collection of all the IRC clients.
-     *
-     * @return The clients
-     * @since 1.0.0
-     */
-    Collection<Client> getClients();
-
-    /**
-     * Returns an immutable list of all the bot administrators.
-     *
-     * @return The administrators
-     * @since 1.1.0
-     */
-    List<String> getAdministrators();
+    private static String message(SubscriberExceptionContext context) {
+        Method method = context.getSubscriberMethod();
+        return "Exception thrown by subscriber method "
+                + method.getName() + '(' + method.getParameterTypes()[0].getName() + ')'
+                + " on subscriber " + context.getSubscriber()
+                + " when dispatching event: " + context.getEvent();
+    }
 }

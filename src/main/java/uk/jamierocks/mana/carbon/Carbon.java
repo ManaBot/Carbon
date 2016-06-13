@@ -38,10 +38,11 @@ import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 import uk.jamierocks.mana.carbon.util.Constants;
 import uk.jamierocks.mana.carbon.util.ReflectionUtil;
 import uk.jamierocks.mana.carbon.util.ReflectionUtilException;
-import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
+import uk.jamierocks.mana.carbon.util.event.ExceptionReporterEventLoggingHandler;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -79,7 +80,7 @@ public final class Carbon {
         return INSTANCE;
     }
 
-    private final Logger logger;
+    private final Logger logger = LoggerFactory.getLogger("Carbon");
     private final EventBus eventBus;
     private final PluginManager pluginManager;
     private final ModuleManager moduleManager;
@@ -89,8 +90,8 @@ public final class Carbon {
     private CommentedConfigurationNode configurationNode;
 
     protected Carbon() {
-        this.logger = LoggerFactory.getLogger("Carbon");
-        this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
+        this.logger.info("Loading Carbon " + Constants.VERSION);
+        this.eventBus = new EventBus(new ExceptionReporterEventLoggingHandler());
         this.pluginManager = new CarbonPluginManager();
         this.moduleManager = new CarbonModuleManager();
         this.ircManager = new CarbonIRCManager();
@@ -106,7 +107,7 @@ public final class Carbon {
             } catch (IOException e) {
                 // If this ever occurs something massively wrong is going on.
                 // It is probably for the best to exit the application
-                this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
+                ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
                 System.exit(0);
             }
         }
@@ -116,9 +117,11 @@ public final class Carbon {
         } catch (IOException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
-            this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
+            ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
             System.exit(0);
         }
+
+        this.setCommandPrefix(); // Forcefully set the command prefix
     }
 
     private void setInstance() {
@@ -127,7 +130,7 @@ public final class Carbon {
         } catch (ReflectionUtilException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
-            this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
+            ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
             System.exit(0);
         }
     }
@@ -139,8 +142,18 @@ public final class Carbon {
         } catch (ReflectionUtilException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
-            this.getLogger().error("Carbon has experienced a fatal error! Exiting!", e);
+            ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
             System.exit(0);
+        }
+    }
+
+    private void setCommandPrefix() {
+        try {
+            final String prefix = this.configurationNode.getNode("commands", "prefix").getString();
+            this.logger.info("Using command prefix: " + prefix);
+            ReflectionUtil.setStaticFinal(Constants.class, "COMMAND_PREFIX", prefix);
+        } catch (ReflectionUtilException e) {
+            ExceptionReporter.report("Failed to set the command prefix!", e);
         }
     }
 

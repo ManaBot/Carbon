@@ -22,44 +22,25 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.irc;
+package uk.jamierocks.mana.carbon.util.extra;
 
-import org.kitteh.irc.client.library.Client;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import com.google.common.eventbus.Subscribe;
+import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
+import uk.jamierocks.mana.carbon.module.Module;
+import uk.jamierocks.mana.carbon.util.extra.command.HelpCommand;
 
 /**
- * A manager for IRC networks / servers.
+ * A help module for Carbon.
  *
  * @author Jamie Mansfield
- * @since 1.0.0
+ * @since 1.1.0
  */
-public interface IRCManager {
+@Module(id = "help", name = "Help")
+public final class HelpModule {
 
-    /**
-     * Returns the {@link Client} for the given id, if available.
-     *
-     * @param id The client id
-     * @return The client
-     * @since 1.0.0
-     */
-    Optional<Client> getClient(String id);
-
-    /**
-     * Returns an immutable collection of all the IRC clients.
-     *
-     * @return The clients
-     * @since 1.0.0
-     */
-    Collection<Client> getClients();
-
-    /**
-     * Returns an immutable list of all the bot administrators.
-     *
-     * @return The administrators
-     * @since 1.1.0
-     */
-    List<String> getAdministrators();
+    @Subscribe
+    public void onPostInitialisation(PostInitialisationEvent event) {
+        // Register commands
+        event.getCarbon().getCommandDispatcher().registerCommand(new HelpCommand(), "help");
+    }
 }

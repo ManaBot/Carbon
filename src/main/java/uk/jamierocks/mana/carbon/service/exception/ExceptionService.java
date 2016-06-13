@@ -22,44 +22,32 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.irc;
-
-import org.kitteh.irc.client.library.Client;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+package uk.jamierocks.mana.carbon.service.exception;
 
 /**
- * A manager for IRC networks / servers.
+ * Represents an exception service for Carbon.
  *
  * @author Jamie Mansfield
- * @since 1.0.0
+ * @since 1.1.0
  */
-public interface IRCManager {
+public interface ExceptionService {
 
     /**
-     * Returns the {@link Client} for the given id, if available.
+     * Handles reporting an {@link Exception}, with the default message.
      *
-     * @param id The client id
-     * @return The client
-     * @since 1.0.0
-     */
-    Optional<Client> getClient(String id);
-
-    /**
-     * Returns an immutable collection of all the IRC clients.
-     *
-     * @return The clients
-     * @since 1.0.0
-     */
-    Collection<Client> getClients();
-
-    /**
-     * Returns an immutable list of all the bot administrators.
-     *
-     * @return The administrators
+     * @param throwable The exception
      * @since 1.1.0
      */
-    List<String> getAdministrators();
+    default void report(Throwable throwable) {
+        this.report("Carbon has experienced an error!", throwable);
+    }
+
+    /**
+     * Handles reporting an {@link Exception}, with a message.
+     *
+     * @param message The message
+     * @param throwable The exception
+     * @since 1.1.0
+     */
+    void report(String message, Throwable throwable);
 }
