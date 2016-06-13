@@ -42,7 +42,7 @@ import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 import uk.jamierocks.mana.carbon.util.Constants;
 import uk.jamierocks.mana.carbon.util.ReflectionUtil;
 import uk.jamierocks.mana.carbon.util.ReflectionUtilException;
-import uk.jamierocks.mana.carbon.util.event.Slf4jEventLoggingHandler;
+import uk.jamierocks.mana.carbon.util.event.ExceptionReporterEventLoggingHandler;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -91,7 +91,7 @@ public final class Carbon {
 
     protected Carbon() {
         this.logger.info("Loading Carbon " + Constants.VERSION);
-        this.eventBus = new EventBus(new Slf4jEventLoggingHandler());
+        this.eventBus = new EventBus(new ExceptionReporterEventLoggingHandler());
         this.pluginManager = new CarbonPluginManager();
         this.moduleManager = new CarbonModuleManager();
         this.ircManager = new CarbonIRCManager();
