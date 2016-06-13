@@ -31,6 +31,7 @@ import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionService;
 import uk.jamierocks.mana.carbon.service.exception.SimpleExceptionService;
 import uk.jamierocks.mana.carbon.util.command.CommandListener;
+import uk.jamierocks.mana.carbon.util.extra.HelpModule;
 import uk.jamierocks.mana.carbon.util.extra.InviteModule;
 
 /**
@@ -68,6 +69,7 @@ public final class Main {
 
         // Register builtin modules
         Carbon.getCarbon().getModuleManager().registerModule(Carbon.getCarbon(), InviteModule.class);
+        Carbon.getCarbon().getModuleManager().registerModule(Carbon.getCarbon(), HelpModule.class);
 
         // Post Init state
         new PostInitialisationEvent().post();
