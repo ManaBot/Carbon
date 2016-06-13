@@ -53,31 +53,72 @@ public final class DescriptionBuilder {
      */
     public DescriptionBuilder() {}
 
+    /**
+     * Sets the parameters value for the {@link Description}.
+     *
+     * @param parameters The list of parameters
+     * @see Description#getParameters()
+     * @since 1.1.0
+     */
     public DescriptionBuilder parameters(List<Parameter> parameters) {
         this.parameters = parameters;
         return this;
     }
 
+    /**
+     * Sets the short description value for the {@link Description}.
+     *
+     * @param shortDescription The short description
+     * @see Description#getShortDescription()
+     * @since 1.1.0
+     */
     public DescriptionBuilder shortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
         return this;
     }
 
+    /**
+     * Sets the help value for the {@link Description}.
+     *
+     * @param help The help
+     * @see Description#getHelp()
+     * @since 1.1.0
+     */
     public DescriptionBuilder help(String help) {
         this.help = help;
         return this;
     }
 
+    /**
+     * Sets the usage value for the {@link Description}.
+     *
+     * @param usage The usage
+     * @see Description#getUsage()
+     * @since 1.1.0
+     */
     public DescriptionBuilder usage(String usage) {
         this.usage = usage;
         return this;
     }
 
+    /**
+     * Sets the permissions value for the {@link Description}.
+     *
+     * @param permissions The list of permissions
+     * @see Description#getPermissions()
+     * @since 1.1.0
+     */
     public DescriptionBuilder permissions(List<String> permissions) {
         this.permissions = permissions;
         return this;
     }
 
+    /**
+     * Builds a {@link Description} from the given values.
+     *
+     * @return The description
+     * @since 1.1.0
+     */
     public Description build() {
         return new Description() {
             @Override

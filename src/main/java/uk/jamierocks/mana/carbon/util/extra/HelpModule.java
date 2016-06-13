@@ -24,7 +24,10 @@
 
 package uk.jamierocks.mana.carbon.util.extra;
 
+import com.google.common.eventbus.Subscribe;
+import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.module.Module;
+import uk.jamierocks.mana.carbon.util.extra.command.HelpCommand;
 
 /**
  * A help module for Carbon.
@@ -35,4 +38,9 @@ import uk.jamierocks.mana.carbon.module.Module;
 @Module(id = "help", name = "Help")
 public final class HelpModule {
 
+    @Subscribe
+    public void onPostInitialisation(PostInitialisationEvent event) {
+        // Register commands
+        event.getCarbon().getCommandDispatcher().registerCommand(new HelpCommand(), "help");
+    }
 }
