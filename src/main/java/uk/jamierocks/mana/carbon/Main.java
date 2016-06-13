@@ -28,6 +28,8 @@ import org.kitteh.irc.client.library.Client;
 import uk.jamierocks.mana.carbon.event.state.InitialisationEvent;
 import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionService;
+import uk.jamierocks.mana.carbon.service.exception.SimpleExceptionService;
 import uk.jamierocks.mana.carbon.util.command.CommandListener;
 import uk.jamierocks.mana.carbon.util.extra.InviteModule;
 
@@ -48,6 +50,10 @@ public final class Main {
 
         // Pre Init state
         new PreInitialisationEvent().post();
+
+        // Register exception service.
+        Carbon.getCarbon().getServiceRegistry()
+                .registerProvider(Carbon.getCarbon(), ExceptionService.class, new SimpleExceptionService());
 
         ((CarbonIRCManager) Carbon.getCarbon().getIRCManager()).initialise();
 
