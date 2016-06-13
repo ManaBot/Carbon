@@ -30,6 +30,7 @@ import com.google.common.collect.Maps;
 import uk.jamierocks.mana.carbon.service.ProviderRegistration;
 import uk.jamierocks.mana.carbon.service.ProviderRegistrationException;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
 import java.util.Map;
 import java.util.Optional;
@@ -58,7 +59,7 @@ public final class CarbonServiceRegistry implements ServiceRegistry {
         try {
             this.providers.put(service, ProviderRegistration.of(plugin, service, provider));
         } catch (ProviderRegistrationException e) {
-            Carbon.getCarbon().getLogger().error("Failed to register provider!", e);
+            ExceptionReporter.report("Failed to register provider!", e);
         }
     }
 
