@@ -35,6 +35,7 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.util.AcceptingTrustManagerFactory;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -101,7 +102,7 @@ public final class CarbonIRCManager implements IRCManager {
         try {
             return getCarbon().getConfigurationNode().getNode("irc", "admins").getList(TypeToken.of(String.class));
         } catch (ObjectMappingException e) {
-            getCarbon().getLogger().error("Failed to get the bot admins!", e);
+            ExceptionReporter.report("Failed to get the bot admins!", e);
             return Lists.newArrayList();
         }
     }

@@ -33,6 +33,7 @@ import com.google.inject.Injector;
 import uk.jamierocks.mana.carbon.plugin.Plugin;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 import uk.jamierocks.mana.carbon.util.guice.PluginGuiceModule;
 
 import java.io.File;
@@ -163,15 +164,15 @@ public final class CarbonPluginManager implements PluginManager {
                                 pluginClasses.add(pluginClass);
                             }
                         } catch (ClassNotFoundException e) {
-                            Carbon.getCarbon().getLogger().error("Exception while loading plugin!", e);
+                            ExceptionReporter.report("Exception while loading plugin!", e);
                         }
                     }
                 });
             } catch (IOException e) {
-                Carbon.getCarbon().getLogger().error("Exception while loading plugin!", e);
+                ExceptionReporter.report("Exception while loading plugin!", e);
             }
         } catch (MalformedURLException e) {
-            Carbon.getCarbon().getLogger().error("Exception while loading plugin!", e);
+            ExceptionReporter.report("Exception while loading plugin!", e);
         }
 
         return pluginClasses;

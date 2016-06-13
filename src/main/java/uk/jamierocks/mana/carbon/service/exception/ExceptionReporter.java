@@ -22,37 +22,47 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.event;
+package uk.jamierocks.mana.carbon.service.exception;
 
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
 import uk.jamierocks.mana.carbon.Carbon;
 
-import java.lang.reflect.Method;
+import java.util.Optional;
 
 /**
- * The implementation of {@link SubscriberExceptionHandler} for Slf4J.
+ * Provides static access to the methods defined in {@link ExceptionService}.
+ * In failure to retrieve the exception service, it uses a fallback.
  *
  * @author Jamie Mansfield
- * @deprecated As of release 1.1.0, replaced by {@link ExceptionReporterEventLoggingHandler}
- * @since 1.0.0
+ * @since 1.1.0
  */
-@Deprecated
-public final class Slf4jEventLoggingHandler implements SubscriberExceptionHandler {
+public final class ExceptionReporter {
 
     /**
-     * {@inheritDoc}
+     * Handles reporting an {@link Exception}, with the default message.
+     *
+     * @param throwable The exception
+     * @see ExceptionService#report(Throwable)
+     * @since 1.1.0
      */
-    @Override
-    public void handleException(Throwable exception, SubscriberExceptionContext context) {
-        Carbon.getCarbon().getLogger().error(message(context), exception);
+    public static void report(Throwable throwable) {
+        report("Carbon has experienced an error!", throwable);
     }
 
-    private static String message(SubscriberExceptionContext context) {
-        Method method = context.getSubscriberMethod();
-        return "Exception thrown by subscriber method "
-                + method.getName() + '(' + method.getParameterTypes()[0].getName() + ')'
-                + " on subscriber " + context.getSubscriber()
-                + " when dispatching event: " + context.getEvent();
+    /**
+     * Handles reporting an {@link Exception}, with a message.
+     *
+     * @param message The message
+     * @param throwable The exception
+     * @see ExceptionService#report(String, Throwable)
+     * @since 1.1.0
+     */
+    public static void report(String message, Throwable throwable) {
+        final Optional<ExceptionService> exceptionService =
+                Carbon.getCarbon().getServiceRegistry().provide(ExceptionService.class);
+        if (exceptionService.isPresent()) {
+            exceptionService.get().report(message, throwable);
+        } else {
+            Carbon.getCarbon().getLogger().error(message, throwable);
+        }
     }
 }

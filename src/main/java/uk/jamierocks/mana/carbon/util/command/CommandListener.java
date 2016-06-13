@@ -35,6 +35,7 @@ import org.kitteh.irc.client.library.element.User;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
 import uk.jamierocks.mana.carbon.event.command.CommandEvent;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 import uk.jamierocks.mana.carbon.util.Constants;
 
 import java.util.Collections;
@@ -68,7 +69,7 @@ public final class CommandListener {
                         getCarbon().getCommandDispatcher()
                                 .call(command, namespace, Collections.singletonList(command));
                     } catch (CommandException | InvocationCommandException e) {
-                        getCarbon().getLogger().error("Failed to execute command: " + message, e);
+                        ExceptionReporter.report("Failed to execute command: " + message, e);
                     } catch (AuthorizationException e) {
                         event.sendReply(event.getActor().getNick() + ": You do not have permission to do that!");
                     }

@@ -22,37 +22,23 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.event;
+package uk.jamierocks.mana.carbon.service.exception;
 
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
 import uk.jamierocks.mana.carbon.Carbon;
 
-import java.lang.reflect.Method;
-
 /**
- * The implementation of {@link SubscriberExceptionHandler} for Slf4J.
+ * A simple implementation of {@link ExceptionService}.
  *
  * @author Jamie Mansfield
- * @deprecated As of release 1.1.0, replaced by {@link ExceptionReporterEventLoggingHandler}
- * @since 1.0.0
+ * @since 1.1.0
  */
-@Deprecated
-public final class Slf4jEventLoggingHandler implements SubscriberExceptionHandler {
+public final class SimpleExceptionService implements ExceptionService {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void handleException(Throwable exception, SubscriberExceptionContext context) {
-        Carbon.getCarbon().getLogger().error(message(context), exception);
-    }
-
-    private static String message(SubscriberExceptionContext context) {
-        Method method = context.getSubscriberMethod();
-        return "Exception thrown by subscriber method "
-                + method.getName() + '(' + method.getParameterTypes()[0].getName() + ')'
-                + " on subscriber " + context.getSubscriber()
-                + " when dispatching event: " + context.getEvent();
+    public void report(String message, Throwable throwable) {
+        Carbon.getCarbon().getLogger().error(message, throwable);
     }
 }

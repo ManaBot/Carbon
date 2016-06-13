@@ -22,37 +22,32 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.event;
-
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
-import uk.jamierocks.mana.carbon.Carbon;
-
-import java.lang.reflect.Method;
+package uk.jamierocks.mana.carbon.service.exception;
 
 /**
- * The implementation of {@link SubscriberExceptionHandler} for Slf4J.
+ * Represents an exception service for Carbon.
  *
  * @author Jamie Mansfield
- * @deprecated As of release 1.1.0, replaced by {@link ExceptionReporterEventLoggingHandler}
- * @since 1.0.0
+ * @since 1.1.0
  */
-@Deprecated
-public final class Slf4jEventLoggingHandler implements SubscriberExceptionHandler {
+public interface ExceptionService {
 
     /**
-     * {@inheritDoc}
+     * Handles reporting an {@link Exception}, with the default message.
+     *
+     * @param throwable The exception
+     * @since 1.1.0
      */
-    @Override
-    public void handleException(Throwable exception, SubscriberExceptionContext context) {
-        Carbon.getCarbon().getLogger().error(message(context), exception);
+    default void report(Throwable throwable) {
+        this.report("Carbon has experienced an error!", throwable);
     }
 
-    private static String message(SubscriberExceptionContext context) {
-        Method method = context.getSubscriberMethod();
-        return "Exception thrown by subscriber method "
-                + method.getName() + '(' + method.getParameterTypes()[0].getName() + ')'
-                + " on subscriber " + context.getSubscriber()
-                + " when dispatching event: " + context.getEvent();
-    }
+    /**
+     * Handles reporting an {@link Exception}, with a message.
+     *
+     * @param message The message
+     * @param throwable The exception
+     * @since 1.1.0
+     */
+    void report(String message, Throwable throwable);
 }
