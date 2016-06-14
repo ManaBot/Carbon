@@ -24,6 +24,11 @@
 
 package uk.jamierocks.mana.carbon.util.context;
 
+import com.google.common.collect.Maps;
+
+import java.util.Map;
+import java.util.Optional;
+
 /**
  * Represents the context of something.
  * A good example of this is with permissions, you may want to check them with a specific context.
@@ -34,4 +39,69 @@ package uk.jamierocks.mana.carbon.util.context;
  */
 public interface Context {
 
+    /**
+     * Gets a builder for {@link Context}.
+     *
+     * @return A builder
+     * @since 1.2.0
+     */
+    static Builder builder() {
+        return new Builder() {
+            final Map contexts = Maps.newHashMap();
+
+            @Override
+            public <T> Builder set(Class<T> clazz, T obj) {
+                this.contexts.put(clazz, obj);
+                return this;
+            }
+
+            @Override
+            public Context build() {
+                return new Context() {
+                    @Override
+                    public <T> Optional<T> get(Class<T> clazz) {
+                        return Optional.ofNullable((T) contexts.get(clazz));
+                    }
+                };
+            }
+        };
+    }
+
+    /**
+     * Gets an object that is apart the context, if available.
+     *
+     * @param clazz The class
+     * @param <T> The class type
+     * @return The object
+     * @since 1.2.0
+     */
+    <T> Optional<T> get(Class<T> clazz);
+
+    /**
+     * A builder for {@link Context}.
+     *
+     * @author Jamie Mansfield
+     * @since 1.2.0
+     */
+    interface Builder {
+
+        /**
+         * Sets the given value as a context.
+         *
+         * @param clazz The class
+         * @param obj The object
+         * @param <T> The class type
+         * @return The Builder
+         * @since 1.2.0
+         */
+        <T> Builder set(Class<T> clazz, T obj);
+
+        /**
+         * Builds the {@link Context} from the given values.
+         *
+         * @return The context
+         * @since 1.2.0
+         */
+        Context build();
+    }
 }
