@@ -74,7 +74,7 @@ public final class HelpCommand implements CommandCallable {
     @Override
     public Description getDescription() {
         return new DescriptionBuilder()
-                .help("Displays a list of commands with their help text.")
+                .help("Displays all commands, with their help text")
                 .build();
     }
 

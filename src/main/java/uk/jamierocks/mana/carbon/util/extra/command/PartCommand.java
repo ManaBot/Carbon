@@ -80,7 +80,7 @@ public final class PartCommand implements CommandCallable {
     @Override
     public Description getDescription() {
         return new DescriptionBuilder()
-                .help("The part command is used to part channels.")
+                .help("Parts the current channel, or in the format of server/#channel")
                 .build();
     }
 

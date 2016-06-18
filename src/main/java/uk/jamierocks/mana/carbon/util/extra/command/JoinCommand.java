@@ -75,7 +75,7 @@ public final class JoinCommand implements CommandCallable {
     @Override
     public Description getDescription() {
         return new DescriptionBuilder()
-                .help("The join command is used to join channels.")
+                .help("Joins the given channel, in the format of server/#channel")
                 .build();
     }
 
