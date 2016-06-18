@@ -57,6 +57,8 @@ public final class CommandListener {
 
             if (getCarbon().getCommandDispatcher().contains(command.split(" ")[0])) {
                 // We now know it is a command, and can continue to process it
+                getCarbon().getLogger().info(event.getActor().getNick() + " issued command: " + command);
+
                 CommandEvent commandEvent =
                         new CommandEvent(event, getCarbon().getCommandDispatcher().get(command.split(" ")[0])).post();
                 if (!commandEvent.isCancelled()) {
