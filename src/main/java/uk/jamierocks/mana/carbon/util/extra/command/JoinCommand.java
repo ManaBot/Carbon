@@ -59,11 +59,21 @@ public final class JoinCommand implements CommandCallable {
     @Override
     public boolean call(String arguments, Namespace namespace, List<String> parentCommands)
             throws CommandException, InvocationCommandException, AuthorizationException {
-        final String[] channelSplit = arguments.split("/");
+        if (arguments != null || !arguments.equals("")) {
+            final String[] channelSplit = arguments.split("/");
 
-        if (getCarbon().getIRCManager().getClient(channelSplit[0]).isPresent()) {
-            getCarbon().getIRCManager().getClient(channelSplit[0]).get().addChannel(channelSplit[1]);
-            return true;
+            if (channelSplit.length == 2 &&
+                    channelSplit[0] != null && !channelSplit[0].equals("") &&
+                    channelSplit[1] != null && !channelSplit[1].equals("")) {
+                if (getCarbon().getIRCManager().getClient(channelSplit[0]).isPresent()) {
+                    getCarbon().getIRCManager().getClient(channelSplit[0]).get().addChannel(channelSplit[1]);
+                    return true;
+                }
+            } else {
+                namespace.get(User.class).sendMessage("INVALID FORMAT! USE server/#channel");
+            }
+        } else {
+            namespace.get(User.class).sendMessage("INVALID FORMAT! USE server/#channel");
         }
 
         return false;

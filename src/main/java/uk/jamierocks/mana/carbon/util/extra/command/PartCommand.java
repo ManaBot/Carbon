@@ -65,9 +65,15 @@ public final class PartCommand implements CommandCallable {
         } else {
             final String[] channelSplit = arguments.split("/");
 
-            if (getCarbon().getIRCManager().getClient(channelSplit[0]).isPresent()) {
-                getCarbon().getIRCManager().getClient(channelSplit[0]).get().removeChannel(channelSplit[1]);
-                return true;
+            if (channelSplit.length == 2 &&
+                    channelSplit[0] != null && !channelSplit[0].equals("") &&
+                    channelSplit[1] != null && !channelSplit[1].equals("")) {
+                if (getCarbon().getIRCManager().getClient(channelSplit[0]).isPresent()) {
+                    getCarbon().getIRCManager().getClient(channelSplit[0]).get().removeChannel(channelSplit[1]);
+                    return true;
+                }
+            } else {
+                namespace.get(User.class).sendMessage("INVALID FORMAT! USE server/#channel");
             }
         }
 
