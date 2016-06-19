@@ -67,8 +67,8 @@ public final class CarbonIRCManager implements IRCManager {
                     .user(network.getNode("username").getString())
                     .nick(network.getNode("nickname").getString())
                     .listenOutput(getCarbon().getLogger()::debug)
-                    .listenException(e -> getCarbon().getLogger()
-                            .error("KittehIRCClientLibrary has experienced an exception!", e));
+                    .listenException(e -> ExceptionReporter
+                            .report("KittehIRCClientLibrary has experienced an exception!", e));
             if (!network.getNode("serverPassword").isVirtual()) {
                 clientBuilder.serverPassword(network.getNode("serverPassword").getString());
             }
