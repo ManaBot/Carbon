@@ -57,10 +57,13 @@ public final class HelpCommand implements CommandCallable {
             StringBuilder builder = new StringBuilder();
             CommandMapping mapping = Carbon.getCarbon().getCommandDispatcher().get(arguments);
 
+            builder.append("Command: ");
             builder.append(mapping.getPrimaryAlias());
             builder.append(" (");
             builder.append(mapping.getCallable().getDescription().getHelp());
-            builder.append(")");
+            builder.append(") ");
+            builder.append("Usage: ");
+            builder.append(mapping.getDescription().getUsage());
 
             namespace.get(User.class).sendMessage(builder.toString());
         } else {
@@ -69,7 +72,6 @@ public final class HelpCommand implements CommandCallable {
 
             for (CommandMapping mapping : Carbon.getCarbon().getCommandDispatcher().getCommands()) {
                 if (mapping.getCallable().testPermission(namespace)) {
-                    builder.append("Command: ");
                     builder.append(mapping.getPrimaryAlias());
                     builder.append(" (");
                     builder.append(mapping.getCallable().getDescription().getHelp());
@@ -90,6 +92,7 @@ public final class HelpCommand implements CommandCallable {
     public Description getDescription() {
         return new DescriptionBuilder()
                 .help("Displays all commands, with their help text")
+                .usage(".help [command]")
                 .build();
     }
 

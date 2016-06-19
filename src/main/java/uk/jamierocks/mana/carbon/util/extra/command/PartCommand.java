@@ -35,7 +35,6 @@ import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
-import org.slf4j.Logger;
 import uk.jamierocks.mana.carbon.util.intake.DescriptionBuilder;
 
 import java.util.List;
@@ -47,12 +46,6 @@ import java.util.List;
  * @since 1.0.0
  */
 public final class PartCommand implements CommandCallable {
-
-    private final Logger logger;
-
-    public PartCommand(Logger logger) {
-        this.logger = logger;
-    }
 
     /**
      * {@inheritDoc}
@@ -87,6 +80,7 @@ public final class PartCommand implements CommandCallable {
     public Description getDescription() {
         return new DescriptionBuilder()
                 .help("Parts the current channel, or in the format of server/#channel")
+                .usage(".part [server/#channel]")
                 .build();
     }
 
