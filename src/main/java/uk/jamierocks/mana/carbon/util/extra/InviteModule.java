@@ -46,7 +46,7 @@ public final class InviteModule {
     @Subscribe
     public void onPostInitialisation(PostInitialisationEvent event) {
         // Register listener
-        event.getCarbon().getIRCManager().getClients().forEach(c -> c.getEventManager().registerEventListener(this));
+        event.getCarbon().getIRCManager().registerIRCEventListener(this);
 
         // Register commands
         event.getCarbon().getCommandDispatcher().registerCommand(new JoinCommand(), "join");
