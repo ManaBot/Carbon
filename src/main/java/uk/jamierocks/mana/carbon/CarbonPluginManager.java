@@ -56,11 +56,11 @@ import java.util.jar.JarFile;
  */
 public final class CarbonPluginManager implements PluginManager {
 
-    private static final File PLUGIN_DIR = new File("plugins");
+    private static final File PLUGINS_DIR = new File("plugins");
 
     static {
-        if (!PLUGIN_DIR.exists()) {
-            PLUGIN_DIR.mkdirs();
+        if (!PLUGINS_DIR.exists()) {
+            PLUGINS_DIR.mkdirs();
         }
     }
 
@@ -118,7 +118,7 @@ public final class CarbonPluginManager implements PluginManager {
         // Register the Carbon plugin
         this.registerPlugin(Carbon.CONTAINER);
 
-        File[] jarFiles = PLUGIN_DIR.listFiles(file -> {
+        File[] jarFiles = PLUGINS_DIR.listFiles(file -> {
             return file.getName().endsWith(".jar");
         });
 

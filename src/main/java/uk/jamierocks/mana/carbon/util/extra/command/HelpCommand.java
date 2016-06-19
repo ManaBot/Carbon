@@ -34,6 +34,7 @@ import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.User;
 import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.util.Constants;
 import uk.jamierocks.mana.carbon.util.intake.DescriptionBuilder;
 
 import java.util.List;
@@ -92,7 +93,7 @@ public final class HelpCommand implements CommandCallable {
     public Description getDescription() {
         return new DescriptionBuilder()
                 .help("Displays all commands, with their help text")
-                .usage(".help [command]")
+                .usage(Constants.COMMAND_PREFIX + "help [command]")
                 .build();
     }
 
