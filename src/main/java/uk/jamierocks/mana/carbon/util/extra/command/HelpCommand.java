@@ -53,20 +53,28 @@ public final class HelpCommand implements CommandCallable {
     @Override
     public boolean call(String arguments, Namespace namespace, List<String> parentCommands)
             throws CommandException, InvocationCommandException, AuthorizationException {
-        if (arguments != null && !arguments.equals("") &&
-                Carbon.getCarbon().getCommandDispatcher().contains(arguments)) {
-            StringBuilder builder = new StringBuilder();
-            CommandMapping mapping = Carbon.getCarbon().getCommandDispatcher().get(arguments);
+        if (arguments != null && !arguments.equals("")) {
+            if (Carbon.getCarbon().getCommandDispatcher().contains(arguments)) {
+                CommandMapping mapping = Carbon.getCarbon().getCommandDispatcher().get(arguments);
+                if (mapping.getCallable().testPermission(namespace)) {
+                    StringBuilder builder = new StringBuilder();
 
-            builder.append("Command: ");
-            builder.append(mapping.getPrimaryAlias());
-            builder.append(" (");
-            builder.append(mapping.getCallable().getDescription().getHelp());
-            builder.append(") ");
-            builder.append("Usage: ");
-            builder.append(mapping.getDescription().getUsage());
+                    builder.append("Command: ");
+                    builder.append(mapping.getPrimaryAlias());
+                    builder.append(" (");
+                    builder.append(mapping.getCallable().getDescription().getHelp());
+                    builder.append(") ");
+                    builder.append("Usage: ");
+                    builder.append(mapping.getDescription().getUsage());
 
-            namespace.get(User.class).sendMessage(builder.toString());
+                    namespace.get(User.class).sendMessage(builder.toString());
+                } else {
+                    namespace.get(User.class)
+                            .sendMessage("You do not have permission to view the help for that command!");
+                }
+            } else {
+                namespace.get(User.class).sendMessage("Command not found!");
+            }
         } else {
             StringBuilder builder = new StringBuilder();
             builder.append("Commands: ");
