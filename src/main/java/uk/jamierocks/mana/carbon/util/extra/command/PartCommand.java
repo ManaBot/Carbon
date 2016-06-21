@@ -30,6 +30,7 @@ import com.google.common.collect.Lists;
 import com.sk89q.intake.CommandCallable;
 import com.sk89q.intake.CommandException;
 import com.sk89q.intake.Description;
+import com.sk89q.intake.InvalidUsageException;
 import com.sk89q.intake.InvocationCommandException;
 import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
@@ -67,7 +68,7 @@ public final class PartCommand implements CommandCallable {
                     return true;
                 }
             } else {
-                namespace.get(User.class).sendMessage("INVALID FORMAT! USE server/#channel");
+                throw new InvalidUsageException(this, parentCommands);
             }
         }
 

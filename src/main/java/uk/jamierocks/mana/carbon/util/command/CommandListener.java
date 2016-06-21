@@ -27,6 +27,7 @@ package uk.jamierocks.mana.carbon.util.command;
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
 import com.sk89q.intake.CommandException;
+import com.sk89q.intake.InvalidUsageException;
 import com.sk89q.intake.InvocationCommandException;
 import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
@@ -70,6 +71,8 @@ public final class CommandListener {
                     try {
                         getCarbon().getCommandDispatcher()
                                 .call(command, namespace, Collections.singletonList(command));
+                    } catch (InvalidUsageException e) {
+                        event.getActor().sendMessage("Usage: " + e.getCommand().getDescription().getUsage());
                     } catch (CommandException | InvocationCommandException e) {
                         ExceptionReporter.report("Failed to execute command: " + message, e);
                     } catch (AuthorizationException e) {
