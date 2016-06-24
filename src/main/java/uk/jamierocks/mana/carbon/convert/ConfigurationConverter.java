@@ -22,36 +22,27 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.importer;
+package uk.jamierocks.mana.carbon.convert;
 
+import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
-import java.io.File;
 import java.util.Optional;
 
 /**
- * Represents a configuration importer.
+ * Represents a configuration converter.
  *
  * @author Jamie Mansfield
  * @since 1.2.0
  */
-public abstract class ConfigImporter {
+public interface ConfigurationConverter {
 
     /**
      * Attempts to convert the given config file.
      *
-     * @param configFile The config file
+     * @param configurationNode The node to convert
      * @return The Carbon configuration node
      * @since 1.2.0
      */
-    public abstract Optional<CommentedConfigurationNode> convert(File configFile);
-
-    /**
-     * Registers the given importer, as so that modules can be imported.
-     *
-     * @param key The key within the original config
-     * @param importer The importer
-     * @since 1.2.0
-     */
-    public abstract void register(String key, ConfigImporter importer);
+    Optional<CommentedConfigurationNode> convert(ConfigurationNode configurationNode);
 }
