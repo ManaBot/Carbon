@@ -24,35 +24,33 @@
 
 package uk.jamierocks.mana.carbon.convert;
 
-import ninja.leaping.configurate.ConfigurationNode;
-
-import java.io.File;
 import java.util.Optional;
 
 /**
- * Represents the top-level configuration converter.
- * This is the one that will handle parsing files.
+ * A manager for the configuration converters.
  *
  * @author Jamie Mansfield
  * @since 1.2.0
  */
-public interface RootConfigurationConveter extends ConfigurationConverter {
+public interface ConfigurationConverterManager {
 
     /**
-     * Reads the given configuration file, into a configuration node.
+     * Registers the given configuration loader.
+     * It will then go onto check if an existing configuration exists, and if not attempts to convert
+     * the configuration at the specified location if it exists.
      *
-     * @param configFile The config file
-     * @return The configuration node, if available
+     * @param fileName The old configuration location
+     * @param converter The configuration converter
      * @since 1.2.0
      */
-    Optional<ConfigurationNode> read(File configFile);
+    void register(String fileName, RootConfigurationConverter converter);
 
     /**
-     * Registers the given converter, as so that modules can be imported.
+     * Provides the configuration converter for the given file name, if available.
      *
-     * @param key The key within the original config
-     * @param converter The converter
+     * @param fileName The file name
+     * @return The configuration converter
      * @since 1.2.0
      */
-    void register(String key, ConfigurationConverter converter);
+    Optional<RootConfigurationConverter> provide(String fileName);
 }
