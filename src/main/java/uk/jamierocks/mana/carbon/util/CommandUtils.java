@@ -24,18 +24,24 @@
 
 package uk.jamierocks.mana.carbon.util;
 
+import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.config.ConfigKeys;
+
 /**
- * All of Carbon's constant values.
+ * Utils for commands.
  *
  * @author Jamie Mansfield
- * @since 1.0.0
+ * @since 2.0.0
  */
-public final class Constants {
+public final class CommandUtils {
 
     /**
-     * The version of Carbon running.
+     * Gets the command prefix.
      *
-     * @since 1.0.0
+     * @return The command prefix
+     * @since 2.0.0
      */
-    public static final String VERSION = "%version%";
+    public static String getCommandPrefix() {
+        return Carbon.getCarbon().getConfigManager().get(ConfigKeys.COMMAND_PREFIX);
+    }
 }

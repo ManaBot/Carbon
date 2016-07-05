@@ -22,20 +22,50 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util;
+package uk.jamierocks.mana.carbon.config;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 /**
- * All of Carbon's constant values.
+ * A manager for the configuration.
  *
  * @author Jamie Mansfield
- * @since 1.0.0
+ * @since 2.0.0
  */
-public final class Constants {
+public class ConfigManager {
+
+    private final CommentedConfigurationNode configurationNode;
+
+    public ConfigManager(CommentedConfigurationNode configurationNode) {
+        this.configurationNode = configurationNode;
+    }
 
     /**
-     * The version of Carbon running.
+     * Gets the configuration node.
      *
-     * @since 1.0.0
+     * @return The config node
+     * @since 2.0.0
      */
-    public static final String VERSION = "%version%";
+    public CommentedConfigurationNode getConfigurationNode() {
+        return this.configurationNode;
+    }
+
+    /**
+     * Gets the value from the given key.
+     *
+     * @param key The key
+     * @param <T> The type of the value
+     * @return The value
+     * @since 2.0.0
+     */
+    public <T> T get(ConfigKey<T> key) {
+        checkNotNull(key, "key is null!");
+
+        T value = (T) this.configurationNode.getNode((Object[]) key.getPath()).getValue();
+        checkNotNull(value, "Cannot retrieve non-existent config key");
+
+        return value;
+    }
 }

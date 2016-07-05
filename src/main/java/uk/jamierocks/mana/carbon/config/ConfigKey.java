@@ -22,20 +22,45 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util;
+package uk.jamierocks.mana.carbon.config;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * All of Carbon's constant values.
+ * Represents the key of which holds a configuration value.
  *
+ * @param <T> The type of the value
  * @author Jamie Mansfield
- * @since 1.0.0
+ * @since 2.0.0
  */
-public final class Constants {
+public final class ConfigKey<T> {
+
+    private final String[] path;
+
+    private ConfigKey(String[] path) {
+        this.path = path;
+    }
 
     /**
-     * The version of Carbon running.
+     * Gets a {@link ConfigKey} of the given path.
      *
-     * @since 1.0.0
+     * @param path The path
+     * @param <T> The type of the key
+     * @return The key
+     * @since 2.0.0
      */
-    public static final String VERSION = "%version%";
+    public static <T> ConfigKey<T> of(String... path) {
+        checkNotNull(path, "path is null!");
+        return new ConfigKey<>(path);
+    }
+
+    /**
+     * Gets the path to the configuration value.
+     *
+     * @return The path
+     * @since 2.0.0
+     */
+    public final String[] getPath() {
+        return this.path;
+    }
 }

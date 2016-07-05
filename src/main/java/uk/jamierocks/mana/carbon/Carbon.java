@@ -29,16 +29,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.eventbus.EventBus;
 import com.sk89q.intake.dispatcher.Dispatcher;
 import com.sk89q.intake.dispatcher.SimpleDispatcher;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.jamierocks.mana.carbon.config.ConfigManager;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
+import uk.jamierocks.mana.carbon.util.CommandUtils;
 import uk.jamierocks.mana.carbon.util.Constants;
 import uk.jamierocks.mana.carbon.util.ReflectionUtil;
 import uk.jamierocks.mana.carbon.util.ReflectionUtilException;
@@ -73,7 +74,7 @@ public final class Carbon {
     private final IRCManager ircManager;
     private final ServiceRegistry serviceRegistry;
     private final Dispatcher commandDispatcher;
-    private CommentedConfigurationNode configurationNode;
+    private ConfigManager configManager;
 
     protected Carbon() {
         this.logger.info("Loading Carbon " + Constants.VERSION);
@@ -99,7 +100,7 @@ public final class Carbon {
         }
 
         try {
-            this.configurationNode = HoconConfigurationLoader.builder().setPath(CONFIG_PATH).build().load();
+            this.configManager = new ConfigManager(HoconConfigurationLoader.builder().setPath(CONFIG_PATH).build().load());
         } catch (IOException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
@@ -107,7 +108,7 @@ public final class Carbon {
             System.exit(0);
         }
 
-        this.setCommandPrefix(); // Forcefully set the command prefix
+        this.logger.info("Using command prefix: " + CommandUtils.getCommandPrefix());
     }
 
     /**
@@ -141,16 +142,6 @@ public final class Carbon {
             // It is probably for the best to exit the application
             ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
             System.exit(0);
-        }
-    }
-
-    private void setCommandPrefix() {
-        try {
-            final String prefix = this.configurationNode.getNode("commands", "prefix").getString();
-            this.logger.info("Using command prefix: " + prefix);
-            ReflectionUtil.setStaticFinal(Constants.class, "COMMAND_PREFIX", prefix);
-        } catch (ReflectionUtilException e) {
-            ExceptionReporter.report("Failed to set the command prefix!", e);
         }
     }
 
@@ -228,12 +219,12 @@ public final class Carbon {
     }
 
     /**
-     * Gets the {@link CommentedConfigurationNode} used by Carbon.
+     * Gets the {@link ConfigManager} used by Carbon.
      *
-     * @return Carbon's configuration node
-     * @since 1.0.0
+     * @return Carbon's config manager
+     * @since 2.0.0
      */
-    public CommentedConfigurationNode getConfigurationNode() {
-        return this.configurationNode;
+    public ConfigManager getConfigManager() {
+        return this.configManager;
     }
 }

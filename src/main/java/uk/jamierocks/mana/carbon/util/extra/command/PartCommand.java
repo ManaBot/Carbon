@@ -36,7 +36,7 @@ import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
-import uk.jamierocks.mana.carbon.util.Constants;
+import uk.jamierocks.mana.carbon.util.CommandUtils;
 import uk.jamierocks.mana.carbon.util.intake.DescriptionBuilder;
 
 import java.util.List;
@@ -82,7 +82,7 @@ public final class PartCommand implements CommandCallable {
     public Description getDescription() {
         return new DescriptionBuilder()
                 .help("Parts the current channel, or in the format of server/#channel")
-                .usage(Constants.COMMAND_PREFIX + "part [server/#channel]")
+                .usage(CommandUtils.getCommandPrefix() + "part [server/#channel]")
                 .build();
     }
 

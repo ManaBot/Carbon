@@ -30,7 +30,7 @@ import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.reflect.TypeToken;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.util.AcceptingTrustManagerFactory;
@@ -57,8 +57,8 @@ public final class CarbonIRCManager implements IRCManager {
     }
 
     public void initialise() {
-        CommentedConfigurationNode configurationNode = getCarbon().getConfigurationNode().getNode("irc");
-        for (CommentedConfigurationNode network : configurationNode.getNode("networks").getChildrenList()) {
+        ConfigurationNode configurationNode = getCarbon().getConfigManager().getConfigurationNode().getNode("irc");
+        for (ConfigurationNode network : configurationNode.getNode("networks").getChildrenList()) {
             Client.Builder clientBuilder = Client.builder()
                     .secureTrustManagerFactory(new AcceptingTrustManagerFactory())
                     .name(network.getNode("id").getString())
@@ -100,7 +100,7 @@ public final class CarbonIRCManager implements IRCManager {
     @Override
     public List<String> getAdministrators() {
         try {
-            return getCarbon().getConfigurationNode().getNode("irc", "admins").getList(TypeToken.of(String.class));
+            return getCarbon().getConfigManager().getConfigurationNode().getNode("irc", "admins").getList(TypeToken.of(String.class));
         } catch (ObjectMappingException e) {
             ExceptionReporter.report("Failed to get the bot admins!", e);
             return Lists.newArrayList();

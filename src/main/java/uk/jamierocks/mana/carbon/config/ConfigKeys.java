@@ -22,37 +22,17 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.event;
+package uk.jamierocks.mana.carbon.config;
 
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
-import uk.jamierocks.mana.carbon.Carbon;
-
-import java.lang.reflect.Method;
+import static uk.jamierocks.mana.carbon.config.ConfigKey.of;
 
 /**
- * The implementation of {@link SubscriberExceptionHandler} for Slf4J.
+ * All the available configuration keys in Carbon.
  *
  * @author Jamie Mansfield
- * @deprecated As of release 1.1.0, replaced by {@link ExceptionReporterEventLoggingHandler}
- * @since 1.0.0
+ * @since 2.0.0
  */
-@Deprecated
-public final class Slf4jEventLoggingHandler implements SubscriberExceptionHandler {
+public final class ConfigKeys {
 
-    private static String message(SubscriberExceptionContext context) {
-        Method method = context.getSubscriberMethod();
-        return "Exception thrown by subscriber method "
-                + method.getName() + '(' + method.getParameterTypes()[0].getName() + ')'
-                + " on subscriber " + context.getSubscriber()
-                + " when dispatching event: " + context.getEvent();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void handleException(Throwable exception, SubscriberExceptionContext context) {
-        Carbon.getCarbon().getLogger().error(message(context), exception);
-    }
+    public static final ConfigKey<String> COMMAND_PREFIX = of("commands", "prefix");
 }

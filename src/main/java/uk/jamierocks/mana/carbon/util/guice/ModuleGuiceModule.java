@@ -71,6 +71,6 @@ public final class ModuleGuiceModule extends AbstractModule {
 
         // Config node
         this.bind(CommentedConfigurationNode.class)
-                .toInstance(Carbon.getCarbon().getConfigurationNode().getNode("module", this.module.id()));
+                .toInstance(Carbon.getCarbon().getConfigManager().getConfigurationNode().getNode("module", this.module.id()));
     }
 }

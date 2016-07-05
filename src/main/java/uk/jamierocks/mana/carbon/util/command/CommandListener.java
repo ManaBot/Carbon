@@ -37,7 +37,7 @@ import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
 import uk.jamierocks.mana.carbon.event.command.CommandEvent;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
-import uk.jamierocks.mana.carbon.util.Constants;
+import uk.jamierocks.mana.carbon.util.CommandUtils;
 
 import java.util.Collections;
 
@@ -52,9 +52,11 @@ public final class CommandListener {
     @Handler
     public void onMessageRecieved(ChannelMessageEvent event) {
         final String message = event.getMessage();
-        if (message.startsWith(Constants.COMMAND_PREFIX)) {
+        final String commandPrefix = CommandUtils.getCommandPrefix();
+
+        if (message.startsWith(commandPrefix)) {
             // By this point it still isn't decided as to weather this is a command!
-            final String command = message.substring(Constants.COMMAND_PREFIX.length());
+            final String command = message.substring(commandPrefix.length());
 
             if (getCarbon().getCommandDispatcher().contains(command.split(" ")[0])) {
                 // We now know it is a command, and can continue to process it
