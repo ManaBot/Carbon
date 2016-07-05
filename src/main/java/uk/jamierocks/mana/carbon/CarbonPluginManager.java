@@ -67,7 +67,8 @@ public final class CarbonPluginManager implements PluginManager {
     private final Map<String, PluginContainer> plugins = Maps.newHashMap();
     private final Map<Object, PluginContainer> pluginInstances = Maps.newHashMap();
 
-    protected CarbonPluginManager() {}
+    protected CarbonPluginManager() {
+    }
 
     /**
      * {@inheritDoc}
@@ -148,7 +149,7 @@ public final class CarbonPluginManager implements PluginManager {
 
         try {
             URLClassLoader classLoader = new URLClassLoader(
-                    new URL[]{ jar.toURI().toURL() }, CarbonPluginManager.class.getClassLoader());
+                    new URL[]{jar.toURI().toURL()}, CarbonPluginManager.class.getClassLoader());
 
             try (JarFile jarFile = new JarFile(jar)) {
                 jarFile.stream().forEach(jarEntry -> {
