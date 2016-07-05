@@ -51,7 +51,8 @@ public final class DescriptionBuilder {
      *
      * @since 1.1.0
      */
-    public DescriptionBuilder() {}
+    public DescriptionBuilder() {
+    }
 
     /**
      * Sets the parameters value for the {@link Description}.

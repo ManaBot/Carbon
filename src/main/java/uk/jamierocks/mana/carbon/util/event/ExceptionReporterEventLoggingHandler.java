@@ -39,19 +39,19 @@ import java.lang.reflect.Method;
  */
 public final class ExceptionReporterEventLoggingHandler implements SubscriberExceptionHandler {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void handleException(Throwable exception, SubscriberExceptionContext context) {
-        ExceptionReporter.report(message(context), exception);
-    }
-
     private static String message(SubscriberExceptionContext context) {
         Method method = context.getSubscriberMethod();
         return "Exception thrown by subscriber method "
                 + method.getName() + '(' + method.getParameterTypes()[0].getName() + ')'
                 + " on subscriber " + context.getSubscriber()
                 + " when dispatching event: " + context.getEvent();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void handleException(Throwable exception, SubscriberExceptionContext context) {
+        ExceptionReporter.report(message(context), exception);
     }
 }

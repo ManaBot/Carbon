@@ -41,10 +41,9 @@ import java.util.Optional;
  */
 public class CommandEvent implements CancellableEvent {
 
-    private boolean cancelled = false;
-
     private final ChannelMessageEvent messageEvent;
     private final CommandMapping commandMapping;
+    private boolean cancelled = false;
 
     /**
      * Creates a command event, with the given message event and command mapping.

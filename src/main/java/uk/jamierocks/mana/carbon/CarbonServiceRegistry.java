@@ -45,7 +45,8 @@ public final class CarbonServiceRegistry implements ServiceRegistry {
 
     private final Map<Class<?>, ProviderRegistration<?>> providers = Maps.newHashMap();
 
-    protected CarbonServiceRegistry() {}
+    protected CarbonServiceRegistry() {
+    }
 
     /**
      * {@inheritDoc}

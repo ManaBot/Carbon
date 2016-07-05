@@ -49,7 +49,8 @@ public final class CarbonModuleManager implements ModuleManager {
 
     private final Map<String, ModuleContainer> modules = Maps.newHashMap();
 
-    protected CarbonModuleManager() {}
+    protected CarbonModuleManager() {
+    }
 
     /**
      * {@inheritDoc}
