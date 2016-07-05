@@ -24,12 +24,8 @@
 
 package uk.jamierocks.mana.carbon;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-
 import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -38,6 +34,11 @@ import uk.jamierocks.mana.carbon.module.ModuleContainer;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.util.guice.ModuleGuiceModule;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * The implementation of {@link ModuleManager} for Carbon.

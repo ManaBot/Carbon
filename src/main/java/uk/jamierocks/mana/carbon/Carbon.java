@@ -74,6 +74,7 @@ public final class Carbon {
     private final ServiceRegistry serviceRegistry;
     private final Dispatcher commandDispatcher;
     private CommentedConfigurationNode configurationNode;
+
     protected Carbon() {
         this.logger.info("Loading Carbon " + Constants.VERSION);
         this.eventBus = new EventBus(new ExceptionReporterEventLoggingHandler());

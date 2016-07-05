@@ -24,11 +24,12 @@
 
 package uk.jamierocks.mana.carbon.module;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import uk.jamierocks.mana.carbon.plugin.PluginContainer;
+
 import java.util.Collection;
 import java.util.Optional;
-
-import static com.google.common.base.Preconditions.checkNotNull;
-import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 
 /**
  * A manager for registering modules.
