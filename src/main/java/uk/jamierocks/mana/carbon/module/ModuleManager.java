@@ -24,12 +24,11 @@
 
 package uk.jamierocks.mana.carbon.module;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import uk.jamierocks.mana.carbon.plugin.PluginContainer;
-
 import java.util.Collection;
 import java.util.Optional;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 
 /**
  * A manager for registering modules.
@@ -38,16 +37,6 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public interface ModuleManager {
-
-    /**
-     * Registers the given module, to an uncredited plugin.
-     *
-     * @param module The module
-     * @since 1.0.0
-     * @deprecated As of release 1.1.0, replaced by {@link #registerModule(Object, Class)}
-     */
-    @Deprecated
-    void registerModule(Class<?> module);
 
     /**
      * Registers the given module, to the given plugin.
@@ -70,7 +59,7 @@ public interface ModuleManager {
 
         final Optional<ModuleContainer> module = this.getModule(moduleClass);
         if (module.isPresent()) {
-            return module.get().getOwner();
+            return Optional.of(module.get().getOwner());
         }
         return Optional.empty();
     }
@@ -87,7 +76,7 @@ public interface ModuleManager {
 
         final Optional<ModuleContainer> module = this.getModule(id);
         if (module.isPresent()) {
-            return module.get().getOwner();
+            return Optional.of(module.get().getOwner());
         }
         return Optional.empty();
     }

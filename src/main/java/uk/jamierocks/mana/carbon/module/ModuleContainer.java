@@ -25,10 +25,7 @@
 package uk.jamierocks.mana.carbon.module;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
-
-import java.util.Optional;
 
 /**
  * A wrapper around a module.
@@ -37,43 +34,6 @@ import java.util.Optional;
  * @since 1.0.0
  */
 public interface ModuleContainer {
-
-    /**
-     * Creates a {@link ModuleContainer} around a {@link Module} and an {@link Object}.
-     *
-     * @param module The module annotation
-     * @param instance The module instance
-     * @return The module container
-     * @since 1.0.0
-     * @deprecated As of release 1.1.0, replaced by {@link #of(Module, Object, PluginContainer)}
-     */
-    @Deprecated
-    static ModuleContainer of(Module module, Object instance) {
-        checkNotNull(module, "module is null!");
-        checkNotNull(instance, "instance is null!");
-
-        return new ModuleContainer() {
-            @Override
-            public String getId() {
-                return module.id();
-            }
-
-            @Override
-            public String getName() {
-                return module.name();
-            }
-
-            @Override
-            public Optional<PluginContainer> getOwner() {
-                return Optional.empty();
-            }
-
-            @Override
-            public Object getInstance() {
-                return instance;
-            }
-        };
-    }
 
     /**
      * Creates a {@link ModuleContainer} around a {@link Module}, a {@link Object} and a {@link PluginContainer}.
@@ -101,8 +61,8 @@ public interface ModuleContainer {
             }
 
             @Override
-            public Optional<PluginContainer> getOwner() {
-                return Optional.of(owner);
+            public PluginContainer getOwner() {
+                return owner;
             }
 
             @Override
@@ -134,9 +94,9 @@ public interface ModuleContainer {
      * Gets the owner of the module, if available.
      *
      * @return The owner
-     * @since 1.1.0
+     * @since 2.0.0
      */
-    Optional<PluginContainer> getOwner();
+    PluginContainer getOwner();
 
     /**
      * Gets the instance of this module.
