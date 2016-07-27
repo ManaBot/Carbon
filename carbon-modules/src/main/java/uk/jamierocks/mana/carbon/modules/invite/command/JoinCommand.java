@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.modules.command;
+package uk.jamierocks.mana.carbon.modules.invite.command;
 
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
@@ -34,19 +34,18 @@ import com.sk89q.intake.InvalidUsageException;
 import com.sk89q.intake.InvocationCommandException;
 import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
-import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
 import uk.jamierocks.mana.carbon.util.intake.DescriptionBuilder;
 
 import java.util.List;
 
 /**
- * A part command for the invite module.
+ * A join command for the invite module.
  *
  * @author Jamie Mansfield
  * @since 1.0.0
  */
-public final class PartCommand implements CommandCallable {
+public final class JoinCommand implements CommandCallable {
 
     /**
      * {@inheritDoc}
@@ -54,21 +53,21 @@ public final class PartCommand implements CommandCallable {
     @Override
     public boolean call(String arguments, Namespace namespace, List<String> parentCommands)
             throws CommandException, InvocationCommandException, AuthorizationException {
-        if (arguments == null || arguments.equals("")) {
-            namespace.get(Channel.class).part();
-        } else {
+        if (arguments != null || !arguments.equals("")) {
             final String[] channelSplit = arguments.split("/");
 
             if (channelSplit.length == 2 &&
                     channelSplit[0] != null && !channelSplit[0].equals("") &&
                     channelSplit[1] != null && !channelSplit[1].equals("")) {
                 if (getCarbon().getIRCManager().getClient(channelSplit[0]).isPresent()) {
-                    getCarbon().getIRCManager().getClient(channelSplit[0]).get().removeChannel(channelSplit[1]);
+                    getCarbon().getIRCManager().getClient(channelSplit[0]).get().addChannel(channelSplit[1]);
                     return true;
                 }
             } else {
                 throw new InvalidUsageException(this, parentCommands);
             }
+        } else {
+            throw new InvalidUsageException(this, parentCommands);
         }
 
         return false;
@@ -80,8 +79,8 @@ public final class PartCommand implements CommandCallable {
     @Override
     public Description getDescription() {
         return new DescriptionBuilder()
-                .help("Parts the current channel, or in the format of server/#channel")
-                .usage("part [server/#channel]")
+                .help("Joins the given channel, in the format of server/#channel")
+                .usage("join <server/#channel>")
                 .build();
     }
 

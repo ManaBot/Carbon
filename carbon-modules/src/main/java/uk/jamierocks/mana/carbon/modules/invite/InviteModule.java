@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.modules;
+package uk.jamierocks.mana.carbon.modules.invite;
 
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
@@ -31,8 +31,8 @@ import org.kitteh.irc.client.library.event.channel.ChannelInviteEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
 import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.module.Module;
-import uk.jamierocks.mana.carbon.modules.command.JoinCommand;
-import uk.jamierocks.mana.carbon.modules.command.PartCommand;
+import uk.jamierocks.mana.carbon.modules.invite.command.JoinCommand;
+import uk.jamierocks.mana.carbon.modules.invite.command.PartCommand;
 
 /**
  * A invite module for Carbon.

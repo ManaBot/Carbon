@@ -22,30 +22,29 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.modules.command;
-
-import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
+package uk.jamierocks.mana.carbon.modules.help.command;
 
 import com.google.common.collect.Lists;
 import com.sk89q.intake.CommandCallable;
 import com.sk89q.intake.CommandException;
+import com.sk89q.intake.CommandMapping;
 import com.sk89q.intake.Description;
-import com.sk89q.intake.InvalidUsageException;
 import com.sk89q.intake.InvocationCommandException;
 import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.User;
+import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.util.intake.DescriptionBuilder;
 
 import java.util.List;
 
 /**
- * A join command for the invite module.
+ * A help command for the help module.
  *
  * @author Jamie Mansfield
- * @since 1.0.0
+ * @since 1.1.0
  */
-public final class JoinCommand implements CommandCallable {
+public final class HelpCommand implements CommandCallable {
 
     /**
      * {@inheritDoc}
@@ -53,24 +52,45 @@ public final class JoinCommand implements CommandCallable {
     @Override
     public boolean call(String arguments, Namespace namespace, List<String> parentCommands)
             throws CommandException, InvocationCommandException, AuthorizationException {
-        if (arguments != null || !arguments.equals("")) {
-            final String[] channelSplit = arguments.split("/");
+        if (arguments != null && !arguments.equals("")) {
+            if (Carbon.getCarbon().getCommandDispatcher().contains(arguments)) {
+                CommandMapping mapping = Carbon.getCarbon().getCommandDispatcher().get(arguments);
+                if (mapping.getCallable().testPermission(namespace)) {
+                    StringBuilder builder = new StringBuilder();
 
-            if (channelSplit.length == 2 &&
-                    channelSplit[0] != null && !channelSplit[0].equals("") &&
-                    channelSplit[1] != null && !channelSplit[1].equals("")) {
-                if (getCarbon().getIRCManager().getClient(channelSplit[0]).isPresent()) {
-                    getCarbon().getIRCManager().getClient(channelSplit[0]).get().addChannel(channelSplit[1]);
-                    return true;
+                    builder.append("Command: ");
+                    builder.append(mapping.getPrimaryAlias());
+                    builder.append(" (");
+                    builder.append(mapping.getCallable().getDescription().getHelp());
+                    builder.append(") ");
+                    builder.append("Usage: ");
+                    builder.append(mapping.getDescription().getUsage());
+
+                    namespace.get(User.class).sendMessage(builder.toString());
+                } else {
+                    namespace.get(User.class)
+                            .sendMessage("You do not have permission to view the help for that command!");
                 }
             } else {
-                throw new InvalidUsageException(this, parentCommands);
+                namespace.get(User.class).sendMessage("Command not found!");
             }
         } else {
-            throw new InvalidUsageException(this, parentCommands);
+            StringBuilder builder = new StringBuilder();
+            builder.append("Commands: ");
+
+            for (CommandMapping mapping : Carbon.getCarbon().getCommandDispatcher().getCommands()) {
+                if (mapping.getCallable().testPermission(namespace)) {
+                    builder.append(mapping.getPrimaryAlias());
+                    builder.append(" (");
+                    builder.append(mapping.getCallable().getDescription().getHelp());
+                    builder.append(") ");
+                }
+            }
+
+            namespace.get(User.class).sendMessage(builder.toString());
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -79,8 +99,8 @@ public final class JoinCommand implements CommandCallable {
     @Override
     public Description getDescription() {
         return new DescriptionBuilder()
-                .help("Joins the given channel, in the format of server/#channel")
-                .usage("join <server/#channel>")
+                .help("Displays all commands, with their help text")
+                .usage("help [command]")
                 .build();
     }
 
@@ -89,7 +109,7 @@ public final class JoinCommand implements CommandCallable {
      */
     @Override
     public boolean testPermission(Namespace namespace) {
-        return getCarbon().getIRCManager().getAdministrators().contains(namespace.get(User.class).getName());
+        return true;
     }
 
     /**

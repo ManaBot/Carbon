@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.modules;
+package uk.jamierocks.mana.carbon.modules.help;
 
 import com.google.common.eventbus.Subscribe;
 import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.module.Module;
-import uk.jamierocks.mana.carbon.modules.command.HelpCommand;
+import uk.jamierocks.mana.carbon.modules.help.command.HelpCommand;
 
 /**
  * A help module for Carbon.
