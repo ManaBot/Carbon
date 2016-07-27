@@ -22,18 +22,16 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
+package uk.jamierocks.mana.carbon.module;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import uk.jamierocks.mana.carbon.module.Module;
-import uk.jamierocks.mana.carbon.module.ModuleContainer;
-import uk.jamierocks.mana.carbon.module.ModuleManager;
+import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.guice.ModuleGuiceModule;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
-import uk.jamierocks.mana.carbon.util.guice.ModuleGuiceModule;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -49,9 +47,6 @@ import java.util.Optional;
 public final class CarbonModuleManager implements ModuleManager {
 
     private final Map<String, ModuleContainer> modules = Maps.newHashMap();
-
-    protected CarbonModuleManager() {
-    }
 
     /**
      * {@inheritDoc}

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
+package uk.jamierocks.mana.carbon.irc;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
@@ -34,7 +34,6 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.util.AcceptingTrustManagerFactory;
-import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
 import java.util.Collection;
@@ -52,9 +51,6 @@ import java.util.Optional;
 public final class CarbonIRCManager implements IRCManager {
 
     private final Map<String, Client> clients = Maps.newHashMap();
-
-    protected CarbonIRCManager() {
-    }
 
     public void initialise() {
         ConfigurationNode configurationNode = getCarbon().getConfigManager().getConfigurationNode().getNode("irc");

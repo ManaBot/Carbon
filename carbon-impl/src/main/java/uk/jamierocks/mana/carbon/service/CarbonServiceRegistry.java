@@ -22,14 +22,11 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
+package uk.jamierocks.mana.carbon.service;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.collect.Maps;
-import uk.jamierocks.mana.carbon.service.ProviderRegistration;
-import uk.jamierocks.mana.carbon.service.ProviderRegistrationException;
-import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
 import java.util.Map;
@@ -44,9 +41,6 @@ import java.util.Optional;
 public final class CarbonServiceRegistry implements ServiceRegistry {
 
     private final Map<Class<?>, ProviderRegistration<?>> providers = Maps.newHashMap();
-
-    protected CarbonServiceRegistry() {
-    }
 
     /**
      * {@inheritDoc}

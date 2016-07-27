@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon;
+package uk.jamierocks.mana.carbon.plugin;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -30,11 +30,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import uk.jamierocks.mana.carbon.plugin.Plugin;
-import uk.jamierocks.mana.carbon.plugin.PluginContainer;
-import uk.jamierocks.mana.carbon.plugin.PluginManager;
+import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
-import uk.jamierocks.mana.carbon.util.guice.PluginGuiceModule;
+import uk.jamierocks.mana.carbon.guice.PluginGuiceModule;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,9 +64,6 @@ public final class CarbonPluginManager implements PluginManager {
 
     private final Map<String, PluginContainer> plugins = Maps.newHashMap();
     private final Map<Object, PluginContainer> pluginInstances = Maps.newHashMap();
-
-    protected CarbonPluginManager() {
-    }
 
     /**
      * {@inheritDoc}
@@ -115,10 +110,7 @@ public final class CarbonPluginManager implements PluginManager {
      *
      * @since 1.0.0
      */
-    protected void loadAllPlugins() {
-        // Register the Carbon plugin
-        this.registerPlugin(Carbon.CONTAINER);
-
+    public void loadAllPlugins() {
         File[] jarFiles = PLUGINS_DIR.listFiles(file -> {
             return file.getName().endsWith(".jar");
         });
@@ -183,7 +175,7 @@ public final class CarbonPluginManager implements PluginManager {
      * @param container The plugin container
      * @since 1.0.0
      */
-    private void registerPlugin(PluginContainer container) {
+    public void registerPlugin(PluginContainer container) {
         Carbon.getCarbon().getLogger().info("Found plugin: " + container.getName() + " (" + container.getId() + ")");
         Carbon.getCarbon().getEventBus().register(container.getInstance());
         this.plugins.put(container.getId(), container);

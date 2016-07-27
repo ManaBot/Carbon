@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.guice;
+package uk.jamierocks.mana.carbon.guice;
 
 import com.google.inject.AbstractModule;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
