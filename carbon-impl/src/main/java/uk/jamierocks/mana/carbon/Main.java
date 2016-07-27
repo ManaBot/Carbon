@@ -54,7 +54,7 @@ public final class Main {
         // Pre Init state
         new PreInitialisationEvent().post();
 
-        // Register exception service.
+        // Register services
         Carbon.getCarbon().getServiceRegistry()
                 .registerProvider(Carbon.getCarbon(), ExceptionService.class, new FallbackExceptionService());
 
