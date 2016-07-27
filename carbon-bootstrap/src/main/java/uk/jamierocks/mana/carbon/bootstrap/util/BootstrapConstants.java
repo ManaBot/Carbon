@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.carbon.bootstrap.util;
+package uk.jamierocks.mana.carbon.bootstrap.util;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

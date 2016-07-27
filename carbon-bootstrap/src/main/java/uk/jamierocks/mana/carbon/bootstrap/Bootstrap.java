@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.carbon.bootstrap;
+package uk.jamierocks.mana.carbon.bootstrap;
 
-import uk.jamierocks.carbon.bootstrap.util.BootstrapConstants;
+import uk.jamierocks.mana.carbon.bootstrap.util.BootstrapConstants;
 import uk.jamierocks.mana.carbon.Main;
 
 /**

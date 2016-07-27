@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.carbon.bootstrap;
+package uk.jamierocks.mana.carbon.bootstrap;
 
 import java.io.IOException;
 import java.net.URL;
