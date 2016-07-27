@@ -2,4 +2,5 @@ rootProject.name = 'Carbon'
 include 'carbon-api'
 include 'carbon-impl'
 include 'carbon-modules'
+include 'carbon-bootstrap'
 
