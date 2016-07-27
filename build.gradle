@@ -41,7 +41,7 @@ subprojects {
     }
 
     shadowJar {
-        classifier = ''
+        classifier = 'shaded'
     }
 
     task javadocJar(type: Jar, dependsOn: 'javadoc') {
