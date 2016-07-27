@@ -42,7 +42,6 @@ import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.CarbonServiceRegistry;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
-import uk.jamierocks.mana.carbon.util.CommandUtils;
 import uk.jamierocks.mana.carbon.util.Constants;
 import uk.jamierocks.mana.carbon.util.ReflectionUtil;
 import uk.jamierocks.mana.carbon.util.ReflectionUtilException;
@@ -99,7 +98,7 @@ public final class CarbonImpl extends Carbon {
             System.exit(0);
         }
 
-        this.logger.info("Using command prefix: " + CommandUtils.getCommandPrefix());
+        this.logger.info("Using command prefix: " + this.getConfiguration().getCommands().getPrefix());
     }
 
     private void setContainer() {

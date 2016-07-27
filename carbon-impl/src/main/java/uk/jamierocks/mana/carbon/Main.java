@@ -48,7 +48,7 @@ public final class Main {
         new CarbonImpl();
 
         // Load all of the plugins
-        ((CarbonPluginManager) Carbon.getCarbon().getPluginManager()).registerPlugin(Carbon.CONTAINER);
+        ((CarbonPluginManager) Carbon.getCarbon().getPluginManager()).loadPlugin(Carbon.CONTAINER);
         ((CarbonPluginManager) Carbon.getCarbon().getPluginManager()).loadAllPlugins();
 
         // Pre Init state

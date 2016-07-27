@@ -35,9 +35,9 @@ import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
+import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.event.command.CommandEvent;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
-import uk.jamierocks.mana.carbon.util.CommandUtils;
 
 import java.util.Collections;
 
@@ -52,7 +52,7 @@ public final class CommandListener {
     @Handler
     public void onMessageRecieved(ChannelMessageEvent event) {
         final String message = event.getMessage();
-        final String commandPrefix = CommandUtils.getCommandPrefix();
+        final String commandPrefix = Carbon.getCarbon().getConfiguration().getCommands().getPrefix();
 
         if (message.startsWith(commandPrefix)) {
             // By this point it still isn't decided as to weather this is a command!
@@ -74,7 +74,7 @@ public final class CommandListener {
                         getCarbon().getCommandDispatcher()
                                 .call(command, namespace, Collections.singletonList(command));
                     } catch (InvalidUsageException e) {
-                        event.getActor().sendMessage("Usage: " + e.getCommand().getDescription().getUsage());
+                        event.getActor().sendMessage("Usage: " + commandPrefix + e.getCommand().getDescription().getUsage());
                     } catch (CommandException | InvocationCommandException e) {
                         ExceptionReporter.report("Failed to execute command: " + message, e);
                     } catch (AuthorizationException e) {
