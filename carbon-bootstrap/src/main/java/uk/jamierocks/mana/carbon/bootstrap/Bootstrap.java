@@ -59,7 +59,7 @@ public final class Bootstrap {
                 "org/apache/logging/log4j/log4j-slf4j-impl/2.6.1/log4j-slf4j-impl-2.6.1.jar");
 
         // IRC dependencies
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "org/kitteh/irc/client-lib/1.1.0/client-lib-1.1.0.jar");
+        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "org/kitteh/irc/client-lib/2.1.0/client-lib-2.1.0.jar");
 
         // Command dependencies
         dependencyManager.checkDependency(BootstrapConstants.MISERABLE_REPO,

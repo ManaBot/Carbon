@@ -16,7 +16,7 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.6.1'
 
     // IRC related
-    compile 'org.kitteh.irc:client-lib:1.1.0'
+    compile 'org.kitteh.irc:client-lib:2.1.0'
 
     // Command related
     compile 'com.sk89q.intake:intake:4.2-MISNIN-SNAPSHOT'
