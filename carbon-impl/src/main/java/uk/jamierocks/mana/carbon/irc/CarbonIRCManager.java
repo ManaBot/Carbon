@@ -26,15 +26,20 @@ package uk.jamierocks.mana.carbon.irc;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
+import static uk.jamierocks.mana.carbon.util.Constants.OPS_PATH;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.reflect.TypeToken;
 import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.gson.GsonConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.util.AcceptingTrustManagerFactory;
-import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.CarbonImpl;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -94,6 +99,12 @@ public final class CarbonIRCManager implements IRCManager {
      */
     @Override
     public List<String> getAdministrators() {
-        return Carbon.getCarbon().getConfiguration().getIrc().getAdmins();
+        try {
+            final ConfigurationNode node = GsonConfigurationLoader.builder().setPath(OPS_PATH).build().load();
+            return node.getList(TypeToken.of(String.class));
+        } catch (IOException | ObjectMappingException e) {
+            ExceptionReporter.report("Failed to get bot administrators!", e);
+            return Lists.newArrayList();
+        }
     }
 }

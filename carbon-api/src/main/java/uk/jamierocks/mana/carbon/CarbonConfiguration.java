@@ -85,14 +85,10 @@ public final class CarbonConfiguration {
     public static class Irc {
 
         private List<Network> networks = Lists.newArrayList();
-        private List<String> admins = Lists.newArrayList();
 
         public Irc(CommentedConfigurationNode node) {
             for (CommentedConfigurationNode network : node.getNode("networks").getChildrenList()) {
                 this.networks.add(new Network(network));
-            }
-            for (CommentedConfigurationNode admin : node.getNode("admins").getChildrenList()) {
-                this.admins.add(admin.getString());
             }
         }
 
@@ -104,16 +100,6 @@ public final class CarbonConfiguration {
          */
         public List<Network> getNetworks() {
             return Lists.newArrayList(this.networks);
-        }
-
-        /**
-         * Returns an immutable list of all the bot administrators.
-         *
-         * @return The admins
-         * @since 2.0.0
-         */
-        public List<String> getAdmins() {
-            return Lists.newArrayList(this.admins);
         }
 
         /**

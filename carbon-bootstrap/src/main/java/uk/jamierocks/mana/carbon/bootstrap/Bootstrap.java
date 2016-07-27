@@ -48,6 +48,9 @@ public final class Bootstrap {
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
                 "ninja/leaping/configurate/configurate-core/3.1.1/configurate-core-3.1.1.jar");
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
+                "ninja/leaping/configurate/configurate-gson/3.1.1/configurate-gson-3.1.1.jar");
+        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/code/gson/gson/2.2.4/gson-2.2.4.jar");
+        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
                 "ninja/leaping/configurate/configurate-hocon/3.1.1/configurate-hocon-3.1.1.jar");
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/typesafe/config/1.3.0/config-1.3.0.jar");
 

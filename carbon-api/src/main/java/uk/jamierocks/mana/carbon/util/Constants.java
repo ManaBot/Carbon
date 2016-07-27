@@ -48,4 +48,11 @@ public final class Constants {
      * @since 2.0.0
      */
     public static final Path CONFIG_PATH = Paths.get("carbon.conf");
+
+    /**
+     * The path of the Carbon ops file.
+     *
+     * @since 2.0.0
+     */
+    public static final Path OPS_PATH = Paths.get("ops.json");
 }

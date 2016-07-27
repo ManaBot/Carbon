@@ -25,6 +25,7 @@
 package uk.jamierocks.mana.carbon;
 
 import static uk.jamierocks.mana.carbon.util.Constants.CONFIG_PATH;
+import static uk.jamierocks.mana.carbon.util.Constants.OPS_PATH;
 
 import com.google.common.eventbus.EventBus;
 import com.sk89q.intake.dispatcher.Dispatcher;
@@ -82,6 +83,17 @@ public final class CarbonImpl extends Carbon {
         if (Files.notExists(CONFIG_PATH)) {
             try {
                 Files.copy(Carbon.class.getResourceAsStream("/carbon.conf"), CONFIG_PATH);
+            } catch (IOException e) {
+                // If this ever occurs something massively wrong is going on.
+                // It is probably for the best to exit the application
+                ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
+                System.exit(0);
+            }
+        }
+
+        if (Files.notExists(OPS_PATH)) {
+            try {
+                Files.copy(Carbon.class.getResourceAsStream("/ops.json"), OPS_PATH);
             } catch (IOException e) {
                 // If this ever occurs something massively wrong is going on.
                 // It is probably for the best to exit the application
