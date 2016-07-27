@@ -24,6 +24,8 @@
 
 package uk.jamierocks.mana.carbon.irc;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.kitteh.irc.client.library.Client;
 
 import java.util.Collection;
@@ -62,4 +64,15 @@ public interface IRCManager {
      * @since 1.1.0
      */
     List<String> getAdministrators();
+
+    /**
+     * Registers the given listener to all of the IRC clients.
+     *
+     * @param listener The listener
+     * @since 1.2.0
+     */
+    default void registerIRCEventListener(Object listener) {
+        checkNotNull(listener);
+        this.getClients().forEach(c -> c.getEventManager().registerEventListener(listener));
+    }
 }

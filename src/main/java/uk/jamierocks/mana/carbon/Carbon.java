@@ -57,29 +57,15 @@ import java.nio.file.Paths;
  */
 public final class Carbon {
 
-    private static final Path CONFIG_PATH = Paths.get("carbon.conf");
-
-    /**
-     * This will be forcefully overridden by Carbon upon its initialisation.
-     */
-    private static final Carbon INSTANCE = null;
-
     /**
      * This will be forcefully overridden by Carbon upon its initialisation.
      */
     protected static final PluginContainer CONTAINER = null;
-
+    private static final Path CONFIG_PATH = Paths.get("carbon.conf");
     /**
-     * Gets the instance of {@link Carbon} currently running.
-     *
-     * @return The current instance of Carbon
-     * @since 1.0.0
+     * This will be forcefully overridden by Carbon upon its initialisation.
      */
-    public static Carbon getCarbon() {
-        checkNotNull(INSTANCE, "INSTANCE is null!");
-        return INSTANCE;
-    }
-
+    private static final Carbon INSTANCE = null;
     private final Logger logger = LoggerFactory.getLogger("Carbon");
     private final EventBus eventBus;
     private final PluginManager pluginManager;
@@ -88,7 +74,6 @@ public final class Carbon {
     private final ServiceRegistry serviceRegistry;
     private final Dispatcher commandDispatcher;
     private CommentedConfigurationNode configurationNode;
-
     protected Carbon() {
         this.logger.info("Loading Carbon " + Constants.VERSION);
         this.eventBus = new EventBus(new ExceptionReporterEventLoggingHandler());
@@ -122,6 +107,17 @@ public final class Carbon {
         }
 
         this.setCommandPrefix(); // Forcefully set the command prefix
+    }
+
+    /**
+     * Gets the instance of {@link Carbon} currently running.
+     *
+     * @return The current instance of Carbon
+     * @since 1.0.0
+     */
+    public static Carbon getCarbon() {
+        checkNotNull(INSTANCE, "INSTANCE is null!");
+        return INSTANCE;
     }
 
     private void setInstance() {

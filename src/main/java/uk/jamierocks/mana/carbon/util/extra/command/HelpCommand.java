@@ -34,6 +34,7 @@ import com.sk89q.intake.argument.Namespace;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.User;
 import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.util.Constants;
 import uk.jamierocks.mana.carbon.util.intake.DescriptionBuilder;
 
 import java.util.List;
@@ -52,19 +53,44 @@ public final class HelpCommand implements CommandCallable {
     @Override
     public boolean call(String arguments, Namespace namespace, List<String> parentCommands)
             throws CommandException, InvocationCommandException, AuthorizationException {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Commands: ");
+        if (arguments != null && !arguments.equals("")) {
+            if (Carbon.getCarbon().getCommandDispatcher().contains(arguments)) {
+                CommandMapping mapping = Carbon.getCarbon().getCommandDispatcher().get(arguments);
+                if (mapping.getCallable().testPermission(namespace)) {
+                    StringBuilder builder = new StringBuilder();
 
-        for (CommandMapping mapping : Carbon.getCarbon().getCommandDispatcher().getCommands()) {
-            if (mapping.getCallable().testPermission(namespace)) {
-                builder.append(mapping.getPrimaryAlias());
-                builder.append(" (");
-                builder.append(mapping.getCallable().getDescription().getHelp());
-                builder.append(") ");
+                    builder.append("Command: ");
+                    builder.append(mapping.getPrimaryAlias());
+                    builder.append(" (");
+                    builder.append(mapping.getCallable().getDescription().getHelp());
+                    builder.append(") ");
+                    builder.append("Usage: ");
+                    builder.append(mapping.getDescription().getUsage());
+
+                    namespace.get(User.class).sendMessage(builder.toString());
+                } else {
+                    namespace.get(User.class)
+                            .sendMessage("You do not have permission to view the help for that command!");
+                }
+            } else {
+                namespace.get(User.class).sendMessage("Command not found!");
             }
+        } else {
+            StringBuilder builder = new StringBuilder();
+            builder.append("Commands: ");
+
+            for (CommandMapping mapping : Carbon.getCarbon().getCommandDispatcher().getCommands()) {
+                if (mapping.getCallable().testPermission(namespace)) {
+                    builder.append(mapping.getPrimaryAlias());
+                    builder.append(" (");
+                    builder.append(mapping.getCallable().getDescription().getHelp());
+                    builder.append(") ");
+                }
+            }
+
+            namespace.get(User.class).sendMessage(builder.toString());
         }
 
-        namespace.get(User.class).sendMessage(builder.toString());
         return true;
     }
 
@@ -74,7 +100,8 @@ public final class HelpCommand implements CommandCallable {
     @Override
     public Description getDescription() {
         return new DescriptionBuilder()
-                .help("Displays a list of commands with their help text.")
+                .help("Displays all commands, with their help text")
+                .usage(Constants.COMMAND_PREFIX + "help [command]")
                 .build();
     }
 

@@ -56,18 +56,19 @@ import java.util.jar.JarFile;
  */
 public final class CarbonPluginManager implements PluginManager {
 
-    private static final File PLUGIN_DIR = new File("plugins");
+    private static final File PLUGINS_DIR = new File("plugins");
 
     static {
-        if (!PLUGIN_DIR.exists()) {
-            PLUGIN_DIR.mkdirs();
+        if (!PLUGINS_DIR.exists()) {
+            PLUGINS_DIR.mkdirs();
         }
     }
 
     private final Map<String, PluginContainer> plugins = Maps.newHashMap();
     private final Map<Object, PluginContainer> pluginInstances = Maps.newHashMap();
 
-    protected CarbonPluginManager() {}
+    protected CarbonPluginManager() {
+    }
 
     /**
      * {@inheritDoc}
@@ -89,7 +90,6 @@ public final class CarbonPluginManager implements PluginManager {
     @Override
     public Optional<PluginContainer> getPlugin(String id) {
         checkNotNull(id, "id is null!");
-
         return Optional.ofNullable(this.plugins.get(id));
     }
 
@@ -107,7 +107,6 @@ public final class CarbonPluginManager implements PluginManager {
     @Override
     public boolean isLoaded(String id) {
         checkNotNull(id, "id is null!");
-
         return this.plugins.containsKey(id);
     }
 
@@ -120,7 +119,7 @@ public final class CarbonPluginManager implements PluginManager {
         // Register the Carbon plugin
         this.registerPlugin(Carbon.CONTAINER);
 
-        File[] jarFiles = PLUGIN_DIR.listFiles(file -> {
+        File[] jarFiles = PLUGINS_DIR.listFiles(file -> {
             return file.getName().endsWith(".jar");
         });
 
@@ -150,7 +149,7 @@ public final class CarbonPluginManager implements PluginManager {
 
         try {
             URLClassLoader classLoader = new URLClassLoader(
-                    new URL[]{ jar.toURI().toURL() }, CarbonPluginManager.class.getClassLoader());
+                    new URL[]{jar.toURI().toURL()}, CarbonPluginManager.class.getClassLoader());
 
             try (JarFile jarFile = new JarFile(jar)) {
                 jarFile.stream().forEach(jarEntry -> {

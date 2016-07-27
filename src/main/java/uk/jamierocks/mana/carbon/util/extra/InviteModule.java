@@ -27,10 +27,8 @@ package uk.jamierocks.mana.carbon.util.extra;
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
 import com.google.common.eventbus.Subscribe;
-import com.google.inject.Inject;
 import org.kitteh.irc.client.library.event.channel.ChannelInviteEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
-import org.slf4j.Logger;
 import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.module.Module;
 import uk.jamierocks.mana.carbon.util.extra.command.JoinCommand;
@@ -45,16 +43,14 @@ import uk.jamierocks.mana.carbon.util.extra.command.PartCommand;
 @Module(id = "invite", name = "Invite")
 public final class InviteModule {
 
-    @Inject private Logger logger;
-
     @Subscribe
     public void onPostInitialisation(PostInitialisationEvent event) {
         // Register listener
-        event.getCarbon().getIRCManager().getClients().forEach(c -> c.getEventManager().registerEventListener(this));
+        event.getCarbon().getIRCManager().registerIRCEventListener(this);
 
         // Register commands
-        event.getCarbon().getCommandDispatcher().registerCommand(new JoinCommand(this.logger), "join");
-        event.getCarbon().getCommandDispatcher().registerCommand(new PartCommand(this.logger), "part", "quit", "leave");
+        event.getCarbon().getCommandDispatcher().registerCommand(new JoinCommand(), "join");
+        event.getCarbon().getCommandDispatcher().registerCommand(new PartCommand(), "part", "quit", "leave");
     }
 
     @Handler

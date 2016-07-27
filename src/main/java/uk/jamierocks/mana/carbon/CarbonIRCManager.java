@@ -53,7 +53,8 @@ public final class CarbonIRCManager implements IRCManager {
 
     private final Map<String, Client> clients = Maps.newHashMap();
 
-    protected CarbonIRCManager() {}
+    protected CarbonIRCManager() {
+    }
 
     public void initialise() {
         CommentedConfigurationNode configurationNode = getCarbon().getConfigurationNode().getNode("irc");
@@ -82,7 +83,6 @@ public final class CarbonIRCManager implements IRCManager {
     @Override
     public Optional<Client> getClient(String id) {
         checkNotNull(id, "id is null!");
-
         return Optional.ofNullable(this.clients.get(id));
     }
 

@@ -40,19 +40,19 @@ import java.lang.reflect.Method;
 @Deprecated
 public final class Slf4jEventLoggingHandler implements SubscriberExceptionHandler {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void handleException(Throwable exception, SubscriberExceptionContext context) {
-        Carbon.getCarbon().getLogger().error(message(context), exception);
-    }
-
     private static String message(SubscriberExceptionContext context) {
         Method method = context.getSubscriberMethod();
         return "Exception thrown by subscriber method "
                 + method.getName() + '(' + method.getParameterTypes()[0].getName() + ')'
                 + " on subscriber " + context.getSubscriber()
                 + " when dispatching event: " + context.getEvent();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void handleException(Throwable exception, SubscriberExceptionContext context) {
+        Carbon.getCarbon().getLogger().error(message(context), exception);
     }
 }

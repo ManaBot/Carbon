@@ -24,7 +24,6 @@
 
 package uk.jamierocks.mana.carbon;
 
-import org.kitteh.irc.client.library.Client;
 import uk.jamierocks.mana.carbon.event.state.InitialisationEvent;
 import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
@@ -59,10 +58,7 @@ public final class Main {
         ((CarbonIRCManager) Carbon.getCarbon().getIRCManager()).initialise();
 
         // Register command listener
-        CommandListener commandListener = new CommandListener();
-        for (Client client : Carbon.getCarbon().getIRCManager().getClients()) {
-            client.getEventManager().registerEventListener(commandListener);
-        }
+        Carbon.getCarbon().getIRCManager().registerIRCEventListener(new CommandListener());
 
         // Init state
         new InitialisationEvent().post();
