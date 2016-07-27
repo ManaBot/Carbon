@@ -67,14 +67,14 @@ public final class DependencyManager {
         final Path dependency = this.librariesPath.resolve(location);
         final String remote = repo + location;
 
-        if (Files.notExists(dependency) && !downloadVerified(remote, dependency)) {
+        if (Files.notExists(dependency) && !verifyDownload(remote, dependency)) {
             return false;
         }
 
-        return Files.exists(dependency) || downloadVerified(remote, dependency);
+        return Files.exists(dependency) || verifyDownload(remote, dependency);
     }
 
-    private static boolean downloadVerified(String remote, Path path) throws IOException, NoSuchAlgorithmException {
+    private static boolean verifyDownload(String remote, Path path) throws IOException, NoSuchAlgorithmException {
         Files.createDirectories(path.getParent());
 
         String name = path.getFileName().toString();

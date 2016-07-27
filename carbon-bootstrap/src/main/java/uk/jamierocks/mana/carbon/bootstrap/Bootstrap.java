@@ -41,12 +41,15 @@ public final class Bootstrap {
         // Basic dependencies
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/guava/guava/19.0/guava-19.0.jar");
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/inject/guice/4.0/guice-4.0.jar");
+        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "javax/inject/javax.inject/1/javax.inject-1.jar");
+        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "aopalliance/aopalliance/1.0/aopalliance-1.0.jar");
 
         // Configurate dependencies
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
                 "ninja/leaping/configurate/configurate-core/3.1.1/configurate-core-3.1.1.jar");
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
                 "ninja/leaping/configurate/configurate-hocon/3.1.1/configurate-hocon-3.1.1.jar");
+        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/typesafe/config/1.3.0/config-1.3.0.jar");
 
         // Logging dependencies
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar");
@@ -62,6 +65,7 @@ public final class Bootstrap {
         dependencyManager.checkDependency(BootstrapConstants.MISERABLE_REPO,
                 "com/sk89q/intake/intake/4.2-MISNIN-SNAPSHOT/intake-4.2-MISNIN-20160413.183647-1.jar");
 
+        // Run Carbon
         Main.main(args);
     }
 }
