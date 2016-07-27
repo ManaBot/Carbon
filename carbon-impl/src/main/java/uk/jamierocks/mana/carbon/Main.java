@@ -33,7 +33,7 @@ import uk.jamierocks.mana.carbon.modules.InviteModule;
 import uk.jamierocks.mana.carbon.plugin.CarbonPluginManager;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionService;
 import uk.jamierocks.mana.carbon.service.exception.FallbackExceptionService;
-import uk.jamierocks.mana.carbon.util.command.CommandListener;
+import uk.jamierocks.mana.carbon.irc.listener.CommandListener;
 
 /**
  * The application entry-point for Carbon.

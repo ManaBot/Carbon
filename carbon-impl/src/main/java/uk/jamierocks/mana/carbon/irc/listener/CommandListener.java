@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.command;
+package uk.jamierocks.mana.carbon.irc.listener;
 
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
