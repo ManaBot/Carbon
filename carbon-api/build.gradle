@@ -3,7 +3,7 @@ apply plugin: 'ninja.miserable.blossom'
 dependencies {
     // Basic dependencies
     compile 'com.google.guava:guava:19.0'
-    compile 'com.google.inject:guice:4.0'
+    compile 'com.google.inject:guice:4.1.0'
 
     // Configuration related
     compile 'ninja.leaping.configurate:configurate-core:3.1.1'

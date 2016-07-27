@@ -36,6 +36,7 @@ import org.kitteh.irc.client.library.element.User;
 import org.kitteh.irc.client.library.event.channel.ChannelMessageEvent;
 import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
 import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.CarbonImpl;
 import uk.jamierocks.mana.carbon.event.command.CommandEvent;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
@@ -60,7 +61,7 @@ public final class CommandListener {
 
             if (getCarbon().getCommandDispatcher().contains(command.split(" ")[0])) {
                 // We now know it is a command, and can continue to process it
-                getCarbon().getLogger().info(event.getActor().getNick() + " issued command: " + command);
+                CarbonImpl.LOGGER.info(event.getActor().getNick() + " issued command: " + command);
 
                 CommandEvent commandEvent =
                         new CommandEvent(event, getCarbon().getCommandDispatcher().get(command.split(" ")[0])).post();

@@ -40,7 +40,7 @@ public final class Bootstrap {
 
         // Basic dependencies
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/guava/guava/19.0/guava-19.0.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/inject/guice/4.0/guice-4.0.jar");
+        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/inject/guice/4.1.0/guice-4.1.0.jar");
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "javax/inject/javax.inject/1/javax.inject-1.jar");
         dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "aopalliance/aopalliance/1.0/aopalliance-1.0.jar");
 

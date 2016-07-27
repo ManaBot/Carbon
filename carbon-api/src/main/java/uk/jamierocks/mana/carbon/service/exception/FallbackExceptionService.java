@@ -24,7 +24,8 @@
 
 package uk.jamierocks.mana.carbon.service.exception;
 
-import uk.jamierocks.mana.carbon.Carbon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The fallback (and default) implementation of {@link ExceptionService}.
@@ -34,11 +35,13 @@ import uk.jamierocks.mana.carbon.Carbon;
  */
 public final class FallbackExceptionService implements ExceptionService {
 
+    private final Logger LOGGER = LoggerFactory.getLogger("Carbon - ExceptionService");
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void report(String message, Throwable throwable) {
-        Carbon.getCarbon().getLogger().error(message, throwable);
+        LOGGER.error(message, throwable);
     }
 }

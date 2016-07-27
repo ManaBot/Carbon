@@ -31,6 +31,7 @@ import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.CarbonImpl;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 import uk.jamierocks.mana.carbon.guice.PluginGuiceModule;
 
@@ -176,7 +177,7 @@ public final class CarbonPluginManager implements PluginManager {
      * @since 1.0.0
      */
     public void loadPlugin(PluginContainer container) {
-        Carbon.getCarbon().getLogger().info("Found plugin: " + container.getName() + " (" + container.getId() + ")");
+        CarbonImpl.LOGGER.info("Found plugin: " + container.getName() + " (" + container.getId() + ")");
         Carbon.getCarbon().getEventBus().register(container.getInstance());
         this.plugins.put(container.getId(), container);
         this.pluginInstances.put(container.getInstance(), container);

@@ -34,6 +34,7 @@ import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.util.AcceptingTrustManagerFactory;
+import uk.jamierocks.mana.carbon.CarbonImpl;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
 import java.util.Collection;
@@ -63,7 +64,7 @@ public final class CarbonIRCManager implements IRCManager {
                     .secure(network.getNode("secure").getBoolean())
                     .user(network.getNode("username").getString())
                     .nick(network.getNode("nickname").getString())
-                    .listenOutput(getCarbon().getLogger()::debug)
+                    .listenOutput(CarbonImpl.LOGGER::debug)
                     .listenException(e -> ExceptionReporter
                             .report("KittehIRCClientLibrary has experienced an exception!", e));
             if (!network.getNode("serverPassword").isVirtual()) {

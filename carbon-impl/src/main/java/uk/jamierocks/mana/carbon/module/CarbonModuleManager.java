@@ -30,6 +30,7 @@ import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.CarbonImpl;
 import uk.jamierocks.mana.carbon.guice.ModuleGuiceModule;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 
@@ -63,7 +64,7 @@ public final class CarbonModuleManager implements ModuleManager {
             if (container.isPresent()) {
                 this.registerModule0(container.get(), module);
             } else {
-                Carbon.getCarbon().getLogger().error("Could not find container for the given plugin!");
+                CarbonImpl.LOGGER.error("Could not find container for the given plugin!");
             }
         }
     }
@@ -74,7 +75,7 @@ public final class CarbonModuleManager implements ModuleManager {
 
             if (Carbon.getCarbon().getConfiguration().getNode()
                     .getNode("module", moduleAnnotation.id(), "enabled").getBoolean(false)) {
-                Carbon.getCarbon().getLogger()
+                CarbonImpl.LOGGER
                         .info("Loading module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
 
                 Injector injector = Guice.createInjector(new ModuleGuiceModule(moduleAnnotation));
@@ -83,11 +84,11 @@ public final class CarbonModuleManager implements ModuleManager {
                 Carbon.getCarbon().getEventBus().register(instance);
                 this.modules.put(moduleAnnotation.id(), ModuleContainer.of(moduleAnnotation, instance, container));
 
-                Carbon.getCarbon().getLogger()
+                CarbonImpl.LOGGER
                         .info("Loaded module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
             }
         } else {
-            Carbon.getCarbon().getLogger().error(module.getName() + " has no @Module annotation!");
+            CarbonImpl.LOGGER.error(module.getName() + " has no @Module annotation!");
         }
     }
 

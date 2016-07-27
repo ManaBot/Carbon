@@ -28,7 +28,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.eventbus.EventBus;
 import com.sk89q.intake.dispatcher.Dispatcher;
-import org.slf4j.Logger;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
@@ -58,17 +57,6 @@ public abstract class Carbon {
         checkNotNull(CONTAINER, "CONTAINER is null!");
         return (Carbon) CONTAINER.getInstance();
     }
-
-    /**
-     * Gets the {@link Logger} used by Carbon.
-     *
-     * <b>It is designed for use internally, and it is recommended
-     * that plugins do NOT use this Logger.</b>
-     *
-     * @return Carbon's logger
-     * @since 1.0.0
-     */
-    public abstract Logger getLogger();
 
     /**
      * Gets the {@link EventBus} used by Carbon.

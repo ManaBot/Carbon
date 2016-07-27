@@ -58,7 +58,8 @@ import java.nio.file.Files;
  */
 public final class CarbonImpl extends Carbon {
 
-    private final Logger logger = LoggerFactory.getLogger("Carbon");
+    public static final Logger LOGGER = LoggerFactory.getLogger("Carbon");
+
     private final EventBus eventBus;
     private final PluginManager pluginManager;
     private final ModuleManager moduleManager;
@@ -68,7 +69,7 @@ public final class CarbonImpl extends Carbon {
     private CarbonConfiguration configuration;
 
     protected CarbonImpl() {
-        this.logger.info("Loading Carbon " + Constants.VERSION);
+        LOGGER.info("Loading Carbon " + Constants.VERSION);
         this.eventBus = new EventBus(new ExceptionReporterEventLoggingHandler());
         this.pluginManager = new CarbonPluginManager();
         this.moduleManager = new CarbonModuleManager();
@@ -98,7 +99,7 @@ public final class CarbonImpl extends Carbon {
             System.exit(0);
         }
 
-        this.logger.info("Using command prefix: " + this.getConfiguration().getCommands().getPrefix());
+        LOGGER.info("Using command prefix: " + this.getConfiguration().getCommands().getPrefix());
     }
 
     private void setContainer() {
@@ -110,11 +111,6 @@ public final class CarbonImpl extends Carbon {
             ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
             System.exit(0);
         }
-    }
-
-    @Override
-    public Logger getLogger() {
-        return this.logger;
     }
 
     @Override
