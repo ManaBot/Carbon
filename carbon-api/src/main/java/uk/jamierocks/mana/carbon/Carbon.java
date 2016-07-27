@@ -29,7 +29,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.eventbus.EventBus;
 import com.sk89q.intake.dispatcher.Dispatcher;
 import org.slf4j.Logger;
-import uk.jamierocks.mana.carbon.config.ConfigManager;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.PluginContainer;
@@ -120,10 +119,10 @@ public abstract class Carbon {
     public abstract Dispatcher getCommandDispatcher();
 
     /**
-     * Gets the {@link ConfigManager} used by Carbon.
+     * Gets the {@link CarbonConfiguration} used by Carbon.
      *
-     * @return Carbon's config manager
+     * @return Carbon's configuration
      * @since 2.0.0
      */
-    public abstract ConfigManager getConfigManager();
+    public abstract CarbonConfiguration getConfiguration();
 }

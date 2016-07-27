@@ -72,7 +72,7 @@ public final class CarbonModuleManager implements ModuleManager {
         if (module.isAnnotationPresent(Module.class)) {
             Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
 
-            if (Carbon.getCarbon().getConfigManager().getConfigurationNode()
+            if (Carbon.getCarbon().getConfiguration().getNode()
                     .getNode("module", moduleAnnotation.id(), "enabled").getBoolean(false)) {
                 Carbon.getCarbon().getLogger()
                         .info("Loading module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");

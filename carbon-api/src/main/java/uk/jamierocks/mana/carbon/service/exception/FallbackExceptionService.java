@@ -22,17 +22,23 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.config;
+package uk.jamierocks.mana.carbon.service.exception;
 
-import static uk.jamierocks.mana.carbon.config.ConfigKey.of;
+import uk.jamierocks.mana.carbon.Carbon;
 
 /**
- * All the available configuration keys in Carbon.
+ * The fallback (and default) implementation of {@link ExceptionService}.
  *
  * @author Jamie Mansfield
- * @since 2.0.0
+ * @since 1.1.0
  */
-public final class ConfigKeys {
+public final class FallbackExceptionService implements ExceptionService {
 
-    public static final ConfigKey<String> COMMAND_PREFIX = of("commands", "prefix");
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void report(String message, Throwable throwable) {
+        Carbon.getCarbon().getLogger().error(message, throwable);
+    }
 }

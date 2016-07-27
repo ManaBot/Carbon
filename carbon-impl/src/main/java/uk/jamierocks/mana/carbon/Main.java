@@ -32,7 +32,7 @@ import uk.jamierocks.mana.carbon.modules.HelpModule;
 import uk.jamierocks.mana.carbon.modules.InviteModule;
 import uk.jamierocks.mana.carbon.plugin.CarbonPluginManager;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionService;
-import uk.jamierocks.mana.carbon.service.exception.SimpleExceptionService;
+import uk.jamierocks.mana.carbon.service.exception.FallbackExceptionService;
 import uk.jamierocks.mana.carbon.util.command.CommandListener;
 
 /**
@@ -56,8 +56,9 @@ public final class Main {
 
         // Register exception service.
         Carbon.getCarbon().getServiceRegistry()
-                .registerProvider(Carbon.getCarbon(), ExceptionService.class, new SimpleExceptionService());
+                .registerProvider(Carbon.getCarbon(), ExceptionService.class, new FallbackExceptionService());
 
+        // Initialise IRC
         ((CarbonIRCManager) Carbon.getCarbon().getIRCManager()).initialise();
 
         // Register command listener

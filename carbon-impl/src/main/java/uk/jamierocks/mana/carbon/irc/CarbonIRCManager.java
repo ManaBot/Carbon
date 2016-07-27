@@ -53,7 +53,7 @@ public final class CarbonIRCManager implements IRCManager {
     private final Map<String, Client> clients = Maps.newHashMap();
 
     public void initialise() {
-        ConfigurationNode configurationNode = getCarbon().getConfigManager().getConfigurationNode().getNode("irc");
+        ConfigurationNode configurationNode = getCarbon().getConfiguration().getNode().getNode("irc");
         for (ConfigurationNode network : configurationNode.getNode("networks").getChildrenList()) {
             Client.Builder clientBuilder = Client.builder()
                     .secureTrustManagerFactory(new AcceptingTrustManagerFactory())
@@ -96,7 +96,7 @@ public final class CarbonIRCManager implements IRCManager {
     @Override
     public List<String> getAdministrators() {
         try {
-            return getCarbon().getConfigManager().getConfigurationNode().getNode("irc", "admins").getList(TypeToken.of(String.class));
+            return getCarbon().getConfiguration().getNode().getNode("irc", "admins").getList(TypeToken.of(String.class));
         } catch (ObjectMappingException e) {
             ExceptionReporter.report("Failed to get the bot admins!", e);
             return Lists.newArrayList();

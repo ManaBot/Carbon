@@ -25,7 +25,6 @@
 package uk.jamierocks.mana.carbon.util;
 
 import uk.jamierocks.mana.carbon.Carbon;
-import uk.jamierocks.mana.carbon.config.ConfigKeys;
 
 /**
  * Utils for commands.
@@ -42,6 +41,6 @@ public final class CommandUtils {
      * @since 2.0.0
      */
     public static String getCommandPrefix() {
-        return Carbon.getCarbon().getConfigManager().get(ConfigKeys.COMMAND_PREFIX);
+        return Carbon.getCarbon().getConfiguration().getCommands().getPrefix();
     }
 }

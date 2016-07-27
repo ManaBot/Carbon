@@ -32,7 +32,6 @@ import com.sk89q.intake.dispatcher.SimpleDispatcher;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uk.jamierocks.mana.carbon.config.ConfigManager;
 import uk.jamierocks.mana.carbon.irc.CarbonIRCManager;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.CarbonModuleManager;
@@ -67,7 +66,7 @@ public final class CarbonImpl extends Carbon {
     private final IRCManager ircManager;
     private final ServiceRegistry serviceRegistry;
     private final Dispatcher commandDispatcher;
-    private ConfigManager configManager;
+    private CarbonConfiguration configuration;
 
     protected CarbonImpl() {
         this.logger.info("Loading Carbon " + Constants.VERSION);
@@ -92,7 +91,7 @@ public final class CarbonImpl extends Carbon {
         }
 
         try {
-            this.configManager = new ConfigManager(HoconConfigurationLoader.builder().setPath(CONFIG_PATH).build().load());
+            this.configuration = new CarbonConfiguration(HoconConfigurationLoader.builder().setPath(CONFIG_PATH).build().load());
         } catch (IOException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
@@ -150,7 +149,7 @@ public final class CarbonImpl extends Carbon {
     }
 
     @Override
-    public ConfigManager getConfigManager() {
-        return this.configManager;
+    public CarbonConfiguration getConfiguration() {
+        return this.configuration;
     }
 }
