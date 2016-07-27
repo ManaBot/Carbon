@@ -24,6 +24,9 @@
 
 package uk.jamierocks.mana.carbon.util;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 /**
  * All of Carbon's constant values.
  *
@@ -38,4 +41,11 @@ public final class Constants {
      * @since 1.0.0
      */
     public static final String VERSION = "%version%";
+
+    /**
+     * The path of the Carbon configuration file.
+     *
+     * @since 2.0.0
+     */
+    public static final Path CONFIG_PATH = Paths.get("carbon.conf");
 }

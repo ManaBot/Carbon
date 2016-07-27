@@ -24,7 +24,7 @@
 
 package uk.jamierocks.mana.carbon;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static uk.jamierocks.mana.carbon.util.Constants.CONFIG_PATH;
 
 import com.google.common.eventbus.EventBus;
 import com.sk89q.intake.dispatcher.Dispatcher;
@@ -47,26 +47,15 @@ import uk.jamierocks.mana.carbon.util.event.ExceptionReporterEventLoggingHandler
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
- * Holds all the necessary components for Carbon.
+ * The implementation of {@link Carbon}.
  *
  * @author Jamie Mansfield
- * @since 1.0.0
+ * @since 2.0.0
  */
-public final class Carbon {
+public final class CarbonImpl extends Carbon {
 
-    /**
-     * This will be forcefully overridden by Carbon upon its initialisation.
-     */
-    protected static final PluginContainer CONTAINER = null;
-    private static final Path CONFIG_PATH = Paths.get("carbon.conf");
-    /**
-     * This will be forcefully overridden by Carbon upon its initialisation.
-     */
-    private static final Carbon INSTANCE = null;
     private final Logger logger = LoggerFactory.getLogger("Carbon");
     private final EventBus eventBus;
     private final PluginManager pluginManager;
@@ -76,7 +65,7 @@ public final class Carbon {
     private final Dispatcher commandDispatcher;
     private ConfigManager configManager;
 
-    protected Carbon() {
+    protected CarbonImpl() {
         this.logger.info("Loading Carbon " + Constants.VERSION);
         this.eventBus = new EventBus(new ExceptionReporterEventLoggingHandler());
         this.pluginManager = new CarbonPluginManager();
@@ -85,7 +74,6 @@ public final class Carbon {
         this.serviceRegistry = new CarbonServiceRegistry();
         this.commandDispatcher = new SimpleDispatcher();
 
-        this.setInstance(); // Forcefully sets the instance
         this.setContainer(); // Forcefully sets the container
 
         if (Files.notExists(CONFIG_PATH)) {
@@ -111,32 +99,9 @@ public final class Carbon {
         this.logger.info("Using command prefix: " + CommandUtils.getCommandPrefix());
     }
 
-    /**
-     * Gets the instance of {@link Carbon} currently running.
-     *
-     * @return The current instance of Carbon
-     * @since 1.0.0
-     */
-    public static Carbon getCarbon() {
-        checkNotNull(INSTANCE, "INSTANCE is null!");
-        return INSTANCE;
-    }
-
-    private void setInstance() {
-        try {
-            ReflectionUtil.setStaticFinal(this.getClass(), "INSTANCE", this);
-        } catch (ReflectionUtilException e) {
-            // If this ever occurs something massively wrong is going on.
-            // It is probably for the best to exit the application
-            ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
-            System.exit(0);
-        }
-    }
-
     private void setContainer() {
         try {
-            ReflectionUtil.setStaticFinal(this.getClass(), "CONTAINER",
-                    PluginContainer.of("carbon", "Carbon", Constants.VERSION, this));
+            ReflectionUtil.setStaticFinal(Carbon.class, "CONTAINER", PluginContainer.of("carbon", "Carbon", Constants.VERSION, this));
         } catch (ReflectionUtilException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application
@@ -145,85 +110,42 @@ public final class Carbon {
         }
     }
 
-    /**
-     * Gets the {@link Logger} used by Carbon.
-     *
-     * <b>It is designed for use internally, and it is recommended
-     * that plugins do NOT use this Logger.</b>
-     *
-     * @return Carbon's logger
-     * @since 1.0.0
-     */
+    @Override
     public Logger getLogger() {
         return this.logger;
     }
 
-    /**
-     * Gets the {@link EventBus} used by Carbon.
-     *
-     * @return Carbon's event bus
-     * @since 1.0.0
-     */
+    @Override
     public EventBus getEventBus() {
         return this.eventBus;
     }
 
-    /**
-     * Gets the {@link PluginManager} used by Carbon.
-     *
-     * @return Carbon's plugin manager
-     * @since 1.0.0
-     */
+    @Override
     public PluginManager getPluginManager() {
         return this.pluginManager;
     }
 
-    /**
-     * Gets the {@link ModuleManager} used by Carbon.
-     *
-     * @return Carbon's module manager
-     * @since 1.0.0
-     */
+    @Override
     public ModuleManager getModuleManager() {
         return this.moduleManager;
     }
 
-    /**
-     * Gets the {@link IRCManager} used by Carbon.
-     *
-     * @return Carbon's irc manager
-     * @since 1.0.0
-     */
+    @Override
     public IRCManager getIRCManager() {
         return this.ircManager;
     }
 
-    /**
-     * Gets the {@link ServiceRegistry} used by Carbon.
-     *
-     * @return Carbon's service registry
-     * @since 1.0.0
-     */
+    @Override
     public ServiceRegistry getServiceRegistry() {
         return this.serviceRegistry;
     }
 
-    /**
-     * Gets the {@link Dispatcher} used by Carbon.
-     *
-     * @return Carbon's command dispatcher
-     * @since 1.0.0
-     */
+    @Override
     public Dispatcher getCommandDispatcher() {
         return this.commandDispatcher;
     }
 
-    /**
-     * Gets the {@link ConfigManager} used by Carbon.
-     *
-     * @return Carbon's config manager
-     * @since 2.0.0
-     */
+    @Override
     public ConfigManager getConfigManager() {
         return this.configManager;
     }

@@ -27,11 +27,11 @@ package uk.jamierocks.mana.carbon;
 import uk.jamierocks.mana.carbon.event.state.InitialisationEvent;
 import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.event.state.PreInitialisationEvent;
+import uk.jamierocks.mana.carbon.modules.HelpModule;
+import uk.jamierocks.mana.carbon.modules.InviteModule;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionService;
 import uk.jamierocks.mana.carbon.service.exception.SimpleExceptionService;
 import uk.jamierocks.mana.carbon.util.command.CommandListener;
-import uk.jamierocks.mana.carbon.util.extra.HelpModule;
-import uk.jamierocks.mana.carbon.util.extra.InviteModule;
 
 /**
  * The application entry-point for Carbon.
@@ -43,7 +43,7 @@ public final class Main {
 
     public static void main(String[] args) {
         // Initialise Carbon
-        new Carbon();
+        new CarbonImpl();
 
         // Load all of the plugins
         ((CarbonPluginManager) Carbon.getCarbon().getPluginManager()).loadAllPlugins();

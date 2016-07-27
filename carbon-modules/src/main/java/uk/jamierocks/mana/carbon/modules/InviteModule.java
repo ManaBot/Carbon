@@ -22,25 +22,42 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.extra;
+package uk.jamierocks.mana.carbon.modules;
+
+import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
 import com.google.common.eventbus.Subscribe;
+import org.kitteh.irc.client.library.event.channel.ChannelInviteEvent;
+import org.kitteh.irc.lib.net.engio.mbassy.listener.Handler;
 import uk.jamierocks.mana.carbon.event.state.PostInitialisationEvent;
 import uk.jamierocks.mana.carbon.module.Module;
-import uk.jamierocks.mana.carbon.util.extra.command.HelpCommand;
+import uk.jamierocks.mana.carbon.modules.command.JoinCommand;
+import uk.jamierocks.mana.carbon.modules.command.PartCommand;
 
 /**
- * A help module for Carbon.
+ * A invite module for Carbon.
  *
  * @author Jamie Mansfield
- * @since 1.1.0
+ * @since 1.0.0
  */
-@Module(id = "help", name = "Help")
-public final class HelpModule {
+@Module(id = "invite", name = "Invite")
+public final class InviteModule {
 
     @Subscribe
     public void onPostInitialisation(PostInitialisationEvent event) {
+        // Register listener
+        event.getCarbon().getIRCManager().registerIRCEventListener(this);
+
         // Register commands
-        event.getCarbon().getCommandDispatcher().registerCommand(new HelpCommand(), "help");
+        event.getCarbon().getCommandDispatcher().registerCommand(new JoinCommand(), "join");
+        event.getCarbon().getCommandDispatcher().registerCommand(new PartCommand(), "part", "quit", "leave");
+    }
+
+    @Handler
+    public void onInvite(ChannelInviteEvent event) {
+        if (event.getTarget().equalsIgnoreCase(event.getClient().getNick()) &&
+                getCarbon().getIRCManager().getAdministrators().contains(event.getActor().getName())) {
+            event.getChannel().join();
+        }
     }
 }

@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.util.extra.command;
+package uk.jamierocks.mana.carbon.modules.command;
 
 import com.google.common.collect.Lists;
 import com.sk89q.intake.CommandCallable;

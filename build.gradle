@@ -1,129 +1,99 @@
-plugins {
-    id 'java'
-    id 'maven'
-
-    id 'idea'
-    id 'eclipse'
-
-    id 'net.minecrell.licenser' version '0.2.1'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-    id 'ninja.miserable.blossom' version '1.0.1'
+buildscript {
+    repositories {
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath 'gradle.plugin.net.minecrell:licenser:0.2.1'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'gradle.plugin.ninja.miserable:blossom:1.0.1'
+    }
 }
 defaultTasks 'clean', 'licenseFormat'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
 
-group 'uk.jamierocks.mana'
-archivesBaseName = project.name.toLowerCase()
-description = 'The framework powering the Mana IRC Bot.'
-version '2.0.0-SNAPSHOT'
-ext.url = 'http://mana.jamierocks.uk/'
+    apply plugin: 'net.minecrell.licenser'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
-repositories {
-    mavenCentral()
-    maven {
-        url 'http://repo.miserable.ninja/content/repositories/public/'
-    }
-}
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
-dependencies {
-    // Basic dependencies
-    compile 'com.google.guava:guava:19.0'
-    compile 'com.google.inject:guice:4.0'
+    group 'uk.jamierocks.mana'
+    archivesBaseName = project.name.toLowerCase()
+    description = 'The framework powering the Mana IRC Bot.'
+    version '2.0.0-SNAPSHOT'
+    ext.url = 'http://mana.jamierocks.uk/'
 
-    // Configuration related
-    compile 'ninja.leaping.configurate:configurate-core:3.1.1'
-    compile 'ninja.leaping.configurate:configurate-hocon:3.1.1'
-
-    // Logging related
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'org.apache.logging.log4j:log4j-api:2.6.1'
-    compile 'org.apache.logging.log4j:log4j-core:2.6.1'
-    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.6.1'
-
-    // IRC related
-    compile 'org.kitteh.irc:client-lib:1.1.0'
-
-    // Command related
-    compile 'com.sk89q.intake:intake:4.2-MISNIN-SNAPSHOT'
-}
-
-license {
-    header file('HEADER.txt')
-    include '**/*.java'
-    include '**/*.groovy'
-}
-
-blossom {
-    replaceToken '%version%', project.version, 'src/main/java/uk/jamierocks/mana/carbon/util/Constants.java'
-}
-
-jar {
-    classifier = 'base'
-
-    manifest {
-        attributes(
-                'Implementation-Title': project.name,
-                'Implementation-Version': version,
-                'Main-Class': 'uk.jamierocks.mana.carbon.Main'
-        )
-    }
-}
-
-shadowJar {
-    classifier = ''
-}
-
-task javadocJar(type: Jar, dependsOn: 'javadoc') {
-    from javadoc.destinationDir
-    classifier = 'javadoc'
-}
-
-task sourcesJar(type: Jar, dependsOn: 'classes') {
-    from sourceSets.main.allSource
-    classifier = 'sources'
-}
-
-artifacts {
-    archives shadowJar
-    archives javadocJar
-    archives sourcesJar
-}
-
-uploadArchives {
     repositories {
-        mavenDeployer {
-            if (System.getenv('MAVEN_RELEASES') != null) {
-                repository(url: 'file://' + System.getenv('MAVEN_RELEASES'))
-                snapshotRepository(url: 'file://' + System.getenv('MAVEN_SNAPSHOTS'))
-            }
+        mavenCentral()
+        maven {
+            url 'http://repo.miserable.ninja/content/repositories/public/'
+        }
+    }
 
-            pom {
-                artifactId = project.archivesBaseName
+    license {
+        header rootProject.file('HEADER.txt')
+        include '**/*.java'
+    }
 
-                project {
-                    name = project.name
-                    description = project.description
-                    packaging = 'jar'
-                    url = project.url
+    shadowJar {
+        classifier = ''
+    }
 
-                    scm {
-                        url = "https://github.com/ManaBot/Carbon"
-                        connection = "scm:git:https://github.com/ManaBot/Carbon.git"
-                        developerConnection = "scm:git:git@github.com:ManaBot/Carbon.git"
-                    }
+    task javadocJar(type: Jar, dependsOn: 'javadoc') {
+        from javadoc.destinationDir
+        classifier = 'javadoc'
+    }
 
-                    issueManagement {
-                        system = 'GitHub'
-                        url = 'https://github.com/ManaBot/Carbon/issues'
-                    }
+    task sourcesJar(type: Jar, dependsOn: 'classes') {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
 
-                    licenses {
-                        license {
-                            name = 'MIT License'
-                            url = 'http://opensource.org/licenses/MIT'
-                            distribution = 'repo'
+    artifacts {
+        archives shadowJar
+        archives javadocJar
+        archives sourcesJar
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                if (System.getenv('MAVEN_RELEASES') != null) {
+                    repository(url: 'file://' + System.getenv('MAVEN_RELEASES'))
+                    snapshotRepository(url: 'file://' + System.getenv('MAVEN_SNAPSHOTS'))
+                }
+
+                pom {
+                    artifactId = project.archivesBaseName
+
+                    project {
+                        name = project.name
+                        description = project.description
+                        packaging = 'jar'
+                        url = project.url
+
+                        scm {
+                            url = "https://github.com/ManaBot/Carbon"
+                            connection = "scm:git:https://github.com/ManaBot/Carbon.git"
+                            developerConnection = "scm:git:git@github.com:ManaBot/Carbon.git"
+                        }
+
+                        issueManagement {
+                            system = 'GitHub'
+                            url = 'https://github.com/ManaBot/Carbon/issues'
+                        }
+
+                        licenses {
+                            license {
+                                name = 'MIT License'
+                                url = 'http://opensource.org/licenses/MIT'
+                                distribution = 'repo'
+                            }
                         }
                     }
                 }
