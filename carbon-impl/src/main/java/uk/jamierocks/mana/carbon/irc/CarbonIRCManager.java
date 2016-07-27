@@ -27,13 +27,11 @@ package uk.jamierocks.mana.carbon.irc;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.reflect.TypeToken;
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.kitteh.irc.client.library.Client;
 import org.kitteh.irc.client.library.util.AcceptingTrustManagerFactory;
+import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.CarbonImpl;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
@@ -96,11 +94,6 @@ public final class CarbonIRCManager implements IRCManager {
      */
     @Override
     public List<String> getAdministrators() {
-        try {
-            return getCarbon().getConfiguration().getNode().getNode("irc", "admins").getList(TypeToken.of(String.class));
-        } catch (ObjectMappingException e) {
-            ExceptionReporter.report("Failed to get the bot admins!", e);
-            return Lists.newArrayList();
-        }
+        return Carbon.getCarbon().getConfiguration().getIrc().getAdmins();
     }
 }
