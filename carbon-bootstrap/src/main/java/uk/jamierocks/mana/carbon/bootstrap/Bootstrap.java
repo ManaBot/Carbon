@@ -24,6 +24,8 @@
 
 package uk.jamierocks.mana.carbon.bootstrap;
 
+import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.gson.GsonConfigurationLoader;
 import uk.jamierocks.mana.carbon.bootstrap.util.BootstrapConstants;
 import uk.jamierocks.mana.carbon.Main;
 
@@ -36,37 +38,16 @@ import uk.jamierocks.mana.carbon.Main;
 public final class Bootstrap {
 
     public static void main(String[] args) throws Exception {
+        // Get dependencies config
+        final ConfigurationNode node = GsonConfigurationLoader.builder().setURL(Bootstrap.class.getResource("/dependencies.json")).build().load();
+        final BootstrapConfiguration configuration = new BootstrapConfiguration(node);
+
+        // Check all the dependencies
         final DependencyManager dependencyManager = new DependencyManager(BootstrapConstants.LIBRARIES_PATH);
 
-        // Basic dependencies
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/guava/guava/19.0/guava-19.0.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/inject/guice/4.1.0/guice-4.1.0.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "javax/inject/javax.inject/1/javax.inject-1.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "aopalliance/aopalliance/1.0/aopalliance-1.0.jar");
-
-        // Configurate dependencies
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
-                "ninja/leaping/configurate/configurate-core/3.1.1/configurate-core-3.1.1.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
-                "ninja/leaping/configurate/configurate-gson/3.1.1/configurate-gson-3.1.1.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/google/code/gson/gson/2.2.4/gson-2.2.4.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
-                "ninja/leaping/configurate/configurate-hocon/3.1.1/configurate-hocon-3.1.1.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "com/typesafe/config/1.3.0/config-1.3.0.jar");
-
-        // Logging dependencies
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "org/apache/logging/log4j/log4j-api/2.6.1/log4j-api-2.6.1.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "org/apache/logging/log4j/log4j-core/2.6.1/log4j-core-2.6.1.jar");
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL,
-                "org/apache/logging/log4j/log4j-slf4j-impl/2.6.1/log4j-slf4j-impl-2.6.1.jar");
-
-        // IRC dependencies
-        dependencyManager.checkDependency(BootstrapConstants.MAVEN_CENTRAL, "org/kitteh/irc/client-lib/2.1.0/client-lib-2.1.0.jar");
-
-        // Command dependencies
-        dependencyManager.checkDependency(BootstrapConstants.MISERABLE_REPO,
-                "com/sk89q/intake/intake/4.2-MISNIN-SNAPSHOT/intake-4.2-MISNIN-20160413.183647-1.jar");
+        for (BootstrapConfiguration.Dependency dependency : configuration.getDependencies()) {
+            dependencyManager.checkDependency(dependency.getRepo(), dependency.getName());
+        }
 
         // Run Carbon
         Main.main(args);
