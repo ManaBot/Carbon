@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package uk.jamierocks.mana.carbon.bootstrap;
+package uk.jamierocks.mana.carbon.bootstrap.dependency;
 
 import java.io.IOException;
 import java.net.URL;
@@ -50,7 +50,7 @@ public final class DependencyManager {
 
     private final Path librariesPath;
 
-    protected DependencyManager(Path librariesPath) {
+    public DependencyManager(Path librariesPath) {
         this.librariesPath = librariesPath;
     }
 
@@ -58,20 +58,20 @@ public final class DependencyManager {
      * Checks if the said dependency exists, and if not download it.
      *
      * @param repo The repo of which the dependency comes from
-     * @param location The location of the dependency
+     * @param dependency The dependency
      * @throws IOException in error
      * @throws NoSuchAlgorithmException in error
      * @since 2.0.0
      */
-    public boolean checkDependency(String repo, String location) throws IOException, NoSuchAlgorithmException {
-        final Path dependency = this.librariesPath.resolve(location);
-        final String remote = repo + location;
+    public boolean checkDependency(String repo, Dependency dependency) throws IOException, NoSuchAlgorithmException {
+        final Path depPath = this.librariesPath.resolve(dependency.getJarPath());
+        final String remote = repo + dependency.getJarPath();
 
-        if (Files.notExists(dependency) && !verifyDownload(remote, dependency)) {
+        if (Files.notExists(depPath) && !verifyDownload(remote, depPath)) {
             return false;
         }
 
-        return Files.exists(dependency) || verifyDownload(remote, dependency);
+        return Files.exists(depPath) || verifyDownload(remote, depPath);
     }
 
     private static boolean verifyDownload(String remote, Path path) throws IOException, NoSuchAlgorithmException {

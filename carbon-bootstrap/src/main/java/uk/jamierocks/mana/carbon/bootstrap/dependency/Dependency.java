@@ -53,11 +53,33 @@ public final class Dependency {
         return new Dependency(builder.toString());
     }
 
+    /**
+     * Gets the base path of the dependency.
+     *
+     * @return The base path
+     * @since 2.0.0
+     */
     public String getBasePath() {
         return this.basePath;
     }
 
+    /**
+     * Gets the jar path of the dependency.
+     *
+     * @return The jar path
+     * @since 2.0.0
+     */
     public String getJarPath() {
         return this.basePath + ".jar";
+    }
+
+    /**
+     * Gets the jar md5 path of the dependency.
+     *
+     * @return The jar md5 path
+     * @since 2.0.0
+     */
+    public String getJarMd5Path() {
+        return this.basePath + ".jar.md5";
     }
 }
