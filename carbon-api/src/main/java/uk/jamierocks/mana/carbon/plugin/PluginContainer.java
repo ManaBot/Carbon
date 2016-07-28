@@ -26,6 +26,8 @@ package uk.jamierocks.mana.carbon.plugin;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+
 /**
  * A wrapper around a plugin.
  *
@@ -35,18 +37,20 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public interface PluginContainer {
 
     /**
-     * Creates a {@link PluginContainer} around a {@link Plugin} and an {@link Object}.
+     * Creates a {@link PluginContainer} around a {@link Plugin}, a {@link CommentedConfigurationNode} and an {@link Object}.
      *
      * @param plugin The plugin annotation
      * @param instance The plugin instance
+     * @param node the configuration node
      * @return The plugin container
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    static PluginContainer of(Plugin plugin, Object instance) {
+    static PluginContainer of(Plugin plugin, CommentedConfigurationNode node, Object instance) {
         checkNotNull(plugin, "plugin is null!");
+        checkNotNull(node, "node is null!");
         checkNotNull(instance, "instance is null!");
 
-        return PluginContainer.of(plugin.id(), plugin.name(), plugin.version(), instance);
+        return PluginContainer.of(plugin.id(), plugin.name(), plugin.version(), node, instance);
     }
 
     /**
@@ -55,14 +59,16 @@ public interface PluginContainer {
      * @param id The identifier
      * @param name The name
      * @param version The version
+     * @param node The configuration node
      * @param instance The plugin instance
      * @return The plugin container
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    static PluginContainer of(String id, String name, String version, Object instance) {
+    static PluginContainer of(String id, String name, String version, CommentedConfigurationNode node, Object instance) {
         checkNotNull(id, "id is null!");
         checkNotNull(name, "name is null!");
         checkNotNull(version, "version is null!");
+        checkNotNull(node, "node is null!");
         checkNotNull(instance, "instance is null!");
 
         return new PluginContainer() {
@@ -79,6 +85,11 @@ public interface PluginContainer {
             @Override
             public String getVersion() {
                 return version;
+            }
+
+            @Override
+            public CommentedConfigurationNode getConfiguration() {
+                return node;
             }
 
             @Override
@@ -114,6 +125,14 @@ public interface PluginContainer {
      * @since 1.0.0
      */
     String getVersion();
+
+    /**
+     * Gets the configuration node of the plugin.
+     *
+     * @return The configuration node
+     * @since 2.0.0
+     */
+    CommentedConfigurationNode getConfiguration();
 
     /**
      * Gets the instance of this plugin.

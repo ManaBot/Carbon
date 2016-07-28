@@ -30,16 +30,21 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.CarbonImpl;
-import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 import uk.jamierocks.mana.carbon.guice.PluginGuiceModule;
+import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -120,12 +125,29 @@ public final class CarbonPluginManager implements PluginManager {
             List<Class> mods = this.findPlugins(jarFile);
 
             for (Class<?> pluginClass : mods) {
-                Plugin pluginAnnotation = pluginClass.getDeclaredAnnotation(Plugin.class);
+                final Plugin pluginAnnotation = pluginClass.getDeclaredAnnotation(Plugin.class);
+                final Path configPath = Paths.get("config", pluginAnnotation.id() + ".conf");
 
-                Injector injector = Guice.createInjector(new PluginGuiceModule(pluginAnnotation));
-                Object instance = injector.getInstance(pluginClass);
+                if (Files.notExists(configPath)) {
+                    try {
+                        Files.copy(CarbonPluginManager.class.getResourceAsStream("/plugin.conf"), configPath);
+                    } catch (IOException e) {
+                        ExceptionReporter.report("Failed to copy default plugin conf. Skipping plugin!", e);
+                        continue;
+                    }
+                }
 
-                this.loadPlugin(PluginContainer.of(pluginAnnotation, instance));
+                try {
+                    final CommentedConfigurationNode node = HoconConfigurationLoader.builder().setPath(configPath).build().load();
+
+                    Injector injector = Guice.createInjector(new PluginGuiceModule(pluginAnnotation, node));
+                    Object instance = injector.getInstance(pluginClass);
+
+                    this.loadPlugin(PluginContainer.of(pluginAnnotation, node, instance));
+                } catch (IOException e) {
+                    ExceptionReporter.report("Failed to load plugin conf. Skipping plugin!", e);
+                    continue;
+                }
             }
         }
     }

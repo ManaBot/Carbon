@@ -44,14 +44,17 @@ import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 public final class PluginGuiceModule extends AbstractModule {
 
     private final Plugin plugin;
+    private final CommentedConfigurationNode configurationNode;
 
     /**
      * Constructs a new Guice module for a {@link Plugin}.
      *
      * @param plugin The plugin
+     * @param configurationNode The configuration node
      */
-    public PluginGuiceModule(Plugin plugin) {
+    public PluginGuiceModule(Plugin plugin, CommentedConfigurationNode configurationNode) {
         this.plugin = plugin;
+        this.configurationNode = configurationNode;
     }
 
     /**
@@ -70,7 +73,6 @@ public final class PluginGuiceModule extends AbstractModule {
         this.bind(ServiceRegistry.class).toInstance(Carbon.getCarbon().getServiceRegistry());
 
         // Config node
-        this.bind(CommentedConfigurationNode.class)
-                .toInstance(Carbon.getCarbon().getConfiguration().getNode().getNode("plugin", this.plugin.id()));
+        this.bind(CommentedConfigurationNode.class).toInstance(this.configurationNode);
     }
 }

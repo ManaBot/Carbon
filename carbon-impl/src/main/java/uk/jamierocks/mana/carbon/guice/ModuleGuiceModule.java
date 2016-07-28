@@ -32,6 +32,7 @@ import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.Module;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
+import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 
@@ -43,14 +44,17 @@ import uk.jamierocks.mana.carbon.service.ServiceRegistry;
  */
 public final class ModuleGuiceModule extends AbstractModule {
 
+    private final PluginContainer container;
     private final Module module;
 
     /**
      * Constructs a new Guice module for a {@link Module}.
      *
+     * @param container The plugin container
      * @param module The module
      */
-    public ModuleGuiceModule(Module module) {
+    public ModuleGuiceModule(PluginContainer container, Module module) {
+        this.container = container;
         this.module = module;
     }
 
@@ -70,7 +74,6 @@ public final class ModuleGuiceModule extends AbstractModule {
         this.bind(ServiceRegistry.class).toInstance(Carbon.getCarbon().getServiceRegistry());
 
         // Config node
-        this.bind(CommentedConfigurationNode.class)
-                .toInstance(Carbon.getCarbon().getConfiguration().getNode().getNode("module", this.module.id()));
+        this.bind(CommentedConfigurationNode.class).toInstance(this.container.getConfiguration().getNode("module", this.module.id()));
     }
 }

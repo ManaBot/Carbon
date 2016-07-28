@@ -78,8 +78,6 @@ public final class CarbonImpl extends Carbon {
         this.serviceRegistry = new CarbonServiceRegistry();
         this.commandDispatcher = new SimpleDispatcher();
 
-        this.setContainer(); // Forcefully sets the container
-
         if (Files.notExists(CONFIG_PATH)) {
             try {
                 Files.copy(Carbon.class.getResourceAsStream("/carbon.conf"), CONFIG_PATH);
@@ -111,12 +109,15 @@ public final class CarbonImpl extends Carbon {
             System.exit(0);
         }
 
+        this.setContainer(); // Forcefully sets the container
+
         LOGGER.info("Using command prefix: " + this.getConfiguration().getCommands().getPrefix());
     }
 
     private void setContainer() {
         try {
-            ReflectionUtil.setStaticFinal(Carbon.class, "CONTAINER", PluginContainer.of("carbon", "Carbon", Constants.VERSION, this));
+            ReflectionUtil.setStaticFinal(Carbon.class, "CONTAINER",
+                    PluginContainer.of("carbon", "Carbon", Constants.VERSION, this.configuration.getNode(), this));
         } catch (ReflectionUtilException e) {
             // If this ever occurs something massively wrong is going on.
             // It is probably for the best to exit the application

@@ -71,21 +71,18 @@ public final class CarbonModuleManager implements ModuleManager {
 
     private void registerModule0(PluginContainer container, Class<?> module) {
         if (module.isAnnotationPresent(Module.class)) {
-            Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
+            final Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
 
-            if (Carbon.getCarbon().getConfiguration().getNode()
-                    .getNode("module", moduleAnnotation.id(), "enabled").getBoolean(false)) {
-                CarbonImpl.LOGGER
-                        .info("Loading module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
+            if (Carbon.getCarbon().getConfiguration().getNode().getNode("module", moduleAnnotation.id(), "enabled").getBoolean(false)) {
+                CarbonImpl.LOGGER.info("Loading module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
 
-                Injector injector = Guice.createInjector(new ModuleGuiceModule(moduleAnnotation));
+                Injector injector = Guice.createInjector(new ModuleGuiceModule(container, moduleAnnotation));
                 Object instance = injector.getInstance(module);
 
                 Carbon.getCarbon().getEventBus().register(instance);
                 this.modules.put(moduleAnnotation.id(), ModuleContainer.of(moduleAnnotation, instance, container));
 
-                CarbonImpl.LOGGER
-                        .info("Loaded module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
+                CarbonImpl.LOGGER.info("Loaded module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
             }
         } else {
             CarbonImpl.LOGGER.error(module.getName() + " has no @Module annotation!");
