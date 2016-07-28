@@ -26,6 +26,7 @@ package uk.jamierocks.mana.carbon.bootstrap;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.gson.GsonConfigurationLoader;
+import uk.jamierocks.mana.carbon.bootstrap.dependency.Dependency;
 import uk.jamierocks.mana.carbon.bootstrap.util.BootstrapConstants;
 import uk.jamierocks.mana.carbon.Main;
 
@@ -46,7 +47,14 @@ public final class Bootstrap {
         final DependencyManager dependencyManager = new DependencyManager(BootstrapConstants.LIBRARIES_PATH);
 
         for (BootstrapConfiguration.Dependency dependency : configuration.getDependencies()) {
-            dependencyManager.checkDependency(dependency.getRepo(), dependency.getName());
+            final String jarPath;
+            if (dependency.getName() != null) {
+                jarPath = Dependency.of(dependency.getName()).getJarPath();
+            } else {
+                jarPath = new Dependency(dependency.getLocation()).getJarPath();
+            }
+
+            dependencyManager.checkDependency(dependency.getRepo(), jarPath);
         }
 
         // Run Carbon
