@@ -27,8 +27,9 @@ package uk.jamierocks.mana.carbon.guice;
 import com.google.inject.AbstractModule;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.guice.provider.PluginConfigGuiceProvider;
+import uk.jamierocks.mana.carbon.guice.provider.PluginLoggerGuiceProvider;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.Plugin;
@@ -62,7 +63,7 @@ public final class PluginGuiceModule extends AbstractModule {
     protected void configure() {
         // The basics
         this.bind(Carbon.class).toInstance(Carbon.getCarbon());
-        this.bind(Logger.class).toInstance(LoggerFactory.getLogger(this.container.getName()));
+        this.bind(Logger.class).toProvider(PluginLoggerGuiceProvider.class);
         this.bind(PluginContainer.class).toInstance(this.container);
 
         // The managers
@@ -72,6 +73,6 @@ public final class PluginGuiceModule extends AbstractModule {
         this.bind(ServiceRegistry.class).toInstance(Carbon.getCarbon().getServiceRegistry());
 
         // Configuration
-        this.bind(CommentedConfigurationNode.class).toInstance(this.container.getConfiguration());
+        this.bind(CommentedConfigurationNode.class).toProvider(PluginConfigGuiceProvider.class);
     }
 }
