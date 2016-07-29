@@ -66,7 +66,8 @@ public final class CarbonPluginManager implements PluginManager {
     }
 
     private final Map<String, PluginContainer> plugins = Maps.newHashMap();
-    private final Map<Object, PluginContainer> pluginInstances = Maps.newHashMap();
+    private final Map<Object, PluginContainer> instanceToContainer = Maps.newHashMap();
+    protected final Map<PluginContainer, Object> containerToInstance = Maps.newHashMap();
 
     /**
      * {@inheritDoc}
@@ -79,7 +80,7 @@ public final class CarbonPluginManager implements PluginManager {
             return Optional.of((PluginContainer) instance);
         }
 
-        return Optional.ofNullable(this.pluginInstances.get(instance));
+        return Optional.ofNullable(this.instanceToContainer.get(instance));
     }
 
     /**
@@ -129,7 +130,7 @@ public final class CarbonPluginManager implements PluginManager {
                     Injector injector = Guice.createInjector(new PluginGuiceModule(pluginAnnotation, node));
                     Object instance = injector.getInstance(pluginClass);
 
-                    this.loadPlugin(PluginContainer.of(pluginAnnotation, node, instance));
+                    this.loadPlugin(new CarbonPluginContainer(this, pluginAnnotation, node), instance);
                 }
             }
         }
@@ -179,12 +180,14 @@ public final class CarbonPluginManager implements PluginManager {
      * Registers the given {@link PluginContainer}.
      *
      * @param container The plugin container
-     * @since 1.0.0
+     * @param object The plugin instance
+     * @since 2.0.0
      */
-    public void loadPlugin(PluginContainer container) {
+    public void loadPlugin(PluginContainer container, Object object) {
         CarbonImpl.LOGGER.info("Found plugin: " + container.getName() + " (" + container.getId() + ")");
-        Carbon.getCarbon().getEventBus().register(container.getInstance());
+        Carbon.getCarbon().getEventBus().register(object);
         this.plugins.put(container.getId(), container);
-        this.pluginInstances.put(container.getInstance(), container);
+        this.instanceToContainer.put(object, container);
+        this.containerToInstance.put(container, object);
     }
 }

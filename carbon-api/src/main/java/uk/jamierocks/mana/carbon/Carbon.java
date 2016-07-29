@@ -55,7 +55,7 @@ public abstract class Carbon {
      */
     public static Carbon getCarbon() {
         checkNotNull(CONTAINER, "CONTAINER is null!");
-        return (Carbon) CONTAINER.getInstance();
+        return (Carbon) CONTAINER.getInstance().get();
     }
 
     /**

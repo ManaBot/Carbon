@@ -28,6 +28,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
+import java.util.Optional;
+
 /**
  * A wrapper around a plugin.
  *
@@ -93,8 +95,8 @@ public interface PluginContainer {
             }
 
             @Override
-            public Object getInstance() {
-                return instance;
+            public Optional<Object> getInstance() {
+                return Optional.of(instance);
             }
         };
     }
@@ -135,10 +137,10 @@ public interface PluginContainer {
     CommentedConfigurationNode getConfiguration();
 
     /**
-     * Gets the instance of this plugin.
+     * Gets the instance of this plugin, if available.
      *
      * @return The instance
-     * @since 1.0.0
+     * @since 2.0.0
      */
-    Object getInstance();
+    Optional<Object> getInstance();
 }
