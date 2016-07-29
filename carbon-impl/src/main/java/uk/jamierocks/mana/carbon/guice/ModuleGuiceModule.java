@@ -65,6 +65,7 @@ public final class ModuleGuiceModule extends AbstractModule {
     protected void configure() {
         // The basics
         this.bind(Carbon.class).toInstance(Carbon.getCarbon());
+        this.bind(PluginContainer.class).toInstance(this.container);
         this.bind(Logger.class).toInstance(LoggerFactory.getLogger(this.module.name()));
 
         // The managers
