@@ -62,10 +62,6 @@ public final class Carbon {
      */
     protected static final PluginContainer CONTAINER = null;
     private static final Path CONFIG_PATH = Paths.get("carbon.conf");
-    /**
-     * This will be forcefully overridden by Carbon upon its initialisation.
-     */
-    private static final Carbon INSTANCE = null;
     private final Logger logger = LoggerFactory.getLogger("Carbon");
     private final EventBus eventBus;
     private final PluginManager pluginManager;
@@ -74,6 +70,7 @@ public final class Carbon {
     private final ServiceRegistry serviceRegistry;
     private final Dispatcher commandDispatcher;
     private CommentedConfigurationNode configurationNode;
+
     protected Carbon() {
         this.logger.info("Loading Carbon " + Constants.VERSION);
         this.eventBus = new EventBus(new ExceptionReporterEventLoggingHandler());
@@ -82,9 +79,6 @@ public final class Carbon {
         this.ircManager = new CarbonIRCManager();
         this.serviceRegistry = new CarbonServiceRegistry();
         this.commandDispatcher = new SimpleDispatcher();
-
-        this.setInstance(); // Forcefully sets the instance
-        this.setContainer(); // Forcefully sets the container
 
         if (Files.notExists(CONFIG_PATH)) {
             try {
@@ -106,6 +100,7 @@ public final class Carbon {
             System.exit(0);
         }
 
+        this.setContainer(); // Forcefully sets the container
         this.setCommandPrefix(); // Forcefully set the command prefix
     }
 
@@ -116,19 +111,8 @@ public final class Carbon {
      * @since 1.0.0
      */
     public static Carbon getCarbon() {
-        checkNotNull(INSTANCE, "INSTANCE is null!");
-        return INSTANCE;
-    }
-
-    private void setInstance() {
-        try {
-            ReflectionUtil.setStaticFinal(this.getClass(), "INSTANCE", this);
-        } catch (ReflectionUtilException e) {
-            // If this ever occurs something massively wrong is going on.
-            // It is probably for the best to exit the application
-            ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
-            System.exit(0);
-        }
+        checkNotNull(CONTAINER, "Carbon has not yet been initialised!");
+        return (Carbon) CONTAINER.getInstance();
     }
 
     private void setContainer() {
