@@ -127,10 +127,10 @@ public final class CarbonPluginManager implements PluginManager {
                 final CommentedConfigurationNode node = CarbonConfigManager.getPluginConfig(pluginAnnotation);
 
                 if (node != null) {
-                    Injector injector = Guice.createInjector(new PluginGuiceModule(pluginAnnotation, node));
-                    Object instance = injector.getInstance(pluginClass);
+                    final PluginContainer container = new CarbonPluginContainer(this, pluginAnnotation, node);
+                    final Injector injector = Guice.createInjector(new PluginGuiceModule(container));
 
-                    this.loadPlugin(new CarbonPluginContainer(this, pluginAnnotation, node), instance);
+                    this.loadPlugin(container, injector.getInstance(pluginClass));
                 }
             }
         }

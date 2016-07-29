@@ -32,6 +32,7 @@ import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.ModuleManager;
 import uk.jamierocks.mana.carbon.plugin.Plugin;
+import uk.jamierocks.mana.carbon.plugin.PluginContainer;
 import uk.jamierocks.mana.carbon.plugin.PluginManager;
 import uk.jamierocks.mana.carbon.service.ServiceRegistry;
 
@@ -43,18 +44,15 @@ import uk.jamierocks.mana.carbon.service.ServiceRegistry;
  */
 public final class PluginGuiceModule extends AbstractModule {
 
-    private final Plugin plugin;
-    private final CommentedConfigurationNode configurationNode;
+    private final PluginContainer container;
 
     /**
      * Constructs a new Guice module for a {@link Plugin}.
      *
-     * @param plugin The plugin
-     * @param configurationNode The configuration node
+     * @param container The plugin container
      */
-    public PluginGuiceModule(Plugin plugin, CommentedConfigurationNode configurationNode) {
-        this.plugin = plugin;
-        this.configurationNode = configurationNode;
+    public PluginGuiceModule(PluginContainer container) {
+        this.container = container;
     }
 
     /**
@@ -64,7 +62,8 @@ public final class PluginGuiceModule extends AbstractModule {
     protected void configure() {
         // The basics
         this.bind(Carbon.class).toInstance(Carbon.getCarbon());
-        this.bind(Logger.class).toInstance(LoggerFactory.getLogger(this.plugin.name()));
+        this.bind(Logger.class).toInstance(LoggerFactory.getLogger(this.container.getName()));
+        this.bind(PluginContainer.class).toInstance(this.container);
 
         // The managers
         this.bind(PluginManager.class).toInstance(Carbon.getCarbon().getPluginManager());
@@ -72,7 +71,7 @@ public final class PluginGuiceModule extends AbstractModule {
         this.bind(IRCManager.class).toInstance(Carbon.getCarbon().getIRCManager());
         this.bind(ServiceRegistry.class).toInstance(Carbon.getCarbon().getServiceRegistry());
 
-        // Config node
-        this.bind(CommentedConfigurationNode.class).toInstance(this.configurationNode);
+        // Configuration
+        this.bind(CommentedConfigurationNode.class).toInstance(this.container.getConfiguration());
     }
 }
