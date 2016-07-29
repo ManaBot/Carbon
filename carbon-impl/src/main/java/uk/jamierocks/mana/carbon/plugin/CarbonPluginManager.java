@@ -67,7 +67,7 @@ public final class CarbonPluginManager implements PluginManager {
 
     private final Map<String, PluginContainer> plugins = Maps.newHashMap();
     private final Map<Object, PluginContainer> instanceToContainer = Maps.newHashMap();
-    protected final Map<PluginContainer, Object> containerToInstance = Maps.newHashMap();
+    private final Map<PluginContainer, Object> containerToInstance = Maps.newHashMap();
 
     /**
      * {@inheritDoc}
@@ -189,5 +189,9 @@ public final class CarbonPluginManager implements PluginManager {
         this.plugins.put(container.getId(), container);
         this.instanceToContainer.put(object, container);
         this.containerToInstance.put(container, object);
+    }
+
+    public Optional<Object> getInstance(PluginContainer container) {
+        return Optional.ofNullable(this.containerToInstance.get(container));
     }
 }

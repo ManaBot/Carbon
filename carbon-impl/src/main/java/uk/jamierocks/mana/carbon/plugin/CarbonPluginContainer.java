@@ -68,9 +68,6 @@ public class CarbonPluginContainer implements PluginContainer {
 
     @Override
     public Optional<Object> getInstance() {
-        if (this.pluginManager.containerToInstance.containsKey(this)) {
-            return Optional.ofNullable(this.pluginManager.containerToInstance.get(this));
-        }
-        return Optional.empty();
+        return this.pluginManager.getInstance(this);
     }
 }
