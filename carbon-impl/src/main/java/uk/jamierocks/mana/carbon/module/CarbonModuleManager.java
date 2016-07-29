@@ -73,7 +73,7 @@ public final class CarbonModuleManager implements ModuleManager {
         if (module.isAnnotationPresent(Module.class)) {
             final Module moduleAnnotation = module.getDeclaredAnnotation(Module.class);
 
-            if (Carbon.getCarbon().getConfiguration().getNode().getNode("module", moduleAnnotation.id(), "enabled").getBoolean(false)) {
+            if (Carbon.getCarbon().getConfiguration().getNode().getNode("module", moduleAnnotation.id(), "enabled").getBoolean(true)) {
                 CarbonImpl.LOGGER.info("Loading module: " + moduleAnnotation.name() + " (" + moduleAnnotation.id() + ")");
 
                 Injector injector = Guice.createInjector(new ModuleGuiceModule(container, moduleAnnotation));

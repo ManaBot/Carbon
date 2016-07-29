@@ -56,8 +56,7 @@ public final class CarbonConfigManager {
         }
 
         try {
-            final CommentedConfigurationNode node = HoconConfigurationLoader.builder().setPath(configPath).build().load();
-            return node;
+            return HoconConfigurationLoader.builder().setPath(configPath).build().load();
         } catch (IOException e) {
             ExceptionReporter.report("Failed to load plugin conf. Skipping plugin!", e);
             return null;
