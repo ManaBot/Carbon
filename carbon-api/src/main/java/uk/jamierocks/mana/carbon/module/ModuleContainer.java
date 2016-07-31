@@ -92,7 +92,7 @@ public interface ModuleContainer {
     String getName();
 
     /**
-     * Gets the owner of the module, if available.
+     * Gets the owner of the module.
      *
      * @return The owner
      * @since 2.0.0
