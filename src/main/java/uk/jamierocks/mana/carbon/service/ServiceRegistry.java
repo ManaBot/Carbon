@@ -56,6 +56,23 @@ public interface ServiceRegistry {
     <T> Optional<T> provide(Class<T> service);
 
     /**
+     * Returns the provider for the given service or the fallback if not available.
+     *
+     * @param service The service
+     * @param <T> The type of the service
+     * @return The provider if available
+     * @since 1.3.0
+     */
+    default <T> T provideOrFallback(Class<T> service, T fallback) {
+        final Optional<T> provider = this.provide(service);
+        if (provider.isPresent()) {
+            return provider.get();
+        } else {
+            return fallback;
+        }
+    }
+
+    /**
      * Returns the registration for the given service, if one is available.
      *
      * @param service The service

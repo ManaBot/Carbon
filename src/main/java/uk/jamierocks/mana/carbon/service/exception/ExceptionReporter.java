@@ -26,8 +26,6 @@ package uk.jamierocks.mana.carbon.service.exception;
 
 import uk.jamierocks.mana.carbon.Carbon;
 
-import java.util.Optional;
-
 /**
  * Provides static access to the methods defined in {@link ExceptionService}.
  * In failure to retrieve the exception service, it uses a fallback.
@@ -62,12 +60,7 @@ public final class ExceptionReporter {
      * @since 1.1.0
      */
     public static void report(String message, Throwable throwable) {
-        final Optional<ExceptionService> exceptionService =
-                Carbon.getCarbon().getServiceRegistry().provide(ExceptionService.class);
-        if (exceptionService.isPresent()) {
-            exceptionService.get().report(message, throwable);
-        } else {
-            FALLBACK.report(message, throwable);
-        }
+        Carbon.getCarbon().getServiceRegistry()
+                .provideOrFallback(ExceptionService.class, FALLBACK).report(message, throwable);
     }
 }
