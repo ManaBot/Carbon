@@ -34,6 +34,7 @@ dependencies {
 
     // Configuration related
     compile 'ninja.leaping.configurate:configurate-core:3.1.1'
+    compile 'ninja.leaping.configurate:configurate-gson:3.1.1'
     compile 'ninja.leaping.configurate:configurate-hocon:3.1.1'
 
     // Logging related
@@ -52,7 +53,6 @@ dependencies {
 license {
     header file('HEADER.txt')
     include '**/*.java'
-    include '**/*.groovy'
 }
 
 blossom {
