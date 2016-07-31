@@ -38,6 +38,11 @@ import java.util.Optional;
 public final class ExceptionReporter {
 
     /**
+     * The exception service to use when the service is unable to be fetched from the registry.
+     */
+    private static final ExceptionService FALLBACK = new SimpleExceptionService();
+
+    /**
      * Handles reporting an {@link Exception}, with the default message.
      *
      * @param throwable The exception
@@ -62,7 +67,7 @@ public final class ExceptionReporter {
         if (exceptionService.isPresent()) {
             exceptionService.get().report(message, throwable);
         } else {
-            Carbon.getCarbon().getLogger().error(message, throwable);
+            FALLBACK.report(message, throwable);
         }
     }
 }
