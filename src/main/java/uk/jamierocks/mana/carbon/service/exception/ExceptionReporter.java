@@ -24,6 +24,8 @@
 
 package uk.jamierocks.mana.carbon.service.exception;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import uk.jamierocks.mana.carbon.Carbon;
 
 import java.util.Optional;
@@ -62,6 +64,8 @@ public final class ExceptionReporter {
      * @since 1.1.0
      */
     public static void report(String message, Throwable throwable) {
+        checkNotNull(message, "message is null!");
+
         final Optional<ExceptionService> exceptionService =
                 Carbon.getCarbon().getServiceRegistry().provide(ExceptionService.class);
         if (exceptionService.isPresent()) {
