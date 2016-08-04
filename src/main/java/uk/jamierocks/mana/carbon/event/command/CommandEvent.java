@@ -24,6 +24,8 @@
 
 package uk.jamierocks.mana.carbon.event.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.sk89q.intake.CommandMapping;
 import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
@@ -53,8 +55,8 @@ public class CommandEvent implements CancellableEvent {
      * @since 1.1.0
      */
     public CommandEvent(ChannelMessageEvent messageEvent, CommandMapping commandMapping) {
-        this.messageEvent = messageEvent;
-        this.commandMapping = commandMapping;
+        this.messageEvent = checkNotNull(messageEvent, "messageEvent is null!");
+        this.commandMapping = checkNotNull(commandMapping, "commandMappings is null!");
     }
 
     /**
