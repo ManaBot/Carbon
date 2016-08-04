@@ -61,7 +61,7 @@ public interface ServiceRegistry {
      * @param service The service
      * @param <T> The type of the service
      * @return The provider if available
-     * @since 2.0.0
+     * @since 1.3.0
      */
     default <T> T provideOrFallback(Class<T> service, T fallback) {
         final Optional<T> provider = this.provide(service);
