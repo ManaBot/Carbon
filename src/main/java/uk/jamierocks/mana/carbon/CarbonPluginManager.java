@@ -116,23 +116,18 @@ public final class CarbonPluginManager implements PluginManager {
      * @since 1.0.0
      */
     protected void loadAllPlugins() {
-        // Register the Carbon plugin
-        this.registerPlugin(Carbon.CONTAINER);
-
         File[] jarFiles = PLUGINS_DIR.listFiles(file -> {
             return file.getName().endsWith(".jar");
         });
 
         for (File jarFile : jarFiles) {
-            List<Class> mods = this.findPlugins(jarFile);
+            final List<Class> mods = this.findPlugins(jarFile);
 
             for (Class<?> pluginClass : mods) {
-                Plugin pluginAnnotation = pluginClass.getDeclaredAnnotation(Plugin.class);
+                final Plugin pluginAnnotation = pluginClass.getDeclaredAnnotation(Plugin.class);
+                final Injector injector = Guice.createInjector(new PluginGuiceModule(pluginAnnotation));
 
-                Injector injector = Guice.createInjector(new PluginGuiceModule(pluginAnnotation));
-                Object instance = injector.getInstance(pluginClass);
-
-                this.registerPlugin(PluginContainer.of(pluginAnnotation, instance));
+                this.loadPlugin(PluginContainer.of(pluginAnnotation, injector.getInstance(pluginClass)));
             }
         }
     }
@@ -181,9 +176,9 @@ public final class CarbonPluginManager implements PluginManager {
      * Registers the given {@link PluginContainer}.
      *
      * @param container The plugin container
-     * @since 1.0.0
+     * @since 1.3.0
      */
-    private void registerPlugin(PluginContainer container) {
+    protected void loadPlugin(PluginContainer container) {
         Carbon.getCarbon().getLogger().info("Found plugin: " + container.getName() + " (" + container.getId() + ")");
         Carbon.getCarbon().getEventBus().register(container.getInstance());
         this.plugins.put(container.getId(), container);
