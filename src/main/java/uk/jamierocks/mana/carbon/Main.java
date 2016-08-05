@@ -46,6 +46,7 @@ public final class Main {
         new Carbon();
 
         // Load all of the plugins
+        ((CarbonPluginManager) Carbon.getCarbon().getPluginManager()).loadPlugin(Carbon.CONTAINER);
         ((CarbonPluginManager) Carbon.getCarbon().getPluginManager()).loadAllPlugins();
 
         // Pre Init state
@@ -55,6 +56,7 @@ public final class Main {
         Carbon.getCarbon().getServiceRegistry()
                 .registerProvider(Carbon.getCarbon(), ExceptionService.class, new SimpleExceptionService());
 
+        // Initialise IRC
         ((CarbonIRCManager) Carbon.getCarbon().getIRCManager()).initialise();
 
         // Register command listener
