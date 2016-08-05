@@ -24,6 +24,8 @@
 
 package uk.jamierocks.mana.carbon.service.exception;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import uk.jamierocks.mana.carbon.Carbon;
 
 /**
@@ -60,6 +62,7 @@ public final class ExceptionReporter {
      * @since 1.1.0
      */
     public static void report(String message, Throwable throwable) {
+        checkNotNull(message, "message is null!");
         Carbon.getCarbon().getServiceRegistry()
                 .provideOrFallback(ExceptionService.class, FALLBACK).report(message, throwable);
     }

@@ -120,7 +120,7 @@ public final class CarbonPluginManager implements PluginManager {
         });
 
         for (File jarFile : jarFiles) {
-            List<Class> mods = this.findPlugins(jarFile);
+            final List<Class> mods = this.findPlugins(jarFile);
 
             for (Class<?> pluginClass : mods) {
                 final Plugin pluginAnnotation = pluginClass.getDeclaredAnnotation(Plugin.class);
