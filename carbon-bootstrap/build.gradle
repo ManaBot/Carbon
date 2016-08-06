@@ -24,7 +24,7 @@ jar {
                         'libraries/org/apache/logging/log4j/log4j-core/2.6.1/log4j-core-2.6.1.jar ' +
                         'libraries/org/apache/logging/log4j/log4j-slf4j-impl/2.6.1/log4j-slf4j-impl-2.6.1.jar ' +
                         'libraries/org/kitteh/irc/client-lib/2.1.0/client-lib-2.1.0.jar ' +
-                        'libraries/com/sk89q/intake/intake/4.2-MISNIN-SNAPSHOT/intake-4.2-MISNIN-20160413.183647-1.jar'
+                        'libraries/com/sk89q/intake/3.1.2/intake-3.1.2.jar'
         )
     }
 }

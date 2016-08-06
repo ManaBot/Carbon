@@ -28,8 +28,7 @@ import static uk.jamierocks.mana.carbon.Carbon.getCarbon;
 
 import com.sk89q.intake.CommandException;
 import com.sk89q.intake.InvalidUsageException;
-import com.sk89q.intake.InvocationCommandException;
-import com.sk89q.intake.argument.Namespace;
+import com.sk89q.intake.context.CommandLocals;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
@@ -39,8 +38,6 @@ import uk.jamierocks.mana.carbon.Carbon;
 import uk.jamierocks.mana.carbon.CarbonImpl;
 import uk.jamierocks.mana.carbon.event.command.CommandEvent;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
-
-import java.util.Collections;
 
 /**
  * A listener for commands.
@@ -66,17 +63,17 @@ public final class CommandListener {
                 CommandEvent commandEvent =
                         new CommandEvent(event, getCarbon().getCommandDispatcher().get(command.split(" ")[0])).post();
                 if (!commandEvent.isCancelled()) {
-                    Namespace namespace = new Namespace();
+                    CommandLocals namespace = new CommandLocals();
                     namespace.put(String.class, command);
                     namespace.put(Channel.class, event.getChannel());
                     namespace.put(User.class, event.getActor());
 
                     try {
                         getCarbon().getCommandDispatcher()
-                                .call(command, namespace, Collections.singletonList(command));
+                                .call(command, namespace, new String[]{command});
                     } catch (InvalidUsageException e) {
                         event.getActor().sendMessage("Usage: " + commandPrefix + e.getCommand().getDescription().getUsage());
-                    } catch (CommandException | InvocationCommandException e) {
+                    } catch (CommandException e) {
                         ExceptionReporter.report("Failed to execute command: " + message, e);
                     } catch (AuthorizationException e) {
                         event.sendReply(event.getActor().getNick() + ": You do not have permission to do that!");

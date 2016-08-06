@@ -20,7 +20,7 @@ dependencies {
     compile 'org.kitteh.irc:client-lib:2.1.2'
 
     // Command related
-    compile 'com.sk89q.intake:intake:4.2-MISNIN-SNAPSHOT'
+    compile 'com.sk89q:intake:3.1.2'
 }
 
 blossom {

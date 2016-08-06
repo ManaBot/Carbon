@@ -32,7 +32,7 @@ import com.sk89q.intake.CommandException;
 import com.sk89q.intake.Description;
 import com.sk89q.intake.InvalidUsageException;
 import com.sk89q.intake.InvocationCommandException;
-import com.sk89q.intake.argument.Namespace;
+import com.sk89q.intake.context.CommandLocals;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.Channel;
 import org.kitteh.irc.client.library.element.User;
@@ -52,7 +52,7 @@ public final class PartCommand implements CommandCallable {
      * {@inheritDoc}
      */
     @Override
-    public boolean call(String arguments, Namespace namespace, List<String> parentCommands)
+    public boolean call(String arguments, CommandLocals namespace, String[] parentCommand)
             throws CommandException, InvocationCommandException, AuthorizationException {
         if (arguments == null || arguments.equals("")) {
             namespace.get(Channel.class).part();
@@ -67,7 +67,7 @@ public final class PartCommand implements CommandCallable {
                     return true;
                 }
             } else {
-                throw new InvalidUsageException(this, parentCommands);
+                throw new InvalidUsageException(this);
             }
         }
 
@@ -89,7 +89,7 @@ public final class PartCommand implements CommandCallable {
      * {@inheritDoc}
      */
     @Override
-    public boolean testPermission(Namespace namespace) {
+    public boolean testPermission(CommandLocals namespace) {
         return getCarbon().getIRCManager().getAdministrators().contains(namespace.get(User.class).getName());
     }
 
@@ -97,7 +97,7 @@ public final class PartCommand implements CommandCallable {
      * {@inheritDoc}
      */
     @Override
-    public List<String> getSuggestions(String arguments, Namespace locals) throws CommandException {
+    public List<String> getSuggestions(String arguments, CommandLocals locals) throws CommandException {
         return Lists.newArrayList();
     }
 }

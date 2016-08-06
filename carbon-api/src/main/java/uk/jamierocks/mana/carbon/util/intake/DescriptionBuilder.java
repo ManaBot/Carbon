@@ -30,8 +30,6 @@ import com.sk89q.intake.Parameter;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 /**
  * A builder for {@link Description}.
  *
@@ -127,13 +125,11 @@ public final class DescriptionBuilder {
                 return parameters;
             }
 
-            @Nullable
             @Override
             public String getShortDescription() {
                 return shortDescription;
             }
 
-            @Nullable
             @Override
             public String getHelp() {
                 return help;

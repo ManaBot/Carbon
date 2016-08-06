@@ -48,13 +48,7 @@ public final class Bootstrap {
         final DependencyManager dependencyManager = new DependencyManager(BootstrapConstants.LIBRARIES_PATH);
 
         for (BootstrapConfiguration.Dependency dependency : configuration.getDependencies()) {
-            final Dependency dep;
-            if (dependency.getName() != null) {
-                dep = Dependency.of(dependency.getName());
-            } else {
-                dep = new Dependency(dependency.getLocation());
-            }
-
+            final Dependency dep = Dependency.of(dependency.getName());
             dependencyManager.checkDependency(dependency.getRepo(), dep);
         }
 

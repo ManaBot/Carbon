@@ -31,7 +31,16 @@ subprojects {
     repositories {
         mavenCentral()
         maven {
-            url 'http://repo.miserable.ninja/content/repositories/public/'
+            name 'lexteam-release'
+            url 'http://repo.lexteam.xyz/maven/releases/'
+        }
+        maven {
+            name 'lexteam-snapshot'
+            url 'http://repo.lexteam.xyz/maven/snapshots/'
+        }
+        maven {
+            name 'sk89q-public'
+            url 'http://maven.sk89q.com/repo/'
         }
     }
 

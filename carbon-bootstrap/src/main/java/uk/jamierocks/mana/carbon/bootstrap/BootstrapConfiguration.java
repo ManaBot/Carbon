@@ -64,12 +64,10 @@ public final class BootstrapConfiguration {
 
         private String repo;
         private String name;
-        private String location;
 
         public Dependency(ConfigurationNode node) {
             this.repo = node.getNode("repo").getString();
             this.name = node.getNode("name").getString();
-            this.location = node.getNode("location").getString();
         }
 
         /**
@@ -90,16 +88,6 @@ public final class BootstrapConfiguration {
          */
         public String getName() {
             return this.name;
-        }
-
-        /**
-         * Gets the location of the dependency.
-         *
-         * @return The location
-         * @since 2.0.0
-         */
-        public String getLocation() {
-            return this.location;
         }
     }
 }

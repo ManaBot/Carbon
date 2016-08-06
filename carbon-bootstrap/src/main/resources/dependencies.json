@@ -57,8 +57,8 @@
             "name": "org.kitteh.irc:client-lib:2.1.0"
         },
         {
-            "repo": "http://repo.miserable.ninja/content/repositories/public/",
-            "location": "com/sk89q/intake/intake/4.2-MISNIN-SNAPSHOT/intake-4.2-MISNIN-20160413.183647-1"
+            "repo": "http://maven.sk89q.com/repo/",
+            "name": "com.sk89q:intake:3.1.2"
         }
     ]
 }
