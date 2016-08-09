@@ -46,6 +46,11 @@ import java.util.List;
  */
 public final class HelpCommand implements CommandCallable {
 
+    private static final Description DESCRIPTION = new DescriptionBuilder()
+            .help("Displays all commands, with their help text")
+            .usage("help [command]")
+            .build();
+
     /**
      * {@inheritDoc}
      */
@@ -98,10 +103,7 @@ public final class HelpCommand implements CommandCallable {
      */
     @Override
     public Description getDescription() {
-        return new DescriptionBuilder()
-                .help("Displays all commands, with their help text")
-                .usage("help [command]")
-                .build();
+        return DESCRIPTION;
     }
 
     /**

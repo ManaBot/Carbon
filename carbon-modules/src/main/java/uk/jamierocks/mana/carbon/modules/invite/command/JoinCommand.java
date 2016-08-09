@@ -47,6 +47,11 @@ import java.util.List;
  */
 public final class JoinCommand implements CommandCallable {
 
+    private static final Description DESCRIPTION = new DescriptionBuilder()
+            .help("Joins the given channel, in the format of server/#channel")
+            .usage("join <server/#channel>")
+            .build();
+
     /**
      * {@inheritDoc}
      */
@@ -78,10 +83,7 @@ public final class JoinCommand implements CommandCallable {
      */
     @Override
     public Description getDescription() {
-        return new DescriptionBuilder()
-                .help("Joins the given channel, in the format of server/#channel")
-                .usage("join <server/#channel>")
-                .build();
+        return DESCRIPTION;
     }
 
     /**

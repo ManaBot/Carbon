@@ -48,6 +48,11 @@ import java.util.List;
  */
 public final class PartCommand implements CommandCallable {
 
+    private static final Description DESCRIPTION = new DescriptionBuilder()
+            .help("Parts the current channel, or in the format of server/#channel")
+            .usage("part [server/#channel]")
+            .build();
+
     /**
      * {@inheritDoc}
      */
@@ -79,10 +84,7 @@ public final class PartCommand implements CommandCallable {
      */
     @Override
     public Description getDescription() {
-        return new DescriptionBuilder()
-                .help("Parts the current channel, or in the format of server/#channel")
-                .usage("part [server/#channel]")
-                .build();
+        return DESCRIPTION;
     }
 
     /**
