@@ -29,7 +29,6 @@ import com.sk89q.intake.CommandCallable;
 import com.sk89q.intake.CommandException;
 import com.sk89q.intake.CommandMapping;
 import com.sk89q.intake.Description;
-import com.sk89q.intake.InvocationCommandException;
 import com.sk89q.intake.context.CommandLocals;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.User;
@@ -55,8 +54,7 @@ public final class HelpCommand implements CommandCallable {
      * {@inheritDoc}
      */
     @Override
-    public boolean call(String arguments, CommandLocals namespace, String[] parentCommands)
-            throws CommandException, InvocationCommandException, AuthorizationException {
+    public boolean call(String arguments, CommandLocals namespace, String[] parentCommands) throws CommandException, AuthorizationException {
         if (arguments != null && !arguments.equals("")) {
             if (Carbon.getCarbon().getCommandDispatcher().contains(arguments)) {
                 CommandMapping mapping = Carbon.getCarbon().getCommandDispatcher().get(arguments);

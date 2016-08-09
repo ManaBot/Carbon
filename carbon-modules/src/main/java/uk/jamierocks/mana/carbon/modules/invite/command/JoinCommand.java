@@ -31,7 +31,6 @@ import com.sk89q.intake.CommandCallable;
 import com.sk89q.intake.CommandException;
 import com.sk89q.intake.Description;
 import com.sk89q.intake.InvalidUsageException;
-import com.sk89q.intake.InvocationCommandException;
 import com.sk89q.intake.context.CommandLocals;
 import com.sk89q.intake.util.auth.AuthorizationException;
 import org.kitteh.irc.client.library.element.User;
@@ -56,8 +55,7 @@ public final class JoinCommand implements CommandCallable {
      * {@inheritDoc}
      */
     @Override
-    public boolean call(String arguments, CommandLocals namespace, String[] parentCommand)
-            throws CommandException, InvocationCommandException, AuthorizationException {
+    public boolean call(String arguments, CommandLocals namespace, String[] parentCommand) throws CommandException, AuthorizationException {
         if (arguments != null || !arguments.equals("")) {
             final String[] channelSplit = arguments.split("/");
 
