@@ -1,7 +1,7 @@
 Carbon
 ======
 
-A framework for building IRC bots, built for the Mana bot. Licensed under the MIT License.
+A framework for building IRC bots, built for the Mana bot. Licensed under the Apache license 2.0.
 
 ## Features
 
