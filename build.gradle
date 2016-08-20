@@ -22,25 +22,23 @@ subprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    group 'uk.jamierocks.mana'
+    group = 'uk.jamierocks.mana'
     archivesBaseName = project.name.toLowerCase()
-    description = 'The framework powering the Mana IRC Bot.'
-    version '2.0.0-SNAPSHOT'
-    ext.url = 'http://mana.jamierocks.uk/'
+    version = '2.0.0-SNAPSHOT'
 
     repositories {
         mavenCentral()
         maven {
-            name 'lexteam-release'
-            url 'http://repo.lexteam.xyz/maven/releases/'
+            name = 'lexteam-release'
+            url = 'http://repo.lexteam.xyz/maven/releases/'
         }
         maven {
-            name 'lexteam-snapshot'
-            url 'http://repo.lexteam.xyz/maven/snapshots/'
+            name = 'lexteam-snapshot'
+            url = 'http://repo.lexteam.xyz/maven/snapshots/'
         }
         maven {
-            name 'sk89q-public'
-            url 'http://maven.sk89q.com/repo/'
+            name = 'sk89q-public'
+            url = 'http://maven.sk89q.com/repo/'
         }
     }
 
@@ -87,9 +85,9 @@ subprojects {
                         url = project.url
 
                         scm {
-                            url = "https://github.com/ManaBot/Carbon"
-                            connection = "scm:git:https://github.com/ManaBot/Carbon.git"
-                            developerConnection = "scm:git:git@github.com:ManaBot/Carbon.git"
+                            url = 'https://github.com/ManaBot/Carbon'
+                            connection = 'scm:git:https://github.com/ManaBot/Carbon.git'
+                            developerConnection = 'scm:git:git@github.com:ManaBot/Carbon.git'
                         }
 
                         issueManagement {
@@ -99,8 +97,8 @@ subprojects {
 
                         licenses {
                             license {
-                                name = 'MIT License'
-                                url = 'http://opensource.org/licenses/MIT'
+                                name = 'Apache License 2.0'
+                                url = 'https://opensource.org/licenses/Apache-2.0'
                                 distribution = 'repo'
                             }
                         }
@@ -112,5 +110,5 @@ subprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '2.14.1'
 }
