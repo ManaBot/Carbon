@@ -54,7 +54,7 @@
         },
         {
             "repo": "https://repo1.maven.org/maven2/",
-            "name": "org.kitteh.irc:client-lib:2.1.0"
+            "name": "org.kitteh.irc:client-lib:2.2.0"
         },
         {
             "repo": "http://maven.sk89q.com/repo/",
