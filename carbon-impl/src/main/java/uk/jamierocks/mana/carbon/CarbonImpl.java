@@ -25,6 +25,7 @@ import com.sk89q.intake.dispatcher.SimpleDispatcher;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.jamierocks.mana.carbon.config.CarbonConfigManager;
 import uk.jamierocks.mana.carbon.irc.CarbonIRCManager;
 import uk.jamierocks.mana.carbon.irc.IRCManager;
 import uk.jamierocks.mana.carbon.module.CarbonModuleManager;
@@ -70,40 +71,13 @@ public final class CarbonImpl extends Carbon {
         this.serviceRegistry = new CarbonServiceRegistry();
         this.commandDispatcher = new SimpleDispatcher();
 
-        if (Files.notExists(CONFIG_PATH)) {
-            try {
-                Files.copy(Carbon.class.getResourceAsStream("/carbon.conf"), CONFIG_PATH);
-            } catch (IOException e) {
-                // If this ever occurs something massively wrong is going on.
-                // It is probably for the best to exit the application
-                ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
-                System.exit(0);
-            }
-        }
+        // Configuration-related stuff
+        this.configuration = CarbonConfigManager.getCarbonConfig();
+        CarbonConfigManager.checkOpsFile();
+        LOGGER.info("Using command prefix: " + this.configuration.getCommands().getPrefix());
 
-        if (Files.notExists(OPS_PATH)) {
-            try {
-                Files.copy(Carbon.class.getResourceAsStream("/ops.json"), OPS_PATH);
-            } catch (IOException e) {
-                // If this ever occurs something massively wrong is going on.
-                // It is probably for the best to exit the application
-                ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
-                System.exit(0);
-            }
-        }
-
-        try {
-            this.configuration = new CarbonConfiguration(HoconConfigurationLoader.builder().setPath(CONFIG_PATH).build().load());
-        } catch (IOException e) {
-            // If this ever occurs something massively wrong is going on.
-            // It is probably for the best to exit the application
-            ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
-            System.exit(0);
-        }
-
-        this.setContainer(); // Forcefully sets the container
-
-        LOGGER.info("Using command prefix: " + this.getConfiguration().getCommands().getPrefix());
+        // Forcefully sets the container
+        this.setContainer();
     }
 
     private void setContainer() {

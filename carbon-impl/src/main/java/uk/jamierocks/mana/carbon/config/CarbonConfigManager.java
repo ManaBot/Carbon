@@ -18,6 +18,8 @@ package uk.jamierocks.mana.carbon.config;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+import uk.jamierocks.mana.carbon.Carbon;
+import uk.jamierocks.mana.carbon.CarbonConfiguration;
 import uk.jamierocks.mana.carbon.plugin.CarbonPluginManager;
 import uk.jamierocks.mana.carbon.plugin.Plugin;
 import uk.jamierocks.mana.carbon.service.exception.ExceptionReporter;
@@ -26,6 +28,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import static uk.jamierocks.mana.carbon.util.Constants.CONFIG_PATH;
+import static uk.jamierocks.mana.carbon.util.Constants.OPS_PATH;
 
 /**
  * The Carbon configuration manager.
@@ -54,4 +59,48 @@ public final class CarbonConfigManager {
             return null;
         }
     }
+
+    /**
+     * Gets the {@link CarbonConfiguration}, if available.
+     *
+     * @return The Carbon configuration
+     * @since 2.0.0
+     */
+    public static CarbonConfiguration getCarbonConfig() {
+        if (Files.notExists(CONFIG_PATH)) {
+            try {
+                Files.copy(Carbon.class.getResourceAsStream("/carbon.conf"), CONFIG_PATH);
+            } catch (IOException e) {
+                // If this ever occurs something massively wrong is going on.
+                // It is probably for the best to exit the application
+                ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
+                System.exit(0);
+            }
+        }
+
+        try {
+            return new CarbonConfiguration(HoconConfigurationLoader.builder().setPath(CONFIG_PATH).build().load());
+        } catch (IOException e) {
+            // If this ever occurs something massively wrong is going on.
+            // It is probably for the best to exit the application
+            ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
+            System.exit(0);
+        }
+
+        return null;
+    }
+
+    public static void checkOpsFile() {
+        if (Files.notExists(OPS_PATH)) {
+            try {
+                Files.copy(Carbon.class.getResourceAsStream("/ops.json"), OPS_PATH);
+            } catch (IOException e) {
+                // If this ever occurs something massively wrong is going on.
+                // It is probably for the best to exit the application
+                ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
+                System.exit(0);
+            }
+        }
+    }
+
 }

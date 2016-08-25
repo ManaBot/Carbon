@@ -66,6 +66,7 @@ public final class CarbonIRCManager implements IRCManager {
                 clientBuilder.serverPassword(network.getNode("serverPassword").getString());
             }
             this.clients.put(network.getNode("id").getString(), clientBuilder.build());
+            CarbonImpl.LOGGER.info("Connected to network: " + network.getNode("id").getString());
         }
     }
 
