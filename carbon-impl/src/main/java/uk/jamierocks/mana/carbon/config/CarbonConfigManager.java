@@ -90,6 +90,11 @@ public final class CarbonConfigManager {
         return null;
     }
 
+    /**
+     * Checks the ops.json file exists and if not, copies the default one.
+     *
+     * @since 2.0.0
+     */
     public static void checkOpsFile() {
         if (Files.notExists(OPS_PATH)) {
             try {

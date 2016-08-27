@@ -46,4 +46,5 @@ public final class ExceptionReporterEventLoggingHandler implements SubscriberExc
     public void handleException(Throwable exception, SubscriberExceptionContext context) {
         ExceptionReporter.report(message(context), exception);
     }
+
 }

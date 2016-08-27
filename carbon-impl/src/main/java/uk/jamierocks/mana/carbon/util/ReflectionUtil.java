@@ -50,4 +50,5 @@ public final class ReflectionUtil {
             throw new ReflectionUtilException("Failed to set field: " + field + " in class: " + clazz.getName(), e);
         }
     }
+
 }
