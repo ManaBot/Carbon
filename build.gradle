@@ -16,9 +16,7 @@ targetCompatibility = 1.8
 
 group 'uk.jamierocks.mana'
 archivesBaseName = project.name.toLowerCase()
-description = 'The framework powering the Mana IRC Bot.'
 version '1.3.0-SNAPSHOT'
-ext.url = 'http://mana.jamierocks.uk/'
 
 repositories {
     mavenCentral()
@@ -109,9 +107,9 @@ uploadArchives {
                     url = project.url
 
                     scm {
-                        url = "https://github.com/ManaBot/Carbon"
-                        connection = "scm:git:https://github.com/ManaBot/Carbon.git"
-                        developerConnection = "scm:git:git@github.com:ManaBot/Carbon.git"
+                        url = 'https://github.com/ManaBot/Carbon'
+                        connection = 'scm:git:https://github.com/ManaBot/Carbon.git'
+                        developerConnection = 'scm:git:git@github.com:ManaBot/Carbon.git'
                     }
 
                     issueManagement {
@@ -121,8 +119,8 @@ uploadArchives {
 
                     licenses {
                         license {
-                            name = 'MIT License'
-                            url = 'http://opensource.org/licenses/MIT'
+                            name = 'Apache License 2.0'
+                            url = 'https://opensource.org/licenses/Apache-2.0'
                             distribution = 'repo'
                         }
                     }
