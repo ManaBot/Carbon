@@ -16,9 +16,7 @@ targetCompatibility = 1.8
 
 group 'uk.jamierocks.mana'
 archivesBaseName = project.name.toLowerCase()
-description = 'The framework powering the Mana IRC Bot.'
-version '1.2.0'
-ext.url = 'http://mana.jamierocks.uk/'
+version '1.2-1'
 
 repositories {
     mavenCentral()
@@ -30,7 +28,7 @@ repositories {
 dependencies {
     // Basic dependencies
     compile 'com.google.guava:guava:19.0'
-    compile 'com.google.inject:guice:4.0'
+    compile 'com.google.inject:guice:4.1.0'
 
     // Configuration related
     compile 'ninja.leaping.configurate:configurate-core:3.1.1'
@@ -38,9 +36,9 @@ dependencies {
 
     // Logging related
     compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'org.apache.logging.log4j:log4j-api:2.6.1'
-    compile 'org.apache.logging.log4j:log4j-core:2.6.1'
-    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.6.1'
+    compile 'org.apache.logging.log4j:log4j-api:2.6.2'
+    compile 'org.apache.logging.log4j:log4j-core:2.6.2'
+    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.6.2'
 
     // IRC related
     compile 'org.kitteh.irc:client-lib:1.1.0'
@@ -109,9 +107,9 @@ uploadArchives {
                     url = project.url
 
                     scm {
-                        url = "https://github.com/ManaBot/Carbon"
-                        connection = "scm:git:https://github.com/ManaBot/Carbon.git"
-                        developerConnection = "scm:git:git@github.com:ManaBot/Carbon.git"
+                        url = 'https://github.com/ManaBot/Carbon'
+                        connection = 'scm:git:https://github.com/ManaBot/Carbon.git'
+                        developerConnection = 'scm:git:git@github.com:ManaBot/Carbon.git'
                     }
 
                     issueManagement {
@@ -121,8 +119,8 @@ uploadArchives {
 
                     licenses {
                         license {
-                            name = 'MIT License'
-                            url = 'http://opensource.org/licenses/MIT'
+                            name = 'Apache License 2.0'
+                            url = 'https://opensource.org/licenses/Apache-2.0'
                             distribution = 'repo'
                         }
                     }

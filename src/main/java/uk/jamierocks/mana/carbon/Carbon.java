@@ -1,25 +1,17 @@
 /*
- * This file is part of Carbon, licensed under the MIT License (MIT).
+ * Copyright 2016 Jamie Mansfield
  *
- * Copyright (c) 2016, Jamie Mansfield <https://www.jamierocks.uk/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package uk.jamierocks.mana.carbon;
@@ -62,10 +54,6 @@ public final class Carbon {
      */
     protected static final PluginContainer CONTAINER = null;
     private static final Path CONFIG_PATH = Paths.get("carbon.conf");
-    /**
-     * This will be forcefully overridden by Carbon upon its initialisation.
-     */
-    private static final Carbon INSTANCE = null;
     private final Logger logger = LoggerFactory.getLogger("Carbon");
     private final EventBus eventBus;
     private final PluginManager pluginManager;
@@ -74,6 +62,7 @@ public final class Carbon {
     private final ServiceRegistry serviceRegistry;
     private final Dispatcher commandDispatcher;
     private CommentedConfigurationNode configurationNode;
+
     protected Carbon() {
         this.logger.info("Loading Carbon " + Constants.VERSION);
         this.eventBus = new EventBus(new ExceptionReporterEventLoggingHandler());
@@ -82,9 +71,6 @@ public final class Carbon {
         this.ircManager = new CarbonIRCManager();
         this.serviceRegistry = new CarbonServiceRegistry();
         this.commandDispatcher = new SimpleDispatcher();
-
-        this.setInstance(); // Forcefully sets the instance
-        this.setContainer(); // Forcefully sets the container
 
         if (Files.notExists(CONFIG_PATH)) {
             try {
@@ -106,6 +92,7 @@ public final class Carbon {
             System.exit(0);
         }
 
+        this.setContainer(); // Forcefully sets the container
         this.setCommandPrefix(); // Forcefully set the command prefix
     }
 
@@ -116,19 +103,8 @@ public final class Carbon {
      * @since 1.0.0
      */
     public static Carbon getCarbon() {
-        checkNotNull(INSTANCE, "INSTANCE is null!");
-        return INSTANCE;
-    }
-
-    private void setInstance() {
-        try {
-            ReflectionUtil.setStaticFinal(this.getClass(), "INSTANCE", this);
-        } catch (ReflectionUtilException e) {
-            // If this ever occurs something massively wrong is going on.
-            // It is probably for the best to exit the application
-            ExceptionReporter.report("Carbon has experienced a fatal error! Exiting!", e);
-            System.exit(0);
-        }
+        checkNotNull(CONTAINER, "Carbon has not yet been initialised!");
+        return (Carbon) CONTAINER.getInstance();
     }
 
     private void setContainer() {
