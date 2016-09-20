@@ -33,4 +33,22 @@ public interface EventBus {
      */
     void register(Object plugin, EventListener listener);
 
+    /**
+     * Registers methods annotated with {@link Listener} in the given Object, or if
+     * the Object is a {@link EventListener} then registers that.
+     *
+     * @param plugin The owning plugin
+     * @param listener The listener class, or {@link EventListener}
+     * @since 2.0.0
+     */
+    void register(Object plugin, Object listener);
+
+    /**
+     * Posts the given {@link Event} through the event bus.
+     *
+     * @param event The event
+     * @since 2.0.0
+     */
+    void post(Event event);
+
 }
